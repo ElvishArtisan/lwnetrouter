@@ -1,2 +1,4 @@
 2016-10-29 Fred Gleason <fredg@paravelsystems.com>
 	* Initial package creation.
+2016-10-29 Fred Gleason <fredg@paravelsystems.com>
+	* Stubbed out lwnetrouterd(8).

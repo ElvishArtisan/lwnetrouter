@@ -1,6 +1,6 @@
-// lwnetrouterd.h
+// audiodestination.h
 //
-// lwnetrouterd(8) routing daemon
+// ALSA audio destination for lwnetrouterd(8)
 //
 //   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
 //
@@ -19,24 +19,33 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
-#ifndef LWNETROUTERD_H
-#define LWNETROUTERD_H
+#ifndef AUDIODESTINATION_H
+#define AUDIODESTINATION_H
 
-#include <QObject>
+#include <alsa/asoundlib.h>
+#include <pthread.h>
 
 #include "config.h"
+#include "ringbuffer.h"
 
-#define LWNETROUTERD_USAGE "[options]\n"
-
-class MainObject : public QObject
+class AudioDestination
 {
- Q_OBJECT;
  public:
-  MainObject(QObject *parent=0);
+  AudioDestination(Ringbuffer *rb,Config *config);
+  ~AudioDestination();
+  bool start(int input);
 
  private:
-  Config *main_config;
+  snd_pcm_t *alsa_pcm;
+  unsigned alsa_samplerate;
+  unsigned alsa_channels;
+  unsigned alsa_period_quantity;
+  snd_pcm_uframes_t alsa_buffer_size; 
+  float *alsa_pcm_buffer;
+  pthread_t alsa_pthread;
+  Config *audio_config;
+  friend void *__AudioDestinationCallback(void *ptr);
 };
 
 
-#endif  // LWNETROUTERD_H
+#endif  // AUDIODESTINATION_H

@@ -1,6 +1,6 @@
-// lwnetrouterd.h
+// config.h
 //
-// lwnetrouterd(8) routing daemon
+// Configuration File Accessor for lwnetrouter
 //
 //   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
 //
@@ -19,24 +19,32 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
-#ifndef LWNETROUTERD_H
-#define LWNETROUTERD_H
+#ifndef CONFIG_H
+#define CONFIG_H
 
-#include <QObject>
+//
+// Default Values
+//
+#define CONFIG_CONF_FILE "/etc/lwnetrouter.conf"
+#define CONFIG_DEFAULT_INPUT_QUANTITY 8
+#define CONFIG_DEFAULT_OUTPUT_QUANTITY 8
+#define CONFIG_DEFAULT_AUDIO_ALSA_DEVICE "plughw:Axia"
 
-#include "config.h"
+#include <QString>
 
-#define LWNETROUTERD_USAGE "[options]\n"
-
-class MainObject : public QObject
+class Config
 {
- Q_OBJECT;
  public:
-  MainObject(QObject *parent=0);
+  Config();
+  int inputQuantity() const;
+  int outputQuantity() const;
+  QString audioAlsaDevice() const;
 
  private:
-  Config *main_config;
+  int conf_input_quantity;
+  int conf_output_quantity;
+  QString conf_audio_alsa_device;
 };
 
 
-#endif  // LWNETROUTERD_H
+#endif  // CONFIG_H

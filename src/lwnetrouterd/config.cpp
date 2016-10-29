@@ -1,6 +1,6 @@
-// lwnetrouterd.h
+// config.cpp
 //
-// lwnetrouterd(8) routing daemon
+// Configuration File Accessor for lwnetrouter
 //
 //   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
 //
@@ -19,24 +19,38 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
-#ifndef LWNETROUTERD_H
-#define LWNETROUTERD_H
-
-#include <QObject>
+#include <sy/syprofile.h>
 
 #include "config.h"
 
-#define LWNETROUTERD_USAGE "[options]\n"
-
-class MainObject : public QObject
+Config::Config()
 {
- Q_OBJECT;
- public:
-  MainObject(QObject *parent=0);
+  SyProfile *p=new SyProfile();
 
- private:
-  Config *main_config;
-};
+  p->setSource(CONFIG_CONF_FILE);
+  conf_input_quantity=
+    p->intValue("Global","InputQuantity",CONFIG_DEFAULT_INPUT_QUANTITY);
+  conf_output_quantity=
+    p->intValue("Global","OutputQuantity",CONFIG_DEFAULT_OUTPUT_QUANTITY);
+  conf_audio_alsa_device=
+    p->stringValue("Audio","AlsaDevice",CONFIG_DEFAULT_AUDIO_ALSA_DEVICE);
+  delete p;
+}
 
 
-#endif  // LWNETROUTERD_H
+int Config::inputQuantity() const
+{
+  return conf_input_quantity;
+}
+
+
+int Config::outputQuantity() const
+{
+  return conf_output_quantity;
+}
+
+
+QString Config::audioAlsaDevice() const
+{
+  return conf_audio_alsa_device;
+}

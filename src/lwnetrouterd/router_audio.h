@@ -1,6 +1,6 @@
-// lwnetrouterd.h
+// router_audio.h
 //
-// lwnetrouterd(8) routing daemon
+// Audio router for lwnetrouterd(8)
 //
 //   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
 //
@@ -19,24 +19,21 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
-#ifndef LWNETROUTERD_H
-#define LWNETROUTERD_H
+#ifndef ROUTER_AUDIO_H
+#define ROUTER_AUDIO_H
 
-#include <QObject>
+#include "router.h"
 
-#include "config.h"
-
-#define LWNETROUTERD_USAGE "[options]\n"
-
-class MainObject : public QObject
+class RouterAudio : public Router
 {
- Q_OBJECT;
+  Q_OBJECT;
  public:
-  MainObject(QObject *parent=0);
+  RouterAudio(Config *config,QObject *parent=0);
+  ~RouterAudio();
 
- private:
-  Config *main_config;
+ protected:
+  void crossPointSet(int output,int input);
 };
 
 
-#endif  // LWNETROUTERD_H
+#endif  // ROUTER_AUDIO_H

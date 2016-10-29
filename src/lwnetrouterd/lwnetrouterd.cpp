@@ -42,6 +42,8 @@ MainObject::MainObject(QObject *parent)
     }
   }
 
+  main_config=new Config();
+
   //
   // Open the Syslog
   //

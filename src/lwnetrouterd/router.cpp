@@ -1,6 +1,6 @@
-// lwnetrouterd.h
+// router.cpp
 //
-// lwnetrouterd(8) routing daemon
+// Abstract base class for router objects.
 //
 //   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
 //
@@ -19,24 +19,33 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
-#ifndef LWNETROUTERD_H
-#define LWNETROUTERD_H
+#include "router.h"
 
-#include <QObject>
-
-#include "config.h"
-
-#define LWNETROUTERD_USAGE "[options]\n"
-
-class MainObject : public QObject
+Router::Router(Config *config,QObject *parent)
+  : QObject(parent)
 {
- Q_OBJECT;
- public:
-  MainObject(QObject *parent=0);
+  router_config=config;
 
- private:
-  Config *main_config;
-};
+  for(int i=0;i<config->outputQuantity();i++) {
+    router_crosspoints.push_back(-1);
+  }
+}
 
 
-#endif  // LWNETROUTERD_H
+int Router::crossPoint(int output) const
+{
+  return router_crosspoints.at(output);
+}
+
+
+void Router::setCrossPoint(int output,int input)
+{
+  crossPointSet(output,input);
+  router_crosspoints[output]=input;
+}
+
+
+Config *Router::config() const
+{
+  return router_config;
+}
