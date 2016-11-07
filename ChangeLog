@@ -5,3 +5,6 @@
 2016-11-07 Fred Gleason <fredg@paravelsystems.com>
 	* Added a libsamplerate dependency.
 	* Implemented a basic audio router using HPI.
+2016-11-07 Fred Gleason <fredg@paravelsystems.com>
+	* Implemented an RML protocol in 'src/lwnetrouterd/protocol_rml.cpp'
+	and 'src/lwnetrouterd/protocol_rml.h'.

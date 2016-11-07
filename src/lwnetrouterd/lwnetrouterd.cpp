@@ -53,6 +53,13 @@ MainObject::MainObject(QObject *parent)
   // Audio Router
   //
   main_audio_router=new RouterHpiAudio(main_config,this);
+
+  //
+  // Protocols
+  //
+  main_rml_protocol=new ProtocolRml(main_config,this);
+  connect(main_rml_protocol,SIGNAL(crosspointChangeReceived(int,int)),
+	  main_audio_router,SLOT(setCrossPoint(int,int)));
 }
 
 

@@ -193,4 +193,5 @@ RouterHpiAudio::RouterHpiAudio(Config *c,QObject *parent)
 
 void RouterHpiAudio::crossPointSet(int output,int input)
 {
+  printf("RouterHpiAudio::crossPointSet(%d,%d)\n",output,input);
 }

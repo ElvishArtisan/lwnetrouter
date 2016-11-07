@@ -35,12 +35,16 @@ dist_lwnetrouterd_SOURCES = audiodestination.cpp audiodestination.h\
                             audiosource.cpp audiosource.h\
                             config.cpp config.h\
                             lwnetrouterd.cpp lwnetrouterd.h\
+                            protocol.cpp protocol.h\
+                            protocol_rml.cpp protocol_rml.h\
                             ringbuffer.cpp ringbuffer.h\
                             router.cpp router.h\
                             router_audio.cpp router_audio.h\
                             router_hpiaudio.cpp router_hpiaudio.h
 
 nodist_lwnetrouterd_SOURCES = moc_lwnetrouterd.cpp\
+                              moc_protocol.cpp\
+                              moc_protocol_rml.cpp\
                               moc_router.cpp\
                               moc_router_audio.cpp\
                               moc_router_hpiaudio.cpp

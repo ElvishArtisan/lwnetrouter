@@ -1,6 +1,6 @@
-// lwnetrouterd.h
+// protocol.h
 //
-// lwnetrouterd(8) routing daemon
+// Abstract base class for protocol objects.
 //
 //   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
 //
@@ -19,28 +19,31 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
-#ifndef LWNETROUTERD_H
-#define LWNETROUTERD_H
+#ifndef PROTOCOL_H
+#define PROTOCOL_H
 
 #include <QObject>
 
 #include "config.h"
-#include "protocol_rml.h"
-#include "router_hpiaudio.h"
 
-#define LWNETROUTERD_USAGE "[options]\n"
-
-class MainObject : public QObject
+class Protocol : public QObject
 {
- Q_OBJECT;
+  Q_OBJECT;
  public:
-  MainObject(QObject *parent=0);
+  Protocol(Config *c,QObject *parent=0);
+
+ signals:
+  void crosspointChangeReceived(int output,int input);
+
+ public slots:
+  virtual void sendCrossPoint(int output,int input);
+
+ protected:
+  Config *config() const;
 
  private:
-  RouterHpiAudio *main_audio_router;
-  ProtocolRml *main_rml_protocol;
-  Config *main_config;
+  Config *protocol_config;
 };
 
 
-#endif  // LWNETROUTERD_H
+#endif  // PROTOCOL_H

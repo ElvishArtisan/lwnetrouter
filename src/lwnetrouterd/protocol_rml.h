@@ -1,6 +1,6 @@
-// lwnetrouterd.h
+// protocol_rml.h
 //
-// lwnetrouterd(8) routing daemon
+// RML protocol for lwnetrouterd(8)
 //
 //   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
 //
@@ -19,28 +19,27 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
-#ifndef LWNETROUTERD_H
-#define LWNETROUTERD_H
+#ifndef PROTOCOL_RML_H
+#define PROTOCOL_RML_H
 
-#include <QObject>
+#include <QUdpSocket>
 
-#include "config.h"
-#include "protocol_rml.h"
-#include "router_hpiaudio.h"
+#include "protocol.h"
 
-#define LWNETROUTERD_USAGE "[options]\n"
-
-class MainObject : public QObject
+class ProtocolRml : public Protocol
 {
- Q_OBJECT;
+  Q_OBJECT;
  public:
-  MainObject(QObject *parent=0);
+  ProtocolRml(Config *c,QObject *parent=0);
+
+ private slots:
+  void readyReadData();
 
  private:
-  RouterHpiAudio *main_audio_router;
-  ProtocolRml *main_rml_protocol;
-  Config *main_config;
+  void ProcessCommand(const QString &cmd);
+  QString rml_accum;
+  QUdpSocket *rml_socket;
 };
 
 
-#endif  // LWNETROUTERD_H
+#endif  // PROTOCOL_H
