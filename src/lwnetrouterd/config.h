@@ -27,7 +27,7 @@
 #define MAX_DELAY 10
 #define AUDIO_CHANNELS 2
 #define AUDIO_SAMPLE_RATE 48000
-#define AUDIO_HPI_POLLING_INTERVAL 50
+#define AUDIO_HPI_POLLING_INTERVAL 10000
 #define CONFIG_CONF_FILE "/etc/lwnetrouter.conf"
 
 //

@@ -120,7 +120,7 @@ void *__AudioCallback(void *ptr)
 	rb[i]->read((float *)pcm,frames_avail);
       }
     }
-    usleep(5000);
+    usleep(AUDIO_HPI_POLLING_INTERVAL);
   }
 
   /*
