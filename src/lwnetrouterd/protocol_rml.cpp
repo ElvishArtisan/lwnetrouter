@@ -68,9 +68,9 @@ void ProtocolRml::ProcessCommand(const QString &cmd)
     unsigned matrix=cmds.at(1).toUInt(&ok);
     if(ok&&(matrix==0)) {
       unsigned input=cmds.at(2).toUInt(&ok);
-      if(ok&&(input<(unsigned)config()->inputQuantity())) {
+      if(ok&&(input<=(unsigned)config()->inputQuantity())) {
 	unsigned output=cmds.at(3).toUInt(&ok);
-	if(ok&&(output<(unsigned)config()->outputQuantity())) {
+	if(ok&&(output<=(unsigned)config()->outputQuantity())) {
 	  emit crosspointChangeReceived(output-1,input-1);
 	}
       }

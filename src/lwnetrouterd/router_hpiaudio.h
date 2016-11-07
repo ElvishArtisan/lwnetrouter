@@ -43,7 +43,8 @@ class RouterHpiAudio : public Router
   hpi_handle_t hpi_input_streams[MAX_INPUTS];
   hpi_handle_t hpi_output_streams[MAX_OUTPUTS];
   hpi_handle_t hpi_mixer;
-  hpi_handle_t hpi_output_volumes[MAX_INPUTS][MAX_OUTPUTS];
+  //  hpi_handle_t hpi_output_volumes[MAX_INPUTS][MAX_OUTPUTS];
+  hpi_handle_t hpi_output_volumes[HPI_MAX_STREAMS][MAX_OUTPUTS];
   pthread_t hpi_pthread;
   friend void *__AudioCallback(void *ptr);
 };

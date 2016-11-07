@@ -11,3 +11,5 @@
 2016-11-07 Fred Gleason <fredg@paravelsystems.com>
 	* Implemented crosspoint switching in
 	'src/lwnetrouterd/router_hpiaudio.cpp'.
+2016-11-07 Fred Gleason <fredg@paravelsystems.com>
+	* Implemented support for non-equal input and output sizes.

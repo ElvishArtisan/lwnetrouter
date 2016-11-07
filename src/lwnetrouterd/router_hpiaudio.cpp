@@ -159,11 +159,23 @@ RouterHpiAudio::RouterHpiAudio(Config *c,QObject *parent)
   hpi_format=new struct hpi_format;
   short on_gain[HPI_MAX_CHANNELS]={0,0};
   short off_gain[HPI_MAX_CHANNELS]={-10000,-10000};
+  uint16_t ostreams;
+  uint16_t istreams;
+  uint16_t version;
+  uint32_t serial;
+  uint16_t type;
+
+  //
+  // Get Adapter Info
+  //
+  HpiError(HPI_AdapterGetInfo(NULL,0,&ostreams,&istreams,&version,&serial,
+			      &type));
 
   //
   // Initialize Mixer
   //
   HpiError(HPI_MixerOpen(NULL,0,&hpi_mixer));
+  /*
   for(int i=0;i<config()->inputQuantity();i++) {
     for(int j=0;j<config()->outputQuantity();j++) {
       HpiError(HPI_MixerGetControl(NULL,hpi_mixer,
@@ -173,6 +185,22 @@ RouterHpiAudio::RouterHpiAudio(Config *c,QObject *parent)
 				   &hpi_output_volumes[i][j]));
       HpiError(HPI_VolumeSetGain(NULL,hpi_output_volumes[i][j],off_gain));
     }
+    HpiError(HPI_VolumeSetGain(NULL,hpi_output_volumes[i][i],on_gain));
+  }
+  */
+
+  printf("ostreams: %d\n",ostreams);
+  for(int i=0;i<ostreams;i++) {
+    for(int j=0;j<config()->outputQuantity();j++) {
+      HpiError(HPI_MixerGetControl(NULL,hpi_mixer,
+				   HPI_SOURCENODE_OSTREAM,i,
+				   HPI_DESTNODE_LINEOUT,j,
+				   HPI_CONTROL_VOLUME,
+				   &hpi_output_volumes[i][j]));
+      HpiError(HPI_VolumeSetGain(NULL,hpi_output_volumes[i][j],off_gain));
+    }
+  }
+  for(int i=0;i<config()->outputQuantity();i++) {
     HpiError(HPI_VolumeSetGain(NULL,hpi_output_volumes[i][i],on_gain));
   }
 
