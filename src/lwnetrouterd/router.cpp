@@ -27,7 +27,7 @@ Router::Router(Config *config,QObject *parent)
   router_config=config;
 
   for(int i=0;i<config->outputQuantity();i++) {
-    router_crosspoints.push_back(-1);
+    router_crosspoints.push_back(0);
   }
 }
 

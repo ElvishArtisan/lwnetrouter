@@ -55,7 +55,9 @@ void *__AudioCallback(void *ptr)
   static int inputs=rha->config()->inputQuantity();
   static int outputs=rha->config()->outputQuantity();
   static Ringbuffer *rb[MAX_INPUTS];
+  static int xpoints[MAX_OUTPUTS];
   static unsigned frames_avail;
+  static int i;
 
   //
   // Initialize Ringbuffers
@@ -69,12 +71,19 @@ void *__AudioCallback(void *ptr)
   //
   while(1==1) {
     //
+    // Get Crosspoint Table
+    //
+    for(i=0;i<outputs;i++) {
+      xpoints[i]=rha->crossPoint(i);
+    }
+
+    //
     // Process Inputs
     //
     HpiError(HPI_InStreamGetInfoEx(NULL,rha->hpi_input_streams[0],&in_state,
 				   &in_buffer_size,&in_data_len,&in_frame_len,
 				   &in_aux_len));
-    for(int i=0;i<inputs;i++) {
+    for(i=0;i<inputs;i++) {
       HpiError(HPI_InStreamReadBuf(NULL,rha->hpi_input_streams[i],pcm,
 				   in_data_len));
       rb[i]->write((float *)pcm,in_data_len);
@@ -87,22 +96,27 @@ void *__AudioCallback(void *ptr)
 				    &out_buffer_size,&out_data_to_play,
 				    &out_frames_played,&out_aux_to_play));
     frames_avail=(out_buffer_size-out_data_to_play)/8;
-    for(int i=0;i<outputs;i++) {
+    for(i=0;i<outputs;i++) {
       if(rb[i]->readSpace()<frames_avail) {
 	frames_avail=rb[i]->readSpace();
       }
     }
     //    printf("frames_avail: %u\n",frames_avail);
     if(frames_avail>0) {
-      for(int i=0;i<outputs;i++) {
-	rb[i]->peek((float *)pcm,frames_avail);
+      for(i=0;i<outputs;i++) {
+	if(xpoints[i]<0) {
+	  memset(pcm,0,262144);
+	}
+	else {
+	  rb[xpoints[i]]->peek((float *)pcm,frames_avail);
+	}
 	HpiError(HPI_OutStreamWriteBuf(NULL,rha->hpi_output_streams[i],pcm,
 				       frames_avail,rha->hpi_format));
 	if(out_state==HPI_STATE_STOPPED) {
 	  HpiError(HPI_OutStreamStart(NULL,rha->hpi_output_streams[i]));
 	}
       }
-      for(int i=0;i<inputs;i++) {
+      for(i=0;i<inputs;i++) {
 	rb[i]->read((float *)pcm,frames_avail);
       }
     }
