@@ -22,6 +22,8 @@
 #ifndef ROUTER_AUDIO_H
 #define ROUTER_AUDIO_H
 
+#include "audiodestination.h"
+#include "audiosource.h"
 #include "router.h"
 
 class RouterAudio : public Router
@@ -33,6 +35,11 @@ class RouterAudio : public Router
 
  protected:
   void crossPointSet(int output,int input);
+
+ private:
+  AudioDestination *audio_destinations[MAX_INPUTS];
+  AudioSource *audio_sources[MAX_OUTPUTS];
+  Ringbuffer *audio_ringbuffers[MAX_INPUTS];
 };
 
 

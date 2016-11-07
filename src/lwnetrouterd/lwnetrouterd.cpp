@@ -48,6 +48,11 @@ MainObject::MainObject(QObject *parent)
   // Open the Syslog
   //
   openlog("lwnetrouterd",LOG_PERROR,LOG_DAEMON);
+
+  //
+  // Audio Router
+  //
+  main_audio_router=new RouterHpiAudio(main_config,this);
 }
 
 

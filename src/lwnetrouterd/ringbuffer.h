@@ -77,6 +77,7 @@ class Ringbuffer
   Ringbuffer(size_t bytes,unsigned channels);
   ~Ringbuffer();
   unsigned size() const;
+  unsigned peek(float *data,unsigned frames);
   unsigned read(float *data,unsigned frames);
   unsigned readSpace() const;
   unsigned write(float *data,unsigned frames);

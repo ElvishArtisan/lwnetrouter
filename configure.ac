@@ -59,6 +59,15 @@ PKG_CHECK_MODULES(SWITCHYARD,[switchyard],[],[AC_MSG_ERROR([*** Switchyard not f
 PKG_CHECK_MODULES(ALSA,[alsa],[],[AC_MSG_ERROR([*** ALSA not found ***])])
 
 #
+# Check for Secret Rabbit Code
+#
+PKG_CHECK_MODULES(SRC,[samplerate],[],[AC_MSG_ERROR([*** libsamplerate not found ***])])
+
+#
+# Check for AudioScience HPI
+AC_CHECK_HEADER(asihpi/hpi.h,[],[AC_MSG_ERROR([*** AudioScience HPI not found ***])])
+
+#
 # Check for DocBook Toolchain
 #
 if test -z $DOCBOOK_DISABLED ; then

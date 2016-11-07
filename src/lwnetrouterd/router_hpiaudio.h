@@ -1,6 +1,6 @@
-// audiosource.h
+// router_hpiaudio.h
 //
-// ALSA audio source for lwnetrouterd(8)
+// Audio router using an AudioScience HPI device.
 //
 //   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
 //
@@ -19,22 +19,34 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
-#ifndef AUDIOSOURCE_H
-#define AUDIOSOURCE_H
+#ifndef ROUTER_HPIAUDIO_H
+#define ROUTER_HPIAUDIO_H
 
 #include <pthread.h>
 
-#include "audioendpoint.h"
+#include <asihpi/hpi.h>
 
-class AudioSource : public AudioEndpoint
+#include "ringbuffer.h"
+#include "router.h"
+
+class RouterHpiAudio : public Router
 {
+  Q_OBJECT;
  public:
-  AudioSource(unsigned slot,Ringbuffer **rb,Config *c);
-  bool start(QString *err_msg);
+  RouterHpiAudio(Config *c,QObject *parent=0);
+
+ protected:
+  void crossPointSet(int output,int input);
 
  private:
-  friend void *__AudioSourceCallback(void *ptr);
+  struct hpi_format *hpi_format;
+  hpi_handle_t hpi_input_streams[MAX_INPUTS];
+  hpi_handle_t hpi_output_streams[MAX_OUTPUTS];
+  hpi_handle_t hpi_mixer;
+  hpi_handle_t hpi_output_volumes[MAX_INPUTS][MAX_OUTPUTS];
+  pthread_t hpi_pthread;
+  friend void *__AudioCallback(void *ptr);
 };
 
 
-#endif  // AUDIOSOURCE_H
+#endif  // ROUTER_HPIAUDIO_H

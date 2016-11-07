@@ -22,28 +22,17 @@
 #ifndef AUDIODESTINATION_H
 #define AUDIODESTINATION_H
 
-#include <alsa/asoundlib.h>
 #include <pthread.h>
 
-#include "config.h"
-#include "ringbuffer.h"
+#include "audioendpoint.h"
 
-class AudioDestination
+class AudioDestination : public AudioEndpoint
 {
  public:
-  AudioDestination(Ringbuffer *rb,Config *config);
-  ~AudioDestination();
-  bool start(int input);
+  AudioDestination(unsigned slot,Ringbuffer **rb,Config *c);
+  bool start(QString *err_msg);
 
  private:
-  snd_pcm_t *alsa_pcm;
-  unsigned alsa_samplerate;
-  unsigned alsa_channels;
-  unsigned alsa_period_quantity;
-  snd_pcm_uframes_t alsa_buffer_size; 
-  float *alsa_pcm_buffer;
-  pthread_t alsa_pthread;
-  Config *audio_config;
   friend void *__AudioDestinationCallback(void *ptr);
 };
 

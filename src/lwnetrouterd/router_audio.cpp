@@ -21,14 +21,59 @@
 
 #include "router_audio.h"
 
-RouterAudio::RouterAudio(Config *config,QObject *parent)
-  : Router(config,parent)
+RouterAudio::RouterAudio(Config *c,QObject *parent)
+  : Router(c,parent)
 {
+  QString err_msg;
+
+  //
+  // Ringbuffers
+  //
+  for(int i=0;i<config()->inputQuantity();i++) {
+    audio_ringbuffers[i]=new Ringbuffer(48000*MAX_DELAY,2);
+  }
+
+  //
+  // Sources
+  //
+  for(int i=0;i<config()->inputQuantity();i++) {
+    audio_sources[i]=new AudioSource(i,audio_ringbuffers,config());
+    if(!audio_sources[i]->start(&err_msg)) {
+      fprintf(stderr,
+	      "lwnetrouterd: failed to start playback device \"%s\" [%s]",
+	      (const char *)config()->audioAlsaDevice(i).toUtf8(),
+	      (const char *)err_msg.toUtf8());
+      exit(256);
+    }
+  }
+
+  //
+  // Destinations
+  //
+  for(int i=0;i<config()->outputQuantity();i++) {
+    audio_destinations[i]=new AudioDestination(i,audio_ringbuffers,config());
+    if(!audio_destinations[i]->start(&err_msg)) {
+      fprintf(stderr,
+	      "lwnetrouterd: failed to start capture device \"%s\" [%s]",
+	      (const char *)config()->audioAlsaDevice(i).toUtf8(),
+	      (const char *)err_msg.toUtf8());
+      exit(256);
+    }
+  }
 }
 
 
 RouterAudio::~RouterAudio()
 {
+  for(int i=0;i<config()->outputQuantity();i++) {
+    delete audio_destinations[i];
+  }
+  for(int i=0;i<config()->inputQuantity();i++) {
+    delete audio_sources[i];
+  }
+  for(int i=0;i<config()->inputQuantity();i++) {
+    delete audio_ringbuffers[i];
+  }
 }
 
 

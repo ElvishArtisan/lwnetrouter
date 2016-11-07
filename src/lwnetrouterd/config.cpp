@@ -19,6 +19,8 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
+#include <stdio.h>
+
 #include <sy/syprofile.h>
 
 #include "config.h"
@@ -34,6 +36,10 @@ Config::Config()
     p->intValue("Global","OutputQuantity",CONFIG_DEFAULT_OUTPUT_QUANTITY);
   conf_audio_alsa_device=
     p->stringValue("Audio","AlsaDevice",CONFIG_DEFAULT_AUDIO_ALSA_DEVICE);
+  conf_audio_period_quantity=
+    p->intValue("Audio","PeriodQuantity",CONFIG_DEFAULT_AUDIO_PERIOD_QUANTITY);
+  conf_audio_buffer_size=
+    p->intValue("Audio","BufferSize",CONFIG_DEFAULT_AUDIO_BUFFER_SIZE);
   delete p;
 }
 
@@ -50,7 +56,22 @@ int Config::outputQuantity() const
 }
 
 
-QString Config::audioAlsaDevice() const
+QString Config::audioAlsaDevice(int subdev) const
 {
-  return conf_audio_alsa_device;
+  if(subdev<0) {
+    return conf_audio_alsa_device;
+  }
+  return conf_audio_alsa_device+QString().sprintf(",%d",subdev);
+}
+
+
+int Config::audioPeriodQuantity() const
+{
+  return conf_audio_period_quantity;
+}
+
+
+int Config::audioBufferSize() const
+{
+  return conf_audio_buffer_size;
 }

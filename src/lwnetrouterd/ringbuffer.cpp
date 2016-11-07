@@ -412,6 +412,14 @@ unsigned Ringbuffer::size() const
 }
 
 
+unsigned Ringbuffer::peek(float *data,unsigned frames)
+{
+  return glass_ringbuffer_peek(ring_ring,(char *)data,
+			      frames*sizeof(float)*ring_channels)/
+    (sizeof(float)*ring_channels);
+}
+
+
 unsigned Ringbuffer::read(float *data,unsigned frames)
 {
   return glass_ringbuffer_read(ring_ring,(char *)data,

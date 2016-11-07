@@ -25,6 +25,7 @@
 #include <QObject>
 
 #include "config.h"
+#include "router_hpiaudio.h"
 
 #define LWNETROUTERD_USAGE "[options]\n"
 
@@ -35,6 +36,7 @@ class MainObject : public QObject
   MainObject(QObject *parent=0);
 
  private:
+  RouterHpiAudio *main_audio_router;
   Config *main_config;
 };
 
