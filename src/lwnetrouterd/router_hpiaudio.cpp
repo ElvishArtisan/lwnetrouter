@@ -123,30 +123,6 @@ void *__AudioCallback(void *ptr)
     usleep(AUDIO_HPI_POLLING_INTERVAL);
   }
 
-  /*
-  //
-  // Main Loop
-  //
-  while(1==1) {
-    HpiError(HPI_InStreamGetInfoEx(NULL,rha->hpi_input_streams[0],&in_state,
-				   &in_buffer_size,&in_data_len,&in_frame_len,
-				   &in_aux_len));
-    for(int i=0;i<inputs;i++) {
-      HpiError(HPI_InStreamReadBuf(NULL,rha->hpi_input_streams[i],pcm,in_data_len));
-      if(in_data_len>0) {
-	HpiError(HPI_OutStreamGetInfoEx(NULL,rha->hpi_output_streams[i],&out_state,
-					&out_buffer_size,&out_data_to_play,
-					&out_frames_played,&out_aux_to_play));
-	HpiError(HPI_OutStreamWriteBuf(NULL,rha->hpi_output_streams[i],pcm,
-				       in_data_len,rha->hpi_format));
-	if(out_state==HPI_STATE_STOPPED) {
-	  HpiError(HPI_OutStreamStart(NULL,rha->hpi_output_streams[i]));
-	}
-      }
-    }
-    usleep(5000);
-  }
-  */
   return NULL;
 }
 
@@ -164,32 +140,23 @@ RouterHpiAudio::RouterHpiAudio(Config *c,QObject *parent)
   uint16_t version;
   uint32_t serial;
   uint16_t type;
+  uint32_t bufsize;
 
   //
   // Get Adapter Info
   //
   HpiError(HPI_AdapterGetInfo(NULL,0,&ostreams,&istreams,&version,&serial,
 			      &type));
+  HpiError(HPI_FormatCreate(hpi_format,2,HPI_FORMAT_PCM32_FLOAT,
+			    AUDIO_SAMPLE_RATE,0,0));
+  HpiError(HPI_StreamEstimateBufferSize(hpi_format,AUDIO_HPI_POLLING_INTERVAL,
+					&bufsize));
+  printf("SIZE: %u\n",bufsize);
 
   //
   // Initialize Mixer
   //
   HpiError(HPI_MixerOpen(NULL,0,&hpi_mixer));
-  /*
-  for(int i=0;i<config()->inputQuantity();i++) {
-    for(int j=0;j<config()->outputQuantity();j++) {
-      HpiError(HPI_MixerGetControl(NULL,hpi_mixer,
-				   HPI_SOURCENODE_OSTREAM,i,
-				   HPI_DESTNODE_LINEOUT,j,
-				   HPI_CONTROL_VOLUME,
-				   &hpi_output_volumes[i][j]));
-      HpiError(HPI_VolumeSetGain(NULL,hpi_output_volumes[i][j],off_gain));
-    }
-    HpiError(HPI_VolumeSetGain(NULL,hpi_output_volumes[i][i],on_gain));
-  }
-  */
-
-  printf("ostreams: %d\n",ostreams);
   for(int i=0;i<ostreams;i++) {
     for(int j=0;j<config()->outputQuantity();j++) {
       HpiError(HPI_MixerGetControl(NULL,hpi_mixer,
@@ -207,11 +174,13 @@ RouterHpiAudio::RouterHpiAudio(Config *c,QObject *parent)
   //
   // Open Inputs
   //
-  HpiError(HPI_FormatCreate(hpi_format,2,HPI_FORMAT_PCM32_FLOAT,
-			    AUDIO_SAMPLE_RATE,0,0));
   for(int i=0;i<config()->inputQuantity();i++) {
     HpiError(HPI_InStreamOpen(NULL,0,i,&hpi_input_streams[i]));
     HpiError(HPI_InStreamSetFormat(NULL,hpi_input_streams[i],hpi_format));
+    if(HpiError(HPI_InStreamHostBufferAllocate(NULL,hpi_input_streams[i],
+				 bufsize))==HPI_ERROR_INVALID_DATASIZE) {
+      syslog(LOG_DEBUG,"unable to enable bus mastering for input stream %d",i);
+    }
     HpiError(HPI_InStreamStart(NULL,hpi_input_streams[i]));
   }
 
@@ -221,6 +190,10 @@ RouterHpiAudio::RouterHpiAudio(Config *c,QObject *parent)
   for(int i=0;i<config()->outputQuantity();i++) {
     HpiError(HPI_OutStreamOpen(NULL,0,i,&hpi_output_streams[i]));
     HpiError(HPI_OutStreamSetFormat(NULL,hpi_output_streams[i],hpi_format));
+    if(HpiError(HPI_OutStreamHostBufferAllocate(NULL,hpi_output_streams[i],
+				 bufsize))==HPI_ERROR_INVALID_DATASIZE) {
+      syslog(LOG_DEBUG,"unable to enable bus mastering for output stream %d",i);
+    }
   }
 
   //
@@ -236,4 +209,32 @@ RouterHpiAudio::RouterHpiAudio(Config *c,QObject *parent)
 void RouterHpiAudio::crossPointSet(int output,int input)
 {
   printf("RouterHpiAudio::crossPointSet(%d,%d)\n",output,input);
+}
+
+
+bool RouterHpiAudio::EnableInputBusMastering(int input,uint32_t bufsize)
+{
+  hpi_err_t err;
+
+  if((err=HPI_InStreamHostBufferAllocate(NULL,hpi_input_streams[input],
+					 bufsize))==HPI_ERROR_INVALID_DATASIZE) {
+    return false;
+  }
+  printf("INPUT ERR: %d\n",err);
+  HpiError(err);
+  return true;
+}
+
+
+bool RouterHpiAudio::EnableOutputBusMastering(int output,uint32_t bufsize)
+{
+  hpi_err_t err;
+
+  if((err=HPI_OutStreamHostBufferAllocate(NULL,hpi_output_streams[output],
+					  bufsize))==HPI_ERROR_INVALID_DATASIZE) {
+    return false;
+  }
+  printf("OUTPUT ERR: %d\n",err);
+  HpiError(err);
+  return true;
 }

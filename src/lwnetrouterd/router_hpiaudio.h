@@ -39,6 +39,8 @@ class RouterHpiAudio : public Router
   void crossPointSet(int output,int input);
 
  private:
+  bool EnableInputBusMastering(int input,uint32_t bufsize);
+  bool EnableOutputBusMastering(int output,uint32_t bufsize);
   struct hpi_format *hpi_format;
   hpi_handle_t hpi_input_streams[MAX_INPUTS];
   hpi_handle_t hpi_output_streams[MAX_OUTPUTS];

@@ -15,3 +15,7 @@
 	* Implemented support for non-equal input and output sizes.
 2016-11-07 Fred Gleason <fredg@paravelsystems.com>
 	* Tuned the audio polling interval for minimal CPU utilization.
+2016-11-12 Fred Gleason <fredg@paravelsystems.com>
+	* Enabled bus-mastering transfers for the HPI driver in
+	'src/lwnetrouterd/router_hpiaudio.cpp' and
+	'src/lwnetrouterd/router_hpiaudio.h'.
