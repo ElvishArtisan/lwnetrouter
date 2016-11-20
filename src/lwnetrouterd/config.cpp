@@ -40,6 +40,11 @@ Config::Config()
     p->intValue("Audio","PeriodQuantity",CONFIG_DEFAULT_AUDIO_PERIOD_QUANTITY);
   conf_audio_buffer_size=
     p->intValue("Audio","BufferSize",CONFIG_DEFAULT_AUDIO_BUFFER_SIZE);
+  conf_audio_input_bus_xfers=p->
+    boolValue("Audio","InputBusXfers",CONFIG_DEFAULT_AUDIO_INPUT_BUS_XFERS);
+  conf_audio_output_bus_xfers=p->
+    boolValue("Audio","OutputBusXfers",CONFIG_DEFAULT_AUDIO_OUTPUT_BUS_XFERS);
+
   delete p;
 }
 
@@ -74,4 +79,16 @@ int Config::audioPeriodQuantity() const
 int Config::audioBufferSize() const
 {
   return conf_audio_buffer_size;
+}
+
+
+bool Config::audioInputBusXfers() const
+{
+  return conf_audio_input_bus_xfers;
+}
+
+
+bool Config::audioOutputBusXfers() const
+{
+  return conf_audio_output_bus_xfers;
 }

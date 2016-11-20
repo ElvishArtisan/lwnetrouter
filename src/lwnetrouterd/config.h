@@ -38,6 +38,8 @@
 #define CONFIG_DEFAULT_AUDIO_ALSA_DEVICE "plughw:Axia"
 #define CONFIG_DEFAULT_AUDIO_PERIOD_QUANTITY 4
 #define CONFIG_DEFAULT_AUDIO_BUFFER_SIZE 22000
+#define CONFIG_DEFAULT_AUDIO_INPUT_BUS_XFERS false
+#define CONFIG_DEFAULT_AUDIO_OUTPUT_BUS_XFERS true
 
 #include <QString>
 
@@ -50,6 +52,8 @@ class Config
   QString audioAlsaDevice(int subdev=-1) const;
   int audioPeriodQuantity() const;
   int audioBufferSize() const;
+  bool audioInputBusXfers() const;
+  bool audioOutputBusXfers() const;
 
  private:
   int conf_input_quantity;
@@ -57,6 +61,8 @@ class Config
   QString conf_audio_alsa_device;
   int conf_audio_period_quantity;
   int conf_audio_buffer_size;
+  bool conf_audio_input_bus_xfers;
+  bool conf_audio_output_bus_xfers;
 };
 
 

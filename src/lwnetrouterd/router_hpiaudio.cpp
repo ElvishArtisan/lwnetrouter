@@ -23,7 +23,11 @@
 #include <syslog.h>
 #include <unistd.h>
 
-#include <samplerate.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+#include <soundtouch/SoundTouch.h>
 
 #include "router_hpiaudio.h"
 
@@ -51,19 +55,28 @@ void *__AudioCallback(void *ptr)
   static uint32_t out_data_to_play;
   static uint32_t out_frames_played;
   static uint32_t out_aux_to_play;
-  static uint8_t pcm[262144];
+  static float pcm[262144];
+  static float pcm2[262144];
   static int inputs=rha->config()->inputQuantity();
   static int outputs=rha->config()->outputQuantity();
   static Ringbuffer *rb[MAX_INPUTS];
+  static soundtouch::SoundTouch *st[MAX_INPUTS];
   static int xpoints[MAX_OUTPUTS];
   static unsigned frames_avail;
   static int i;
+  static int n;
 
   //
-  // Initialize Ringbuffers
+  // Initialize Input Queues
   //
   for(int i=0;i<inputs;i++) {
-    rb[i]=new Ringbuffer(4800000,2);
+    rb[i]=new Ringbuffer(4800000,AUDIO_CHANNELS);
+    st[i]=new soundtouch::SoundTouch();
+    st[i]->setRate(1.0);
+    st[i]->setTempo(1.0);
+    st[i]->setPitch(1.0);
+    st[i]->setChannels(AUDIO_CHANNELS);
+    st[i]->setSampleRate(AUDIO_SAMPLE_RATE);
   }
 
   //
@@ -84,9 +97,13 @@ void *__AudioCallback(void *ptr)
 				   &in_buffer_size,&in_data_len,&in_frame_len,
 				   &in_aux_len));
     for(i=0;i<inputs;i++) {
-      HpiError(HPI_InStreamReadBuf(NULL,rha->hpi_input_streams[i],pcm,
-				   in_data_len));
-      rb[i]->write((float *)pcm,in_data_len);
+      HpiError(HPI_InStreamReadBuf(NULL,rha->hpi_input_streams[i],
+				   (uint8_t *)pcm,in_data_len));
+      st[i]->putSamples(pcm,in_data_len/8);
+      if(st[i]->numSamples()>0) {
+	n=st[i]->receiveSamples(pcm2,st[i]->numSamples());
+	rb[i]->write(pcm2,n*8);
+      }
     }
 
     //
@@ -95,13 +112,16 @@ void *__AudioCallback(void *ptr)
     HpiError(HPI_OutStreamGetInfoEx(NULL,rha->hpi_output_streams[0],&out_state,
 				    &out_buffer_size,&out_data_to_play,
 				    &out_frames_played,&out_aux_to_play));
-    frames_avail=(out_buffer_size-out_data_to_play)/8;
+    frames_avail=(out_buffer_size-out_data_to_play)/(sizeof(float)*AUDIO_CHANNELS);
+    if(out_data_to_play<(out_buffer_size/2)) {
+      frames_avail=out_buffer_size/(sizeof(float)*AUDIO_CHANNELS*2);
+    }
     for(i=0;i<outputs;i++) {
       if(rb[i]->readSpace()<frames_avail) {
 	frames_avail=rb[i]->readSpace();
       }
     }
-    //    printf("frames_avail: %u\n",frames_avail);
+    // printf("out: %u\n",frames_avail);
     if(frames_avail>0) {
       for(i=0;i<outputs;i++) {
 	if(xpoints[i]<0) {
@@ -110,7 +130,8 @@ void *__AudioCallback(void *ptr)
 	else {
 	  rb[xpoints[i]]->peek((float *)pcm,frames_avail);
 	}
-	HpiError(HPI_OutStreamWriteBuf(NULL,rha->hpi_output_streams[i],pcm,
+	HpiError(HPI_OutStreamWriteBuf(NULL,rha->hpi_output_streams[i],
+				       (uint8_t *)pcm,
 				       frames_avail,rha->hpi_format));
 	if(out_state==HPI_STATE_STOPPED) {
 	  HpiError(HPI_OutStreamStart(NULL,rha->hpi_output_streams[i]));
@@ -151,7 +172,6 @@ RouterHpiAudio::RouterHpiAudio(Config *c,QObject *parent)
 			    AUDIO_SAMPLE_RATE,0,0));
   HpiError(HPI_StreamEstimateBufferSize(hpi_format,AUDIO_HPI_POLLING_INTERVAL,
 					&bufsize));
-  printf("SIZE: %u\n",bufsize);
 
   //
   // Initialize Mixer
@@ -177,9 +197,13 @@ RouterHpiAudio::RouterHpiAudio(Config *c,QObject *parent)
   for(int i=0;i<config()->inputQuantity();i++) {
     HpiError(HPI_InStreamOpen(NULL,0,i,&hpi_input_streams[i]));
     HpiError(HPI_InStreamSetFormat(NULL,hpi_input_streams[i],hpi_format));
-    if(HpiError(HPI_InStreamHostBufferAllocate(NULL,hpi_input_streams[i],
-				 bufsize))==HPI_ERROR_INVALID_DATASIZE) {
-      syslog(LOG_DEBUG,"unable to enable bus mastering for input stream %d",i);
+    if(config()->audioInputBusXfers()) {
+      if(HpiError(HPI_InStreamHostBufferAllocate(NULL,hpi_input_streams[i],
+						 bufsize))==
+	 HPI_ERROR_INVALID_DATASIZE) {
+	syslog(LOG_DEBUG,
+	       "unable to enable bus mastering for input stream %d",i);
+      }
     }
     HpiError(HPI_InStreamStart(NULL,hpi_input_streams[i]));
   }
@@ -190,9 +214,13 @@ RouterHpiAudio::RouterHpiAudio(Config *c,QObject *parent)
   for(int i=0;i<config()->outputQuantity();i++) {
     HpiError(HPI_OutStreamOpen(NULL,0,i,&hpi_output_streams[i]));
     HpiError(HPI_OutStreamSetFormat(NULL,hpi_output_streams[i],hpi_format));
-    if(HpiError(HPI_OutStreamHostBufferAllocate(NULL,hpi_output_streams[i],
-				 bufsize))==HPI_ERROR_INVALID_DATASIZE) {
-      syslog(LOG_DEBUG,"unable to enable bus mastering for output stream %d",i);
+    if(config()->audioOutputBusXfers()) {
+      if(HpiError(HPI_OutStreamHostBufferAllocate(NULL,hpi_output_streams[i],
+						  bufsize))==
+	 HPI_ERROR_INVALID_DATASIZE) {
+	syslog(LOG_DEBUG,
+	       "unable to enable bus mastering for output stream %d",i);
+      }
     }
   }
 
@@ -209,32 +237,4 @@ RouterHpiAudio::RouterHpiAudio(Config *c,QObject *parent)
 void RouterHpiAudio::crossPointSet(int output,int input)
 {
   printf("RouterHpiAudio::crossPointSet(%d,%d)\n",output,input);
-}
-
-
-bool RouterHpiAudio::EnableInputBusMastering(int input,uint32_t bufsize)
-{
-  hpi_err_t err;
-
-  if((err=HPI_InStreamHostBufferAllocate(NULL,hpi_input_streams[input],
-					 bufsize))==HPI_ERROR_INVALID_DATASIZE) {
-    return false;
-  }
-  printf("INPUT ERR: %d\n",err);
-  HpiError(err);
-  return true;
-}
-
-
-bool RouterHpiAudio::EnableOutputBusMastering(int output,uint32_t bufsize)
-{
-  hpi_err_t err;
-
-  if((err=HPI_OutStreamHostBufferAllocate(NULL,hpi_output_streams[output],
-					  bufsize))==HPI_ERROR_INVALID_DATASIZE) {
-    return false;
-  }
-  printf("OUTPUT ERR: %d\n",err);
-  HpiError(err);
-  return true;
 }

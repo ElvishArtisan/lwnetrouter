@@ -64,7 +64,13 @@ PKG_CHECK_MODULES(ALSA,[alsa],[],[AC_MSG_ERROR([*** ALSA not found ***])])
 PKG_CHECK_MODULES(SRC,[samplerate],[],[AC_MSG_ERROR([*** libsamplerate not found ***])])
 
 #
+# Check for SoundTouch
+#
+PKG_CHECK_MODULES(SOUNDTOUCH,[soundtouch-1.4],[],[AC_MSG_ERROR([*** SoundTouch not found ***])])
+
+#
 # Check for AudioScience HPI
+#
 AC_CHECK_HEADER(asihpi/hpi.h,[],[AC_MSG_ERROR([*** AudioScience HPI not found ***])])
 
 #

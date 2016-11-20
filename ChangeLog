@@ -19,3 +19,5 @@
 	* Enabled bus-mastering transfers for the HPI driver in
 	'src/lwnetrouterd/router_hpiaudio.cpp' and
 	'src/lwnetrouterd/router_hpiaudio.h'.
+2016-11-20 Fred Gleason <fredg@paravelsystems.com>
+	* Added a dependency for Soundtouch.

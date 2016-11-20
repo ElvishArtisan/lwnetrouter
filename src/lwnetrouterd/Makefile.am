@@ -20,7 +20,7 @@
 ##
 ## Use automake to process this into a Makefile.in
 
-AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -Wno-strict-aliasing @QT4CLI_CFLAGS@ @SWITCHYARD_CFLAGS@ @ALSA_CFLAGS@ @SRC_CFLAGS@ @PTHREADS_CFLAGS@
+AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -Wno-strict-aliasing @QT4CLI_CFLAGS@ @SWITCHYARD_CFLAGS@ @ALSA_CFLAGS@ @SRC_CFLAGS@ @SOUNDTOUCH_CFLAGS@ @PTHREADS_CFLAGS@
 MOC = @QT4_MOC@
 
 # The dependency for qt's Meta Object Compiler (moc)
@@ -49,7 +49,7 @@ nodist_lwnetrouterd_SOURCES = moc_lwnetrouterd.cpp\
                               moc_router_audio.cpp\
                               moc_router_hpiaudio.cpp
 
-lwnetrouterd_LDADD = @QT4CLI_LIBS@ @SWITCHYARD_LIBS@ @ALSA_LIBS@ @PTHREADS_LIBS@ @SRC_LIBS@ -lhpi -lpthread
+lwnetrouterd_LDADD = @QT4CLI_LIBS@ @SWITCHYARD_LIBS@ @ALSA_LIBS@ @PTHREADS_LIBS@ @SRC_LIBS@ @SOUNDTOUCH_LIBS@ -lhpi -lpthread
 
 CLEANFILES = *~\
              moc_*\
