@@ -37,11 +37,6 @@ AC_LANG(C++)
 AC_ARG_ENABLE(docbook,[  --disable-docbook       disable building of documentation],[DOCBOOK_DISABLED=yes],[])
 
 #
-# Check for POSIX threads
-#
-PKG_CHECK_MODULES(PTHREADS,[pthread-stubs],[],[AC_MSG_ERROR([*** POSIX theads API not found ***])])
-
-#
 # Check for Qt4 (Mandatory)
 #
 PKG_CHECK_MODULES(QT4CLI,QtCore QtNetwork,[],[AC_MSG_ERROR([*** Qt4 not found ***])])
@@ -52,16 +47,6 @@ AC_SUBST(MOC,$MOC_NAME)
 # Check for Switchyard
 #
 PKG_CHECK_MODULES(SWITCHYARD,[switchyard],[],[AC_MSG_ERROR([*** Switchyard not found ***])])
-
-#
-# Check for ALSA
-#
-PKG_CHECK_MODULES(ALSA,[alsa],[],[AC_MSG_ERROR([*** ALSA not found ***])])
-
-#
-# Check for Secret Rabbit Code
-#
-PKG_CHECK_MODULES(SRC,[samplerate],[],[AC_MSG_ERROR([*** libsamplerate not found ***])])
 
 #
 # Check for SoundTouch
