@@ -40,8 +40,9 @@ AC_ARG_ENABLE(docbook,[  --disable-docbook       disable building of documentati
 # Check for Qt4 (Mandatory)
 #
 PKG_CHECK_MODULES(QT4CLI,QtCore QtNetwork,[],[AC_MSG_ERROR([*** Qt4 not found ***])])
+PKG_CHECK_MODULES(QT4GUI,QtCore QtGui QtNetwork,[],[AC_MSG_ERROR([*** Qt4 not found ***])])
 AC_CHECK_PROG(MOC_NAME,moc-qt4,[moc-qt4],[moc])
-AC_SUBST(MOC,$MOC_NAME)
+AC_SUBST(QT4_MOC,$MOC_NAME)
 
 #
 # Check for Switchyard
@@ -95,11 +96,18 @@ AC_CONFIG_FILES([ \
     conf/Makefile \
     docs/Makefile \
     src/Makefile \
+    src/lwnetdelay/Makefile \
     src/lwnetrouterd/Makefile \
     lwnetrouter.service \
     lwnetrouter.spec \
     Makefile ])
 AC_OUTPUT()
+
+#
+# Link Common Elements
+#
+./link_common.sh lwnetdelay
+./link_common.sh lwnetrouterd
 
 AC_MSG_NOTICE()
 AC_MSG_NOTICE(Now enter 'make' to build the software.)

@@ -25,13 +25,12 @@ MOC = @QT4_MOC@
 
 # The dependency for qt's Meta Object Compiler (moc)
 moc_%.cpp:	%.h
-	@MOC@ $< -o $@
+	$(MOC) $< -o $@
 
 
 sbin_PROGRAMS = lwnetrouterd
 
-dist_lwnetrouterd_SOURCES = config.cpp config.h\
-                            lwnetrouterd.cpp lwnetrouterd.h\
+dist_lwnetrouterd_SOURCES = lwnetrouterd.cpp lwnetrouterd.h\
                             protocol.cpp protocol.h\
                             protocol_cunc.cpp protocol_cunc.h\
                             protocol_rml.cpp protocol_rml.h\
@@ -40,7 +39,8 @@ dist_lwnetrouterd_SOURCES = config.cpp config.h\
                             router_hpiaudio.cpp router_hpiaudio.h\
                             streamcmdserver.cpp streamcmdserver.h
 
-nodist_lwnetrouterd_SOURCES = moc_lwnetrouterd.cpp\
+nodist_lwnetrouterd_SOURCES = config.cpp config.h\
+                              moc_lwnetrouterd.cpp\
                               moc_protocol.cpp\
                               moc_protocol_cunc.cpp\
                               moc_protocol_rml.cpp\
@@ -56,5 +56,8 @@ CLEANFILES = *~\
              *.idb\
              *.pdb\
              *ilk
+
+DISTCLEANFILES = config.cpp config.h
+
 MAINTAINERCLEANFILES = *~\
                        Makefile.in

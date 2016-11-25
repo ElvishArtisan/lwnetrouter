@@ -48,6 +48,7 @@ rpm:	dist
 EXTRA_DIST = autogen.sh\
              get_distro.sh\
              get_target.sh\
+             link_common.sh\
              lwnetrouter.service.in\
              lwnetrouter.spec.in\
              PACKAGE_VERSION
