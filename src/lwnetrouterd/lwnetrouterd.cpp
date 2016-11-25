@@ -60,6 +60,25 @@ MainObject::MainObject(QObject *parent)
   main_rml_protocol=new ProtocolRml(main_config,this);
   connect(main_rml_protocol,SIGNAL(crosspointChangeReceived(int,int)),
 	  main_audio_router,SLOT(setCrossPoint(int,int)));
+
+  main_cunc_protocol=new ProtocolCunc(main_config,this);
+  connect(main_cunc_protocol,
+	  SIGNAL(delayStateChangeReceived(int,Config::DelayState)),
+	  main_audio_router,SLOT(setDelayState(int,Config::DelayState)));
+  connect(main_cunc_protocol,SIGNAL(delayDumpReceived(int)),
+	  main_audio_router,SLOT(dumpDelay(int)));
+  connect(main_cunc_protocol,SIGNAL(delayStateRequested(int,int)),
+	  this,SLOT(cuncDelayStateRequestedData(int,int)));
+  connect(main_audio_router,SIGNAL(delayStateChanged(int,Config::DelayState,int)),
+	  main_cunc_protocol,SLOT(sendDelayState(int,Config::DelayState,int)));
+}
+
+
+void MainObject::cuncDelayStateRequestedData(int id,int input)
+{
+  main_cunc_protocol->
+    sendDelayState(id,input,main_audio_router->delayState(input),
+		   main_audio_router->delayInterval(input));
 }
 
 

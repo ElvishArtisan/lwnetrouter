@@ -34,12 +34,9 @@ Config::Config()
     p->intValue("Global","InputQuantity",CONFIG_DEFAULT_INPUT_QUANTITY);
   conf_output_quantity=
     p->intValue("Global","OutputQuantity",CONFIG_DEFAULT_OUTPUT_QUANTITY);
-  conf_audio_alsa_device=
-    p->stringValue("Audio","AlsaDevice",CONFIG_DEFAULT_AUDIO_ALSA_DEVICE);
-  conf_audio_period_quantity=
-    p->intValue("Audio","PeriodQuantity",CONFIG_DEFAULT_AUDIO_PERIOD_QUANTITY);
-  conf_audio_buffer_size=
-    p->intValue("Audio","BufferSize",CONFIG_DEFAULT_AUDIO_BUFFER_SIZE);
+  conf_audio_delay_change_percent=
+    p->intValue("Audio","DelayChangePercent",
+		CONFIG_DEFAULT_AUDIO_DELAY_CHANGE_PERCENT);
   conf_audio_input_bus_xfers=p->
     boolValue("Audio","InputBusXfers",CONFIG_DEFAULT_AUDIO_INPUT_BUS_XFERS);
   conf_audio_output_bus_xfers=p->
@@ -61,24 +58,9 @@ int Config::outputQuantity() const
 }
 
 
-QString Config::audioAlsaDevice(int subdev) const
+int Config::audioDelayChangePercent() const
 {
-  if(subdev<0) {
-    return conf_audio_alsa_device;
-  }
-  return conf_audio_alsa_device+QString().sprintf(",%d",subdev);
-}
-
-
-int Config::audioPeriodQuantity() const
-{
-  return conf_audio_period_quantity;
-}
-
-
-int Config::audioBufferSize() const
-{
-  return conf_audio_buffer_size;
+  return conf_audio_delay_change_percent;
 }
 
 

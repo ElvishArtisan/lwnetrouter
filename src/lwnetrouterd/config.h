@@ -24,7 +24,7 @@
 
 #define MAX_INPUTS 8
 #define MAX_OUTPUTS 8
-#define MAX_DELAY 10
+#define MAX_DELAY 1
 #define AUDIO_CHANNELS 2
 #define AUDIO_SAMPLE_RATE 48000
 #define AUDIO_HPI_POLLING_INTERVAL 10000
@@ -35,9 +35,7 @@
 //
 #define CONFIG_DEFAULT_INPUT_QUANTITY 8
 #define CONFIG_DEFAULT_OUTPUT_QUANTITY 8
-#define CONFIG_DEFAULT_AUDIO_ALSA_DEVICE "plughw:Axia"
-#define CONFIG_DEFAULT_AUDIO_PERIOD_QUANTITY 4
-#define CONFIG_DEFAULT_AUDIO_BUFFER_SIZE 22000
+#define CONFIG_DEFAULT_AUDIO_DELAY_CHANGE_PERCENT 5
 #define CONFIG_DEFAULT_AUDIO_INPUT_BUS_XFERS false
 #define CONFIG_DEFAULT_AUDIO_OUTPUT_BUS_XFERS true
 
@@ -46,21 +44,19 @@
 class Config
 {
  public:
+  enum DelayState {DelayUnknown=0,DelayBypassed=1,DelayEntered=2,
+		   DelayEntering=3,DelayExited=4,DelayExiting=5};
   Config();
   int inputQuantity() const;
   int outputQuantity() const;
-  QString audioAlsaDevice(int subdev=-1) const;
-  int audioPeriodQuantity() const;
-  int audioBufferSize() const;
+  int audioDelayChangePercent() const;
   bool audioInputBusXfers() const;
   bool audioOutputBusXfers() const;
 
  private:
   int conf_input_quantity;
   int conf_output_quantity;
-  QString conf_audio_alsa_device;
-  int conf_audio_period_quantity;
-  int conf_audio_buffer_size;
+  int conf_audio_delay_change_percent;
   bool conf_audio_input_bus_xfers;
   bool conf_audio_output_bus_xfers;
 };

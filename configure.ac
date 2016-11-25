@@ -49,11 +49,6 @@ AC_SUBST(MOC,$MOC_NAME)
 PKG_CHECK_MODULES(SWITCHYARD,[switchyard],[],[AC_MSG_ERROR([*** Switchyard not found ***])])
 
 #
-# Check for SoundTouch
-#
-PKG_CHECK_MODULES(SOUNDTOUCH,[soundtouch-1.4],[],[AC_MSG_ERROR([*** SoundTouch not found ***])])
-
-#
 # Check for AudioScience HPI
 #
 AC_CHECK_HEADER(asihpi/hpi.h,[],[AC_MSG_ERROR([*** AudioScience HPI not found ***])])

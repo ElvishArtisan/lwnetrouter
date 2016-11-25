@@ -27,16 +27,25 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#include <soundtouch/SoundTouch.h>
-
 #include "router_hpiaudio.h"
 
-hpi_err_t HpiError(hpi_err_t err)
+size_t SetpointBytes(uint32_t msec)
+{
+  return AUDIO_SAMPLE_RATE*AUDIO_CHANNELS*msec*sizeof(float)/1000;
+}
+
+
+hpi_err_t HpiError(hpi_err_t err,const QString &flag="")
 {
   char str[200];
   if(err!=0) {
     HPI_GetErrorText(err,str);
-    syslog(LOG_INFO,"HPI error %s",str);
+    if(flag.isEmpty()) {
+      syslog(LOG_INFO,"HPI error %s",str);
+    }
+    else {
+      syslog(LOG_INFO,"[%s] HPI error %s",(const char *)flag.toUtf8(),str);
+    }
   }
   return err;
 }
@@ -56,27 +65,23 @@ void *__AudioCallback(void *ptr)
   static uint32_t out_frames_played;
   static uint32_t out_aux_to_play;
   static float pcm[262144];
-  static float pcm2[262144];
   static int inputs=rha->config()->inputQuantity();
-  static int outputs=rha->config()->outputQuantity();
+  //  static int outputs=rha->config()->outputQuantity();
   static Ringbuffer *rb[MAX_INPUTS];
-  static soundtouch::SoundTouch *st[MAX_INPUTS];
-  static int xpoints[MAX_OUTPUTS];
-  static unsigned frames_avail;
+  static float timescale;
+  //  static int xpoints[MAX_OUTPUTS];
   static int i;
-  static int n;
+  static uint32_t space;
+  static uint32_t delay_frames;
+  static uint32_t delay_interval;
 
   //
   // Initialize Input Queues
   //
   for(int i=0;i<inputs;i++) {
-    rb[i]=new Ringbuffer(4800000,AUDIO_CHANNELS);
-    st[i]=new soundtouch::SoundTouch();
-    st[i]->setRate(1.0);
-    st[i]->setTempo(1.0);
-    st[i]->setPitch(1.0);
-    st[i]->setChannels(AUDIO_CHANNELS);
-    st[i]->setSampleRate(AUDIO_SAMPLE_RATE);
+    rb[i]=
+      new Ringbuffer(SetpointBytes(MAX_DELAY*1100));
+    rha->delay_state_taken[i]=Config::DelayBypassed;
   }
 
   //
@@ -86,59 +91,94 @@ void *__AudioCallback(void *ptr)
     //
     // Get Crosspoint Table
     //
+    /*
     for(i=0;i<outputs;i++) {
       xpoints[i]=rha->crossPoint(i);
     }
+    */
 
     //
     // Process Inputs
     //
+    in_data_len=0;
     HpiError(HPI_InStreamGetInfoEx(NULL,rha->hpi_input_streams[0],&in_state,
 				   &in_buffer_size,&in_data_len,&in_frame_len,
 				   &in_aux_len));
     for(i=0;i<inputs;i++) {
       HpiError(HPI_InStreamReadBuf(NULL,rha->hpi_input_streams[i],
 				   (uint8_t *)pcm,in_data_len));
-      st[i]->putSamples(pcm,in_data_len/8);
-      if(st[i]->numSamples()>0) {
-	n=st[i]->receiveSamples(pcm2,st[i]->numSamples());
-	rb[i]->write(pcm2,n*8);
-      }
+      rb[i]->write(pcm,in_data_len);
     }
-
+ 
     //
     // Process Outputs
     //
-    HpiError(HPI_OutStreamGetInfoEx(NULL,rha->hpi_output_streams[0],&out_state,
-				    &out_buffer_size,&out_data_to_play,
-				    &out_frames_played,&out_aux_to_play));
-    frames_avail=(out_buffer_size-out_data_to_play)/(sizeof(float)*AUDIO_CHANNELS);
-    if(out_data_to_play<(out_buffer_size/2)) {
-      frames_avail=out_buffer_size/(sizeof(float)*AUDIO_CHANNELS*2);
-    }
-    for(i=0;i<outputs;i++) {
-      if(rb[i]->readSpace()<frames_avail) {
-	frames_avail=rb[i]->readSpace();
-      }
-    }
-    // printf("out: %u\n",frames_avail);
-    if(frames_avail>0) {
-      for(i=0;i<outputs;i++) {
-	if(xpoints[i]<0) {
-	  memset(pcm,0,262144);
+    if(in_data_len>0) {
+      for(i=0;i<inputs;i++) {
+	HpiError(HPI_OutStreamGetInfoEx(NULL,rha->hpi_output_streams[0],
+					&out_state,
+					&out_buffer_size,&out_data_to_play,
+					&out_frames_played,&out_aux_to_play));
+	space=38400-out_data_to_play;
+	space=rb[i]->read((float *)pcm,space);
+	delay_frames=out_data_to_play+rb[i]->readSpace();
+
+	switch(rha->delay_state_set[i]) {
+	case Config::DelayEntering:
+	  if(delay_frames>SetpointBytes(MAX_DELAY*1000)) {
+	    timescale=1.0;
+	    rha->delay_state_taken[i]=Config::DelayEntered;
+	    rha->delay_interval[i]=MAX_DELAY*1000;
+	  }
+	  else {
+	    if(rha->delay_state_taken[i]!=Config::DelayEntered) {
+	      if((delay_interval=100*(delay_frames/38400))>
+		 rha->delay_interval[i]) {
+		rha->delay_interval[i]=delay_interval;
+	      }
+	      timescale=rha->delay_change_up;   // SLOWER
+	      rha->delay_state_taken[i]=Config::DelayEntering;
+	    }
+	  }
+	  break;
+
+	case Config::DelayExiting:
+	  if(delay_frames<4096) {
+	    timescale=1.0;
+	    rha->delay_state_taken[i]=Config::DelayExited;
+	    rha->delay_interval[i]=0;
+	  }
+	  else {
+	    if(rha->delay_state_taken[i]!=Config::DelayExited) {
+	      if((delay_interval=100*(delay_frames/38400))<
+		 rha->delay_interval[i]) {
+		rha->delay_interval[i]=delay_interval;
+	      }
+	      timescale=rha->delay_change_down;   // FASTER
+	      rha->delay_state_taken[i]=Config::DelayExiting;
+	    }
+	  }
+	  break;
+
+	case Config::DelayUnknown:
+	case Config::DelayBypassed:
+	case Config::DelayEntered:
+	case Config::DelayExited:
+	  timescale=1.0;
+	  break;
 	}
-	else {
-	  rb[xpoints[i]]->peek((float *)pcm,frames_avail);
-	}
+
+	HpiError(HPI_OutStreamSetTimeScale(NULL,rha->hpi_output_streams[i],
+				       timescale*HPI_OSTREAM_TIMESCALE_UNITS));
 	HpiError(HPI_OutStreamWriteBuf(NULL,rha->hpi_output_streams[i],
 				       (uint8_t *)pcm,
-				       frames_avail,rha->hpi_format));
+				       space,rha->hpi_format),"OUTPUT");
+	if(out_state==HPI_STATE_DRAINED) {
+	  syslog(LOG_WARNING,"Xrun on output stream %d",i);
+	}
 	if(out_state==HPI_STATE_STOPPED) {
 	  HpiError(HPI_OutStreamStart(NULL,rha->hpi_output_streams[i]));
 	}
-      }
-      for(i=0;i<inputs;i++) {
-	rb[i]->read((float *)pcm,frames_avail);
       }
     }
     usleep(AUDIO_HPI_POLLING_INTERVAL);
@@ -162,6 +202,12 @@ RouterHpiAudio::RouterHpiAudio(Config *c,QObject *parent)
   uint32_t serial;
   uint16_t type;
   uint32_t bufsize;
+
+  //
+  // Delay Settings
+  //
+  delay_change_down=1.0-(float)(config()->audioDelayChangePercent())/100;
+  delay_change_up=1.0+(float)(config()->audioDelayChangePercent())/100;
 
   //
   // Get Adapter Info
@@ -211,9 +257,14 @@ RouterHpiAudio::RouterHpiAudio(Config *c,QObject *parent)
   //
   // Open Outputs
   //
-  for(int i=0;i<config()->outputQuantity();i++) {
+  uint8_t pcm[38400];
+  memset(pcm,0,38400);
+  for(int i=0;i<config()->inputQuantity();i++) {
+    delay_state_set[i]=Config::DelayBypassed;
     HpiError(HPI_OutStreamOpen(NULL,0,i,&hpi_output_streams[i]));
     HpiError(HPI_OutStreamSetFormat(NULL,hpi_output_streams[i],hpi_format));
+    HpiError(HPI_OutStreamSetTimeScale(NULL,hpi_output_streams[i],
+				       HPI_OSTREAM_TIMESCALE_PASSTHROUGH));
     if(config()->audioOutputBusXfers()) {
       if(HpiError(HPI_OutStreamHostBufferAllocate(NULL,hpi_output_streams[i],
 						  bufsize))==
@@ -222,7 +273,16 @@ RouterHpiAudio::RouterHpiAudio(Config *c,QObject *parent)
 	       "unable to enable bus mastering for output stream %d",i);
       }
     }
+    HpiError(HPI_OutStreamWriteBuf(NULL,hpi_output_streams[i],pcm,38400,
+				   hpi_format));
   }
+
+  //
+  // Timers
+  //
+  hpi_scan_timer=new QTimer(this);
+  connect(hpi_scan_timer,SIGNAL(timeout()),this,SLOT(scanTimerData()));
+  hpi_scan_timer->start(100);
 
   //
   // Start the Callback
@@ -234,7 +294,54 @@ RouterHpiAudio::RouterHpiAudio(Config *c,QObject *parent)
 }
 
 
-void RouterHpiAudio::crossPointSet(int output,int input)
+Config::DelayState RouterHpiAudio::delayState(int input) const
 {
-  printf("RouterHpiAudio::crossPointSet(%d,%d)\n",output,input);
+  return Config::DelayBypassed;
+}
+
+
+int RouterHpiAudio::delayInterval(int input)
+{
+  return 0;
+}
+
+
+void RouterHpiAudio::setDelayState(int input,Config::DelayState state)
+{
+  printf("setDelayState(%d,%d)\n",input,state);
+
+  switch(state) {
+  case Config::DelayEntering:
+    delay_state_set[input]=Config::DelayEntering;
+    break;
+
+  case Config::DelayExiting:
+    delay_state_set[input]=Config::DelayExiting;
+    break;
+
+  case Config::DelayUnknown:
+  case Config::DelayBypassed:
+  case Config::DelayEntered:
+  case Config::DelayExited:
+    break;
+  }
+}
+
+
+void RouterHpiAudio::dumpDelay(int input)
+{
+  printf("dumpDelay(%d)\n",input);
+}
+
+
+void RouterHpiAudio::scanTimerData()
+{
+  for(int i=0;i<config()->inputQuantity();i++) {
+    if((hpi_delay_state[i]!=delay_state_taken[i])||
+       (hpi_delay_interval[i]!=delay_interval[i])) {
+      hpi_delay_state[i]=delay_state_taken[i];
+      hpi_delay_interval[i]=delay_interval[i];
+      emit delayStateChanged(i,hpi_delay_state[i],hpi_delay_interval[i]);
+    }
+  }
 }

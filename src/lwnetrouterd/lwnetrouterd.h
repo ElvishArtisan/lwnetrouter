@@ -25,6 +25,7 @@
 #include <QObject>
 
 #include "config.h"
+#include "protocol_cunc.h"
 #include "protocol_rml.h"
 #include "router_hpiaudio.h"
 
@@ -36,8 +37,12 @@ class MainObject : public QObject
  public:
   MainObject(QObject *parent=0);
 
+ private slots:
+  void cuncDelayStateRequestedData(int id,int input);
+
  private:
   RouterHpiAudio *main_audio_router;
+  ProtocolCunc *main_cunc_protocol;
   ProtocolRml *main_rml_protocol;
   Config *main_config;
 };

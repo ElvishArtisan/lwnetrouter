@@ -33,6 +33,11 @@ void Protocol::sendCrossPoint(int output,int input)
 }
 
 
+void Protocol::sendDelayState(int input,Config::DelayState state,int msec)
+{
+}
+
+
 Config *Protocol::config() const
 {
   return protocol_config;

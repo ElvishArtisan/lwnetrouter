@@ -26,6 +26,8 @@
 
 #include <asihpi/hpi.h>
 
+#include <QTimer>
+
 #include "ringbuffer.h"
 #include "router.h"
 
@@ -34,9 +36,15 @@ class RouterHpiAudio : public Router
   Q_OBJECT;
  public:
   RouterHpiAudio(Config *c,QObject *parent=0);
+  Config::DelayState delayState(int input) const;
+  int delayInterval(int input);
 
- protected:
-  void crossPointSet(int output,int input);
+ public slots:
+  void setDelayState(int input,Config::DelayState state);
+  void dumpDelay(int input);
+
+ private slots:
+  void scanTimerData();
 
  private:
   struct hpi_format *hpi_format;
@@ -45,7 +53,23 @@ class RouterHpiAudio : public Router
   hpi_handle_t hpi_mixer;
   hpi_handle_t hpi_output_volumes[HPI_MAX_STREAMS][MAX_OUTPUTS];
   pthread_t hpi_pthread;
+  Config::DelayState hpi_delay_state[MAX_INPUTS];
+  uint32_t hpi_delay_interval[MAX_INPUTS];
+  QTimer *hpi_scan_timer;
   friend void *__AudioCallback(void *ptr);
+
+  //
+  // Class -> Callback
+  //
+  Config::DelayState delay_state_set[MAX_INPUTS];
+  float delay_change_down;
+  float delay_change_up;
+
+  //
+  // Callback -> Class
+  //
+  Config::DelayState delay_state_taken[MAX_INPUTS];
+  uint32_t delay_interval[MAX_INPUTS];
 };
 
 

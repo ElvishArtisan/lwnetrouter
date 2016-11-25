@@ -1,6 +1,6 @@
-// router.cpp
+// protocol_cunc.h
 //
-// Abstract base class for router objects.
+// Protocol driver for the Cuntator Delay Control System
 //
 //   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
 //
@@ -19,38 +19,32 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
-#include "router.h"
+#ifndef PROTOCOL_CUNC_H
+#define PROTOCOL_CUNC_H
 
-Router::Router(Config *config,QObject *parent)
-  : QObject(parent)
+#include "protocol.h"
+#include "streamcmdserver.h"
+
+class ProtocolCunc : public Protocol
 {
-  router_config=config;
+  Q_OBJECT;
+ public:
+  ProtocolCunc(Config *c,QObject *parent=0);
 
-  for(int i=0;i<config->outputQuantity();i++) {
-    router_crosspoints.push_back(0);
-  }
-}
+ public slots:
+  void sendDelayState(int input,Config::DelayState state,int msec);
+  void sendDelayState(int id,int input,Config::DelayState state,int msec);
 
+ signals:
+  void delayStateRequested(int id,int input);
 
-int Router::crossPoint(int output) const
-{
-  return router_crosspoints.at(output);
-}
+ private slots:
+  void commandReceivedData(int id,int cmd,const QStringList &args);
 
-
-void Router::setCrossPoint(int output,int input)
-{
-  crossPointSet(output,input);
-  router_crosspoints[output]=input;
-}
-
-
-void Router::crossPointSet(int output,int input)
-{
-}
+ private:
+  enum Commands {DC=0,DQ=1,DM=2,DS=3,SS=4,DP=5};
+  StreamCmdServer *cunc_server;
+};
 
 
-Config *Router::config() const
-{
-  return router_config;
-}
+#endif  // PROTOCOL_CUNC_H

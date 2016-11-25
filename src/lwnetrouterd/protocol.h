@@ -34,9 +34,12 @@ class Protocol : public QObject
 
  signals:
   void crosspointChangeReceived(int output,int input);
+  void delayStateChangeReceived(int input,Config::DelayState state);
+  void delayDumpReceived(int input);
 
  public slots:
   virtual void sendCrossPoint(int output,int input);
+  virtual void sendDelayState(int input,Config::DelayState state,int msec);
 
  protected:
   Config *config() const;
