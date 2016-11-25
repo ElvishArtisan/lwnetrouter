@@ -66,10 +66,8 @@ void *__AudioCallback(void *ptr)
   static uint32_t out_aux_to_play;
   static float pcm[262144];
   static int inputs=rha->config()->inputQuantity();
-  //  static int outputs=rha->config()->outputQuantity();
   static Ringbuffer *rb[MAX_INPUTS];
   static float timescale;
-  //  static int xpoints[MAX_OUTPUTS];
   static int i;
   static uint32_t space;
   static uint32_t delay_frames;
@@ -88,15 +86,6 @@ void *__AudioCallback(void *ptr)
   // Main Loop
   //
   while(1==1) {
-    //
-    // Get Crosspoint Table
-    //
-    /*
-    for(i=0;i<outputs;i++) {
-      xpoints[i]=rha->crossPoint(i);
-    }
-    */
-
     //
     // Process Inputs
     //
@@ -371,5 +360,19 @@ void RouterHpiAudio::scanTimerData()
       hpi_delay_interval[i]=delay_interval[i];
       emit delayStateChanged(i,hpi_delay_state[i],hpi_delay_interval[i]);
     }
+  }
+}
+
+
+void RouterHpiAudio::crossPointSet(int output,int input)
+{
+  short on_gain[HPI_MAX_CHANNELS]={0,0};
+  short off_gain[HPI_MAX_CHANNELS]={-10000,-10000};
+
+  for(int i=0;i<config()->inputQuantity();i++) {
+    HpiError(HPI_VolumeSetGain(NULL,hpi_output_volumes[i][output],off_gain));
+  }
+  if(input>=0) {
+    HpiError(HPI_VolumeSetGain(NULL,hpi_output_volumes[input][output],on_gain));
   }
 }

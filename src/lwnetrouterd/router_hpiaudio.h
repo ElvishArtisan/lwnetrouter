@@ -46,6 +46,9 @@ class RouterHpiAudio : public Router
  private slots:
   void scanTimerData();
 
+ protected:
+  void crossPointSet(int output,int input);
+
  private:
   struct hpi_format *hpi_format;
   hpi_handle_t hpi_input_streams[MAX_INPUTS];

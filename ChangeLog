@@ -33,3 +33,5 @@
 	INVALID_DATASIZE errors when running with more than one input.
 2016-11-25 Fred Gleason <fredg@paravelsystems.com>
 	* Added lwnetdelay(1) control client in 'src/lwnetdelay/'.
+2016-11-25 Fred Gleason <fredg@paravelsystems.com>
+	* Enabled X-Y audio routing in 'src/lwnetrouterd/router_hpiaudio.cpp'.
