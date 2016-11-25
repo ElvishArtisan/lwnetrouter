@@ -28,3 +28,6 @@
 2016-11-25 Fred Gleason <fredg@paravelsystems.com>
 	* Implemented the 'Dump' ['DP'] command in
 	'src/lwnetrouterd/router_hpiaudio.cpp'.
+2016-11-25 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a bug in 'src/lwnetrouterd/router_hpiaudio.cpp' that caused
+	INVALID_DATASIZE errors when running with more than one input.

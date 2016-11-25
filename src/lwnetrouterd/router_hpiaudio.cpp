@@ -141,7 +141,7 @@ void *__AudioCallback(void *ptr)
 	  }
 	}
 
-	HpiError(HPI_OutStreamGetInfoEx(NULL,rha->hpi_output_streams[0],
+	HpiError(HPI_OutStreamGetInfoEx(NULL,rha->hpi_output_streams[i],
 					&out_state,
 					&out_buffer_size,&out_data_to_play,
 					&out_frames_played,&out_aux_to_play));
