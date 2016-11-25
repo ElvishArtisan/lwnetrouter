@@ -34,7 +34,7 @@ class Ringbuffer
   size_t readSpace() const;
   size_t write(void *data,size_t len);
   size_t writeSpace() const;
-  size_t dump(size_t len);
+  size_t dump(size_t len=0);
 
  private:
   uint8_t *ring_buffer;

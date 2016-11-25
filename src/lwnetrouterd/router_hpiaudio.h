@@ -62,6 +62,7 @@ class RouterHpiAudio : public Router
   // Class -> Callback
   //
   Config::DelayState delay_state_set[MAX_INPUTS];
+  bool delay_dump[MAX_INPUTS];
   float delay_change_down;
   float delay_change_up;
 

@@ -25,3 +25,6 @@
 	* Removed the ALSA dependency.
 	* Removed the SRC dependency.
 	* Implemented basic delay control.
+2016-11-25 Fred Gleason <fredg@paravelsystems.com>
+	* Implemented the 'Dump' ['DP'] command in
+	'src/lwnetrouterd/router_hpiaudio.cpp'.

@@ -115,6 +115,32 @@ void *__AudioCallback(void *ptr)
     //
     if(in_data_len>0) {
       for(i=0;i<inputs;i++) {
+	//
+	// Process Dump
+	//
+	if(rha->delay_dump[i]) {
+	  switch(rha->delay_state_taken[i]) {
+	  case Config::DelayEntering:
+	  case Config::DelayEntered:
+	    rb[i]->dump();
+	    rha->delay_interval[i]=0;
+	    rha->delay_dump[i]=false;
+	    rha->delay_state_taken[i]=Config::DelayEntering;
+	    break;
+
+	  case Config::DelayExiting:
+	    rb[i]->dump();
+	    rha->delay_interval[i]=0;
+	    rha->delay_dump[i]=false;
+	    rha->delay_state_taken[i]=Config::DelayExited;
+	    break;
+	  case Config::DelayUnknown:
+	  case Config::DelayBypassed:
+	  case Config::DelayExited:
+	    break;
+	  }
+	}
+
 	HpiError(HPI_OutStreamGetInfoEx(NULL,rha->hpi_output_streams[0],
 					&out_state,
 					&out_buffer_size,&out_data_to_play,
@@ -261,6 +287,7 @@ RouterHpiAudio::RouterHpiAudio(Config *c,QObject *parent)
   memset(pcm,0,38400);
   for(int i=0;i<config()->inputQuantity();i++) {
     delay_state_set[i]=Config::DelayBypassed;
+    delay_dump[i]=false;
     HpiError(HPI_OutStreamOpen(NULL,0,i,&hpi_output_streams[i]));
     HpiError(HPI_OutStreamSetFormat(NULL,hpi_output_streams[i],hpi_format));
     HpiError(HPI_OutStreamSetTimeScale(NULL,hpi_output_streams[i],
@@ -330,6 +357,7 @@ void RouterHpiAudio::setDelayState(int input,Config::DelayState state)
 
 void RouterHpiAudio::dumpDelay(int input)
 {
+  delay_dump[input]=true;
   printf("dumpDelay(%d)\n",input);
 }
 

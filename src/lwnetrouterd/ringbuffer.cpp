@@ -92,7 +92,7 @@ size_t Ringbuffer::writeSpace() const
 
 size_t Ringbuffer::dump(size_t len)
 {
-  if(len>readSpace()) {
+  if((len>readSpace())||(len==0)) {
     len=readSpace();
   }
   ring_length-=len;
