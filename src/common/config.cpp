@@ -34,6 +34,9 @@ Config::Config()
     p->intValue("Global","InputQuantity",CONFIG_DEFAULT_INPUT_QUANTITY);
   conf_output_quantity=
     p->intValue("Global","OutputQuantity",CONFIG_DEFAULT_OUTPUT_QUANTITY);
+  conf_rml_port=p->intValue("Global","RmlPort",CONFIG_DEFAULT_RML_PORT);
+  conf_cunctator_port=
+    p->intValue("Global","CunctatorPort",CONFIG_DEFAULT_CUNCTATOR_PORT);
   conf_audio_delay_change_percent=
     p->intValue("Audio","DelayChangePercent",
 		CONFIG_DEFAULT_AUDIO_DELAY_CHANGE_PERCENT);
@@ -55,6 +58,18 @@ int Config::inputQuantity() const
 int Config::outputQuantity() const
 {
   return conf_output_quantity;
+}
+
+
+uint16_t Config::rmlPort() const
+{
+  return conf_rml_port;
+}
+
+
+uint16_t Config::cunctatorPort() const
+{
+  return conf_cunctator_port;
 }
 
 

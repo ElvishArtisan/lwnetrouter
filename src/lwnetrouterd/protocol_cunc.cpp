@@ -30,7 +30,7 @@ ProtocolCunc::ProtocolCunc(Config *c,QObject *parent)
   // Stream Server
   //
   QTcpServer *server=new QTcpServer(this);
-  server->listen(QHostAddress::Any,3749);
+  server->listen(QHostAddress::Any,config()->cunctatorPort());
   std::map<int,QString> cmds;
   std::map<int,int> upper_limits;
   std::map<int,int> lower_limits;

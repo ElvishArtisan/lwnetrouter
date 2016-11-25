@@ -30,7 +30,7 @@ ProtocolRml::ProtocolRml(Config *c,QObject *parent)
   : Protocol(c,parent)
 {
   rml_socket=new QUdpSocket(this);
-  if(!rml_socket->bind(1234)) {
+  if(!rml_socket->bind(config()->rmlPort())) {
     syslog(LOG_WARNING,"unable to bind to RML port");
   }
   connect(rml_socket,SIGNAL(readyRead()),this,SLOT(readyReadData()));

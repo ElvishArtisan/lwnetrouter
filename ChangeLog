@@ -35,3 +35,6 @@
 	* Added lwnetdelay(1) control client in 'src/lwnetdelay/'.
 2016-11-25 Fred Gleason <fredg@paravelsystems.com>
 	* Enabled X-Y audio routing in 'src/lwnetrouterd/router_hpiaudio.cpp'.
+2016-11-25 Fred Gleason <fredg@paravelsystems.com>
+	* Added 'RmlPort=' and 'CunctatorPort=' directives to the [Global]
+	section of lwnetrouter.conf(5).

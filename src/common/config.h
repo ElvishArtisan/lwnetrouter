@@ -35,9 +35,13 @@
 //
 #define CONFIG_DEFAULT_INPUT_QUANTITY 8
 #define CONFIG_DEFAULT_OUTPUT_QUANTITY 8
+#define CONFIG_DEFAULT_RML_PORT 5858
+#define CONFIG_DEFAULT_CUNCTATOR_PORT 3749
 #define CONFIG_DEFAULT_AUDIO_DELAY_CHANGE_PERCENT 5
 #define CONFIG_DEFAULT_AUDIO_INPUT_BUS_XFERS false
 #define CONFIG_DEFAULT_AUDIO_OUTPUT_BUS_XFERS true
+
+#include <stdint.h>
 
 #include <QString>
 
@@ -49,6 +53,8 @@ class Config
   Config();
   int inputQuantity() const;
   int outputQuantity() const;
+  uint16_t rmlPort() const;
+  uint16_t cunctatorPort() const;
   int audioDelayChangePercent() const;
   bool audioInputBusXfers() const;
   bool audioOutputBusXfers() const;
@@ -56,6 +62,8 @@ class Config
  private:
   int conf_input_quantity;
   int conf_output_quantity;
+  uint16_t conf_rml_port;
+  uint16_t conf_cunctator_port;
   int conf_audio_delay_change_percent;
   bool conf_audio_input_bus_xfers;
   bool conf_audio_output_bus_xfers;
