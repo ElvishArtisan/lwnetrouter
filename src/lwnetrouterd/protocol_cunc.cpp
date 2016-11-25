@@ -70,7 +70,7 @@ void ProtocolCunc::sendDelayState(int input,Config::DelayState state,int msec)
 {
   QStringList args;
 
-  args.push_back(QString().sprintf("%d",input));
+  args.push_back(QString().sprintf("%d",input+1));
   args.push_back(QString().sprintf("%d",state));
   args.push_back(QString().sprintf("%d",msec));
   cunc_server->sendCommand(ProtocolCunc::DS,args);
@@ -82,7 +82,7 @@ void ProtocolCunc::sendDelayState(int id,int input,Config::DelayState state,
 {
   QStringList args;
 
-  args.push_back(QString().sprintf("%d",input));
+  args.push_back(QString().sprintf("%d",input+1));
   args.push_back(QString().sprintf("%d",state));
   args.push_back(QString().sprintf("%d",msec));
   cunc_server->sendCommand(id,ProtocolCunc::DS,args);
@@ -92,7 +92,7 @@ void ProtocolCunc::sendDelayState(int id,int input,Config::DelayState state,
 void ProtocolCunc::commandReceivedData(int id,int cmd,const QStringList &args)
 {
   QStringList reply;
-  unsigned num;
+  unsigned input;
   bool ok=false;
   Config::DelayState state;
 
@@ -113,26 +113,26 @@ void ProtocolCunc::commandReceivedData(int id,int cmd,const QStringList &args)
     break;
 
   case ProtocolCunc::DS:
-    num=args.at(0).toUInt(&ok);
-    if(ok&&(num<(unsigned)config()->inputQuantity())) {
-      emit delayStateRequested(id,num);
+    input=args.at(0).toUInt(&ok)-1;
+    if(ok&&(input<(unsigned)config()->inputQuantity())) {
+      emit delayStateRequested(id,input);
     }
     break;
 
   case ProtocolCunc::SS:
-    num=args.at(0).toUInt(&ok);
-    if(ok&&(num<(unsigned)config()->inputQuantity())) {
+    input=args.at(0).toUInt(&ok)-1;
+    if(ok&&(input<(unsigned)config()->inputQuantity())) {
       state=(Config::DelayState)args.at(1).toUInt(&ok);
       if(ok) {
-	emit delayStateChangeReceived(num,state);
+	emit delayStateChangeReceived(input,state);
       }
     }
     break;
 
   case ProtocolCunc::DP:
-    num=args.at(0).toUInt(&ok);
-    if(ok&&(num<(unsigned)config()->inputQuantity())) {
-      emit delayDumpReceived(num);
+    input=args.at(0).toUInt(&ok)-1;
+    if(ok&&(input<(unsigned)config()->inputQuantity())) {
+      emit delayDumpReceived(input);
     }
     break;
   }
