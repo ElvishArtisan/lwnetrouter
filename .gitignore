@@ -14,4 +14,9 @@ Makefile
 Makefile.in
 missing
 moc_*
+src/lwnetdelay/config.cpp
+src/lwnetdelay/config.h
+src/lwnetdelay/lwnetdelay
+src/lwnetrouterd/config.cpp
+src/lwnetrouterd/config.h
 src/lwnetrouterd/lwnetrouterd
