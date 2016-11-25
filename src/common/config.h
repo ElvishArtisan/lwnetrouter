@@ -58,6 +58,7 @@ class Config
   int audioDelayChangePercent() const;
   bool audioInputBusXfers() const;
   bool audioOutputBusXfers() const;
+  int inputDelayControlSource(int input) const;
 
  private:
   int conf_input_quantity;
@@ -67,6 +68,7 @@ class Config
   int conf_audio_delay_change_percent;
   bool conf_audio_input_bus_xfers;
   bool conf_audio_output_bus_xfers;
+  int conf_input_delay_control_sources[MAX_INPUTS];
 };
 
 

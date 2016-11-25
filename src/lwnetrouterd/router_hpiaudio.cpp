@@ -79,6 +79,7 @@ void *__AudioCallback(void *ptr)
   for(int i=0;i<inputs;i++) {
     rb[i]=
       new Ringbuffer(SetpointBytes(MAX_DELAY*1100));
+    rha->delay_interval[i]=0;
     rha->delay_state_taken[i]=Config::DelayBypassed;
   }
 

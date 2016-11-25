@@ -1,6 +1,6 @@
-// lwnetrouterd.h
+// protocol_gpio.h
 //
-// lwnetrouterd(8) routing daemon
+// Protocol driver for LiveWire GPIO
 //
 //   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
 //
@@ -19,38 +19,30 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
-#ifndef LWNETROUTERD_H
-#define LWNETROUTERD_H
+#ifndef PROTOCOL_GPIO_H
+#define PROTOCOL_GPIO_H
 
-#include <QObject>
+#include <QTimer>
 
 #include <sy/sygpio_server.h>
 
-#include "config.h"
-#include "protocol_cunc.h"
-#include "protocol_gpio.h"
-#include "protocol_rml.h"
-#include "router_hpiaudio.h"
+#include "protocol.h"
 
-#define LWNETROUTERD_USAGE "[options]\n"
-
-class MainObject : public QObject
+class ProtocolGpio : public Protocol
 {
- Q_OBJECT;
+  Q_OBJECT;
  public:
-  MainObject(QObject *parent=0);
+  ProtocolGpio(SyGpioServer *gpioserv,Config *c,QObject *parent=0);
+
+ public slots:
+  void sendDelayState(int input,Config::DelayState state,int msec);
 
  private slots:
-  void cuncDelayStateRequestedData(int id,int input);
+  void gpoReceivedData(int gpo,int line,bool state,bool pulse);
 
  private:
-  RouterHpiAudio *main_audio_router;
-  ProtocolCunc *main_cunc_protocol;
-  ProtocolGpio *main_gpio_protocol;
-  ProtocolRml *main_rml_protocol;
-  SyGpioServer *main_gpio;
-  Config *main_config;
+  SyGpioServer *gpio_server;
 };
 
 
-#endif  // LWNETROUTERD_H
+#endif  // PROTOCOL_GPIO_H

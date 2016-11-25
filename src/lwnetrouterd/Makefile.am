@@ -33,6 +33,7 @@ sbin_PROGRAMS = lwnetrouterd
 dist_lwnetrouterd_SOURCES = lwnetrouterd.cpp lwnetrouterd.h\
                             protocol.cpp protocol.h\
                             protocol_cunc.cpp protocol_cunc.h\
+                            protocol_gpio.cpp protocol_gpio.h\
                             protocol_rml.cpp protocol_rml.h\
                             ringbuffer.cpp ringbuffer.h\
                             router.cpp router.h\
@@ -43,6 +44,7 @@ nodist_lwnetrouterd_SOURCES = config.cpp config.h\
                               moc_lwnetrouterd.cpp\
                               moc_protocol.cpp\
                               moc_protocol_cunc.cpp\
+                              moc_protocol_gpio.cpp\
                               moc_protocol_rml.cpp\
                               moc_router.cpp\
                               moc_router_hpiaudio.cpp\

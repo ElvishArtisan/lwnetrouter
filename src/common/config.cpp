@@ -44,6 +44,11 @@ Config::Config()
     boolValue("Audio","InputBusXfers",CONFIG_DEFAULT_AUDIO_INPUT_BUS_XFERS);
   conf_audio_output_bus_xfers=p->
     boolValue("Audio","OutputBusXfers",CONFIG_DEFAULT_AUDIO_OUTPUT_BUS_XFERS);
+  for(int i=0;i<MAX_INPUTS;i++) {
+    QString section=QString().sprintf("Input%d",i+1);
+    conf_input_delay_control_sources[i]=
+      p->intValue(section,"DelayControlSource");
+  }
 
   delete p;
 }
@@ -88,4 +93,10 @@ bool Config::audioInputBusXfers() const
 bool Config::audioOutputBusXfers() const
 {
   return conf_audio_output_bus_xfers;
+}
+
+
+int Config::inputDelayControlSource(int input) const
+{
+  return conf_input_delay_control_sources[input];
 }

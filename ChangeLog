@@ -40,3 +40,7 @@
 	section of lwnetrouter.conf(5).
 2016-11-25 Fred Gleason <fredg@paravelsystems.com>
 	* Fixed fencepost errors in 'src/lwnetrouterd/protocol_cunc.cpp'.
+2016-11-25 Fred Gleason <fredg@paravelsystems.com>
+	* Added a LiveWire GPIO protocol driver in
+	'src/lwnetrouterd/protocol_gpio.cpp' and
+	'src/lwnetrouterd/protocol_gpio.h'.

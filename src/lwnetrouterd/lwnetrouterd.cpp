@@ -55,6 +55,11 @@ MainObject::MainObject(QObject *parent)
   main_audio_router=new RouterHpiAudio(main_config,this);
 
   //
+  // GPIO Server
+  //
+  main_gpio=new SyGpioServer(new SyRouting(0,0),this);
+
+  //
   // Protocols
   //
   main_rml_protocol=new ProtocolRml(main_config,this);
@@ -69,8 +74,19 @@ MainObject::MainObject(QObject *parent)
 	  main_audio_router,SLOT(dumpDelay(int)));
   connect(main_cunc_protocol,SIGNAL(delayStateRequested(int,int)),
 	  this,SLOT(cuncDelayStateRequestedData(int,int)));
-  connect(main_audio_router,SIGNAL(delayStateChanged(int,Config::DelayState,int)),
+  connect(main_audio_router,
+	  SIGNAL(delayStateChanged(int,Config::DelayState,int)),
 	  main_cunc_protocol,SLOT(sendDelayState(int,Config::DelayState,int)));
+
+  main_gpio_protocol=new ProtocolGpio(main_gpio,main_config,this);
+  connect(main_gpio_protocol,
+	  SIGNAL(delayStateChangeReceived(int,Config::DelayState)),
+	  main_audio_router,SLOT(setDelayState(int,Config::DelayState)));
+  connect(main_gpio_protocol,SIGNAL(delayDumpReceived(int)),
+	  main_audio_router,SLOT(dumpDelay(int)));
+  connect(main_audio_router,
+	  SIGNAL(delayStateChanged(int,Config::DelayState,int)),
+	  main_gpio_protocol,SLOT(sendDelayState(int,Config::DelayState,int)));
 }
 
 
