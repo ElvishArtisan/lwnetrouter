@@ -56,3 +56,5 @@
 	* Added support for serial netcues in
 	 'src/lwnetrouter/router_gpio.cpp' and
 	 'src/lwnetrouter/router_gpio.h'.
+2016-11-26 Fred Gleason <fredg@paravelsystems.com>
+	* Updated 'conf/lwnetrouter-sample.conf'.
