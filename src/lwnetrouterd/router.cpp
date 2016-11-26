@@ -45,6 +45,16 @@ void Router::setCrossPoint(int output,int input)
 }
 
 
+void Router::setDelayState(int input,Config::DelayState state)
+{
+}
+
+
+void Router::dumpDelay(int input)
+{
+}
+
+
 void Router::crossPointSet(int output,int input)
 {
 }

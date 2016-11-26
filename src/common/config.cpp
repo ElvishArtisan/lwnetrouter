@@ -37,6 +37,7 @@ Config::Config()
   conf_rml_port=p->intValue("Global","RmlPort",CONFIG_DEFAULT_RML_PORT);
   conf_cunctator_port=
     p->intValue("Global","CunctatorPort",CONFIG_DEFAULT_CUNCTATOR_PORT);
+  conf_audio_adapter_ip_address=p->addressValue("Audio","AdapterIpAddress","");
   conf_audio_delay_change_percent=
     p->intValue("Audio","DelayChangePercent",
 		CONFIG_DEFAULT_AUDIO_DELAY_CHANGE_PERCENT);
@@ -75,6 +76,12 @@ uint16_t Config::rmlPort() const
 uint16_t Config::cunctatorPort() const
 {
   return conf_cunctator_port;
+}
+
+
+QHostAddress Config::audioAdapterIpAddress() const
+{
+  return conf_audio_adapter_ip_address;
 }
 
 

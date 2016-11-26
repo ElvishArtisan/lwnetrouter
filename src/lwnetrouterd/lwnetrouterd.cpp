@@ -50,14 +50,18 @@ MainObject::MainObject(QObject *parent)
   openlog("lwnetrouterd",LOG_PERROR,LOG_DAEMON);
 
   //
-  // Audio Router
-  //
-  main_audio_router=new RouterHpiAudio(main_config,this);
-
-  //
   // GPIO Server
   //
   main_gpio=new SyGpioServer(new SyRouting(0,0),this);
+
+  //
+  // Routers
+  //
+  main_audio_router=new RouterHpiAudio(main_config,this);
+  main_gpio_router=new RouterGpio(main_gpio,main_config,this);
+  connect(main_audio_router,
+	  SIGNAL(delayStateChanged(int,Config::DelayState,int)),
+	  main_gpio_router,SLOT(setDelayState(int,Config::DelayState,int)));
 
   //
   // Protocols
@@ -65,6 +69,8 @@ MainObject::MainObject(QObject *parent)
   main_rml_protocol=new ProtocolRml(main_config,this);
   connect(main_rml_protocol,SIGNAL(crosspointChangeReceived(int,int)),
 	  main_audio_router,SLOT(setCrossPoint(int,int)));
+  connect(main_rml_protocol,SIGNAL(crosspointChangeReceived(int,int)),
+	  main_gpio_router,SLOT(setCrossPoint(int,int)));
 
   main_cunc_protocol=new ProtocolCunc(main_config,this);
   connect(main_cunc_protocol,

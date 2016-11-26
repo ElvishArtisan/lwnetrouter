@@ -43,6 +43,7 @@
 
 #include <stdint.h>
 
+#include <QHostAddress>
 #include <QString>
 
 class Config
@@ -55,6 +56,7 @@ class Config
   int outputQuantity() const;
   uint16_t rmlPort() const;
   uint16_t cunctatorPort() const;
+  QHostAddress audioAdapterIpAddress() const;
   int audioDelayChangePercent() const;
   bool audioInputBusXfers() const;
   bool audioOutputBusXfers() const;
@@ -65,6 +67,7 @@ class Config
   int conf_output_quantity;
   uint16_t conf_rml_port;
   uint16_t conf_cunctator_port;
+  QHostAddress conf_audio_adapter_ip_address;
   int conf_audio_delay_change_percent;
   bool conf_audio_input_bus_xfers;
   bool conf_audio_output_bus_xfers;

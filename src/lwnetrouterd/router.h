@@ -42,8 +42,8 @@ class Router : public QObject
 
  public slots:
   void setCrossPoint(int output,int input);
-  virtual void setDelayState(int input,Config::DelayState state)=0;
-  virtual void dumpDelay(int input)=0;
+  virtual void setDelayState(int input,Config::DelayState state);
+  virtual void dumpDelay(int input);
 
  protected:
   virtual void crossPointSet(int output,int input);

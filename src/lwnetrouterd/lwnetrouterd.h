@@ -30,6 +30,7 @@
 #include "protocol_cunc.h"
 #include "protocol_gpio.h"
 #include "protocol_rml.h"
+#include "router_gpio.h"
 #include "router_hpiaudio.h"
 
 #define LWNETROUTERD_USAGE "[options]\n"
@@ -45,6 +46,7 @@ class MainObject : public QObject
 
  private:
   RouterHpiAudio *main_audio_router;
+  RouterGpio *main_gpio_router;
   ProtocolCunc *main_cunc_protocol;
   ProtocolGpio *main_gpio_protocol;
   ProtocolRml *main_rml_protocol;
