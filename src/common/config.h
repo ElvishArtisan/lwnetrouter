@@ -37,6 +37,7 @@
 #define CONFIG_DEFAULT_OUTPUT_QUANTITY 8
 #define CONFIG_DEFAULT_RML_PORT 5858
 #define CONFIG_DEFAULT_CUNCTATOR_PORT 3749
+#define CONFIG_DEFAULT_CIC_PORT 5001
 #define CONFIG_DEFAULT_AUDIO_DELAY_CHANGE_PERCENT 5
 #define CONFIG_DEFAULT_AUDIO_INPUT_BUS_XFERS false
 #define CONFIG_DEFAULT_AUDIO_OUTPUT_BUS_XFERS true
@@ -44,6 +45,7 @@
 #include <stdint.h>
 
 #include <QHostAddress>
+#include <QList>
 #include <QString>
 
 class Config
@@ -56,22 +58,28 @@ class Config
   int outputQuantity() const;
   uint16_t rmlPort() const;
   uint16_t cunctatorPort() const;
+  uint16_t cicPort() const;
+  QList<QHostAddress> cicIpAddresses();
   QHostAddress audioAdapterIpAddress() const;
   int audioDelayChangePercent() const;
   bool audioInputBusXfers() const;
   bool audioOutputBusXfers() const;
   int inputDelayControlSource(int input) const;
+  int input(const QHostAddress &addr);
 
  private:
   int conf_input_quantity;
   int conf_output_quantity;
   uint16_t conf_rml_port;
   uint16_t conf_cunctator_port;
+  uint16_t conf_cic_port;
+  QList<QHostAddress> conf_cic_addresses;
   QHostAddress conf_audio_adapter_ip_address;
   int conf_audio_delay_change_percent;
   bool conf_audio_input_bus_xfers;
   bool conf_audio_output_bus_xfers;
   int conf_input_delay_control_sources[MAX_INPUTS];
+  QList<QHostAddress> conf_input_addresses[MAX_INPUTS];
 };
 
 

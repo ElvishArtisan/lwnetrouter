@@ -37,6 +37,7 @@ dist_lwnetrouterd_SOURCES = lwnetrouterd.cpp lwnetrouterd.h\
                             protocol_rml.cpp protocol_rml.h\
                             ringbuffer.cpp ringbuffer.h\
                             router.cpp router.h\
+                            router_cic.cpp router_cic.h\
                             router_gpio.cpp router_gpio.h\
                             router_hpiaudio.cpp router_hpiaudio.h\
                             streamcmdserver.cpp streamcmdserver.h
@@ -48,6 +49,7 @@ nodist_lwnetrouterd_SOURCES = config.cpp config.h\
                               moc_protocol_gpio.cpp\
                               moc_protocol_rml.cpp\
                               moc_router.cpp\
+                              moc_router_cic.cpp\
                               moc_router_gpio.cpp\
                               moc_router_hpiaudio.cpp\
                               moc_streamcmdserver.cpp

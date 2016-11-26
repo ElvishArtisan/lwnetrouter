@@ -30,6 +30,7 @@
 #include "protocol_cunc.h"
 #include "protocol_gpio.h"
 #include "protocol_rml.h"
+#include "router_cic.h"
 #include "router_gpio.h"
 #include "router_hpiaudio.h"
 
@@ -46,6 +47,7 @@ class MainObject : public QObject
 
  private:
   RouterHpiAudio *main_audio_router;
+  RouterCic *main_cic_router;
   RouterGpio *main_gpio_router;
   ProtocolCunc *main_cunc_protocol;
   ProtocolGpio *main_gpio_protocol;

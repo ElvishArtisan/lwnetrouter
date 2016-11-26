@@ -62,6 +62,10 @@ MainObject::MainObject(QObject *parent)
   connect(main_audio_router,
 	  SIGNAL(delayStateChanged(int,Config::DelayState,int)),
 	  main_gpio_router,SLOT(setDelayState(int,Config::DelayState,int)));
+  main_cic_router=new RouterCic(main_config,this);
+  connect(main_audio_router,
+	  SIGNAL(delayStateChanged(int,Config::DelayState,int)),
+	  main_cic_router,SLOT(setDelayState(int,Config::DelayState,int)));
 
   //
   // Protocols

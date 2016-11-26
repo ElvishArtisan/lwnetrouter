@@ -28,6 +28,9 @@
 Config::Config()
 {
   SyProfile *p=new SyProfile();
+  QHostAddress addr;
+  int count=0;
+  bool ok=true;
 
   p->setSource(CONFIG_CONF_FILE);
   conf_input_quantity=
@@ -37,6 +40,17 @@ Config::Config()
   conf_rml_port=p->intValue("Global","RmlPort",CONFIG_DEFAULT_RML_PORT);
   conf_cunctator_port=
     p->intValue("Global","CunctatorPort",CONFIG_DEFAULT_CUNCTATOR_PORT);
+  conf_cic_port=
+    p->intValue("Global","CicPort",CONFIG_DEFAULT_CIC_PORT);
+  while(ok) {
+    addr=p->addressValue("Global",QString().sprintf("CicIpAddress%d",
+						   count+1),"",&ok);
+    if(ok) {
+      conf_cic_addresses.push_back(addr);
+    }
+    count++;
+  }
+
   conf_audio_adapter_ip_address=p->addressValue("Audio","AdapterIpAddress","");
   conf_audio_delay_change_percent=
     p->intValue("Audio","DelayChangePercent",
@@ -46,9 +60,21 @@ Config::Config()
   conf_audio_output_bus_xfers=p->
     boolValue("Audio","OutputBusXfers",CONFIG_DEFAULT_AUDIO_OUTPUT_BUS_XFERS);
   for(int i=0;i<MAX_INPUTS;i++) {
+    count=0;
+    ok=true;
+
     QString section=QString().sprintf("Input%d",i+1);
     conf_input_delay_control_sources[i]=
       p->intValue(section,"DelayControlSource");
+
+    while(ok) {
+      addr=p->addressValue(section,QString().sprintf("SourceIpAddress%d",
+						     count+1),"",&ok);
+      if(ok) {
+	conf_input_addresses[i].push_back(addr);
+      }
+      count++;
+    }
   }
 
   delete p;
@@ -79,6 +105,18 @@ uint16_t Config::cunctatorPort() const
 }
 
 
+uint16_t Config::cicPort() const
+{
+  return conf_cic_port;
+}
+
+
+QList<QHostAddress> Config::cicIpAddresses()
+{
+  return conf_cic_addresses;
+}
+
+
 QHostAddress Config::audioAdapterIpAddress() const
 {
   return conf_audio_adapter_ip_address;
@@ -106,4 +144,15 @@ bool Config::audioOutputBusXfers() const
 int Config::inputDelayControlSource(int input) const
 {
   return conf_input_delay_control_sources[input];
+}
+
+
+int Config::input(const QHostAddress &addr)
+{
+  for(int i=0;i<inputQuantity();i++) {
+    if(conf_input_addresses[i].contains(addr)) {
+      return i;
+    }
+  }
+  return -1;
 }

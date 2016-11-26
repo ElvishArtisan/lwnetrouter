@@ -49,3 +49,6 @@
 	and 'src/lwnetrouterd/router_gpio.h'.
 2016-11-26 Fred Gleason <fredg@paravelsystems.com>
 	* Fixed a memory leak in 'src/lwnetrouter/router_gpio.cpp'.
+2016-11-26 Fred Gleason <fredg@paravelsystems.com>
+	* Added a Content Insertion Cue router in
+	'src/lwnetrouterd/router_cic.cpp' and 'src/lwnetrouterd/router_cic.h'.
