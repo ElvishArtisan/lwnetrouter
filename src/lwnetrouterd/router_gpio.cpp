@@ -104,6 +104,7 @@ void RouterGpio::scanTimerData()
 	  (gpio_events[i].front()->
 	   timestamp().addMSecs(gpio_delay_intervals[i])<=now)) {
       SendGpo(i,gpio_events[i].front()->line());
+      delete gpio_events[i].front();
       gpio_events[i].pop();
     }
   }

@@ -47,3 +47,5 @@
 2016-11-26 Fred Gleason <fredg@paravelsystems.com>
 	* Added a LiveWire GPIO router in 'src/lwnetrouterd/router_gpio.cpp'
 	and 'src/lwnetrouterd/router_gpio.h'.
+2016-11-26 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a memory leak in 'src/lwnetrouter/router_gpio.cpp'.
