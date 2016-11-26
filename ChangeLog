@@ -60,3 +60,6 @@
 	* Updated 'conf/lwnetrouter-sample.conf'.
 2016-11-26 Fred Gleason <fredg@paravelsystems.com>
 	* Fixed a bug in 'Makefile.am' that broke the 'make install' target.
+2016-11-26 Fred Gleason <fredg@paravelsystems.com>
+	* Added 'xdg/lwnetdelay.desktop'.
+	* Enabled the 'make rpm' target.

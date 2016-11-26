@@ -25,7 +25,9 @@ if DOCBOOK_AM
 endif
 
 SUBDIRS = $(DOCBOOK_AM_OPT) conf\
-          src
+          icons\
+          src\
+          xdg
 
 install-exec-local:	
 	mkdir -p $(DESTDIR)/usr/lib/systemd/system

@@ -20,7 +20,8 @@
 ##
 ## Use automake to process this into a Makefile.in
 
-SUBDIRS = lwnetdelay\
+SUBDIRS = common\
+          lwnetdelay\
           lwnetrouterd
 
 CLEANFILES = *~\

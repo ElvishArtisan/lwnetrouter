@@ -95,9 +95,12 @@ fi
 AC_CONFIG_FILES([ \
     conf/Makefile \
     docs/Makefile \
+    icons/Makefile \
     src/Makefile \
+    src/common/Makefile \
     src/lwnetdelay/Makefile \
     src/lwnetrouterd/Makefile \
+    xdg/Makefile \
     lwnetrouter.service \
     lwnetrouter.spec \
     Makefile ])

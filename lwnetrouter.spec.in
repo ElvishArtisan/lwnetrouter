@@ -1,8 +1,8 @@
-## lwpath.spec.in
+## lwnetrouter.spec.in
 ##
-##    Switcher Matrix Control System
+##    Radio network facility router system
 ##
-##    Copyright (C) 2015  Fred Gleason <fredg@paravelsystems.com>
+##    Copyright (C) 2016  Fred Gleason <fredg@paravelsystems.com>
 ##
 ##    This program is free software; you can redistribute it and/or modify
 ##    it under the terms of version 2 of the GNU General Public License as
@@ -19,8 +19,8 @@
 ##    Boston, MA  02111-1307  USA
 ##
 
-Summary: Switcher Matrix Control System
-Name: lwpath
+Summary: Radio network facility router system
+Name: lwnetrouter
 Version: @VERSION@
 Release: @RPM_RELEASE@%{?dist}
 License: GPLv2
@@ -31,19 +31,17 @@ BuildRequires: qt-devel
 BuildRoot: /var/tmp/%{name}-@VERSION@
 
 
-%package panels
-Summary: GUI control panels for LWPath
+%package gui
+Summary: GUI control panels for LWNetRouter
 Group: Productivity/Multimedia/Other
 
 
 %description
-LWPath is a switch matrix control system intended for use in professional
-broadcast environments.
+LWNetRouter is a centralized audio routing system for radio head-end network.
 
 
-%description panels
-GUI control panels for use the LWPath.  These allow control of individual
-crosspoint outputs by means of point-and-click interfaces.
+%description gui
+GUI control panels for use the LWNetRouter.
 
 
 %prep
@@ -69,8 +67,8 @@ fi
 if test "@DISTRO@" = "redhat" ; then
   PACKAGE_DOC_DIR=%_docdir/%{name}-@VERSION@
 fi
-if test ! -f /etc/lwpath.conf ; then
-    cp $PACKAGE_DOC_DIR/lwpath-sample.conf /etc/lwpath.conf
+if test ! -f /etc/lwnetrouter.conf ; then
+    cp $PACKAGE_DOC_DIR/lwnetrouter-sample.conf /etc/lwnetrouter.conf
 fi
 if [ -x %{_bindir}/systemctl ] ; then
   systemctl daemon-reload
@@ -79,7 +77,7 @@ fi
 
 %preun
 if [ -x %{_bindir}/systemctl ] ; then
-  systemctl stop lwpath
+  systemctl stop lwnetrouter
 fi
 
 
@@ -89,15 +87,15 @@ if [ -x %{_bindir}/systemctl ] ; then
 fi
 
 
-%post panels
+%post gui
 if test "@DISTRO@" = "suse" ; then
-  PACKAGE_DOC_DIR=%_docdir/lwpath-panels
+  PACKAGE_DOC_DIR=%_docdir/lwrouter-gui
 fi
 if test "@DISTRO@" = "redhat" ; then
-  PACKAGE_DOC_DIR=%_docdir/lwpath-panels-@VERSION@
+  PACKAGE_DOC_DIR=%_docdir/lwnetrouter-gui-@VERSION@
 fi
-if test ! -f /etc/lwpanel.conf ; then
-    cp $PACKAGE_DOC_DIR/lwpanel-sample.conf /etc/lwpanel.conf
+if test ! -f /etc/lwnetrouter.conf ; then
+    cp $PACKAGE_DOC_DIR/lwnetrouter-sample.conf /etc/lwnetrouter.conf
 fi
 if [ -x %{_bindir}/gtk-update-icon-cache ] ; then
   %{_bindir}/gtk-update-icon-cache -f --quiet %{_datadir}/icons/hicolor || :
@@ -110,37 +108,24 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
-%{_sbindir}/lwpathd
-%{_sbindir}/lwckmap
-%{_sbindir}/lwmap
-/etc/init.d/lwpathd
-/usr/lib/systemd/system/lwpath.service
-%{_mandir}/man8/lwckmap.8.gz
-%{_mandir}/man8/lwmap.8.gz
-%{_mandir}/man8/lwpathd.8.gz
+%{_sbindir}/lwnetrouterd
+/usr/lib/systemd/system/lwnetrouter.service
 %dir /var/cache/aoip
 %doc AUTHORS
 %doc ChangeLog
 %doc COPYING 
 %doc NEWS 
 %doc README 
-%doc conf/lwpathd_map-sample.dat
-%doc conf/lwpath-sample.conf
+%doc conf/lwnetrouter-sample.conf
 
 
-%files panels
-%{_bindir}/lwpanel
-%{_bindir}/lwxypanel
-%{_mandir}/man1/lwpanel.1.gz
-%{_mandir}/man1/lwxypanel.1.gz
-%{_datadir}/applications/lwpath-*.desktop
-%{_datadir}/icons/hicolor/16x16/apps/lwpath.png
-%{_datadir}/icons/hicolor/32x32/apps/lwpath.png
-%{_datadir}/icons/hicolor/48x48/apps/lwpath.png
-%doc conf/lwpanel-sample.conf
+%files gui
+%{_bindir}/lwnetdelay
+%{_datadir}/icons/48x48/apps/lwnetdelay.png
+%{_datadir}/applications/lwnetdelay.desktop
+%doc conf/lwnetrouter-sample.conf
+
 
 %changelog
-* Sun Mar 13 2016 Fred Gleason <fredg@paravelsystems.com>
--- Added LWPanel(1).
-* Fri Nov 13 2015 Fred Gleason <fredg@paravelsystems.com>
+* Sat Nov 26 2016 Fred Gleason <fredg@paravelsystems.com>
 -- Initial RPM creation.
