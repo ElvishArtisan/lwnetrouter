@@ -30,12 +30,9 @@ SUBDIRS = $(DOCBOOK_AM_OPT) conf\
 install-exec-local:	
 	mkdir -p $(DESTDIR)/usr/lib/systemd/system
 	cp lwnetrouter.service $(DESTDIR)/usr/lib/systemd/system/lwnetrouter.service
-	mkdir -p $(DESTDIR)/etc/init.d
-	cp rc.lwnetrouterd $(DESTDIR)/etc/init.d/lwnetrouterd
 
 uninstall-local:	
 	rm -f $(DESTDIR)/usr/lib/systemd/system/lwnetrouter.service
-	rm -f $(DESTDIR)/etc/init.d/lwnetrouterd
 
 rpm:	dist
 	cp lwnetrouter-$(VERSION).tar.gz $(HOME)/rpmbuild/SOURCES/
