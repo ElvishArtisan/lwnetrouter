@@ -31,6 +31,7 @@
 #include <sy/sylwrp_client.h>
 
 #include "router.h"
+#include "ttydevice.h"
 
 class RouterGpioEvent
 {
@@ -65,6 +66,7 @@ class RouterGpio : public Router
   void SendGpo(int input,int line);
   SyGpioServer *gpio_server;
   SyLwrpClient *gpio_lwrp;
+  TTYDevice *gpio_netcue_device;
   QTimer *gpio_scan_timer;
   Config::DelayState gpio_delay_states[MAX_INPUTS];
   int gpio_delay_intervals[MAX_INPUTS];

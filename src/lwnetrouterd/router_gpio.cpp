@@ -19,6 +19,8 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
+#include <syslog.h>
+
 #include "router_gpio.h"
 
 RouterGpioEvent::RouterGpioEvent(int line)
@@ -45,6 +47,9 @@ int RouterGpioEvent::line() const
 RouterGpio::RouterGpio(SyGpioServer *gpioserv,Config *c,QObject *parent)
   : Router(c,parent)
 {
+  //
+  // GPIO Server
+  //
   gpio_server=gpioserv;
   connect(gpio_server,SIGNAL(gpoReceived(int,int,bool,bool)),
 	  this,SLOT(gpoReceivedData(int,int,bool,bool)));
@@ -54,10 +59,32 @@ RouterGpio::RouterGpio(SyGpioServer *gpioserv,Config *c,QObject *parent)
     gpio_delay_intervals[i]=0;
   }
 
+  //
+  // LWRP Connection
+  //
   gpio_lwrp=new SyLwrpClient(0,this);
   gpio_lwrp->
     connectToHost(c->audioAdapterIpAddress(),SWITCHYARD_LWRP_PORT,"",true);
 
+  //
+  // Netcue Port
+  //
+  gpio_netcue_device=new TTYDevice(this);
+  if(!config()->netcuePort().isEmpty()) {
+    gpio_netcue_device->setName(config()->netcuePort());
+    gpio_netcue_device->setSpeed(NETCUE_TTY_SPEED);
+    gpio_netcue_device->setParity(NETCUE_TTY_DATA_PARITY);
+    gpio_netcue_device->setWordLength(NETCUE_TTY_DATA_BITS);
+    gpio_netcue_device->setFlowControl(NETCUE_TTY_FLOW_CONTROL);
+    if(!gpio_netcue_device->open(QIODevice::WriteOnly)) {
+      syslog(LOG_WARNING,"unable to open netcue serial device \"%s\"",
+	     (const char *)config()->netcuePort().toUtf8());
+    }
+  }
+
+  //
+  // Timers
+  //
   gpio_scan_timer=new QTimer(this);
   connect(gpio_scan_timer,SIGNAL(timeout()),this,SLOT(scanTimerData()));
   gpio_scan_timer->start(50);
@@ -117,6 +144,10 @@ void RouterGpio::SendGpo(int input,int line)
     if(crossPoint(i)==input) {
       gpio_server->sendGpo(SyRouting::livewireNumber(gpio_lwrp->srcAddress(i)),
 			   line,true,true);
+      if(gpio_netcue_device->isOpen()) {
+	QString netcue=config()->outputNetcue(i,line)+"\n";
+	gpio_netcue_device->write(netcue.toAscii(),netcue.toAscii().length());
+      }
     }
   }
 }

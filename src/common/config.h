@@ -29,6 +29,10 @@
 #define AUDIO_SAMPLE_RATE 48000
 #define AUDIO_HPI_POLLING_INTERVAL 10000
 #define CONFIG_CONF_FILE "/etc/lwnetrouter.conf"
+#define NETCUE_TTY_SPEED 9600
+#define NETCUE_TTY_DATA_BITS 8
+#define NETCUE_TTY_DATA_PARITY TTYDevice::None
+#define NETCUE_TTY_FLOW_CONTROL TTYDevice::FlowNone
 
 //
 // Default Values
@@ -38,6 +42,7 @@
 #define CONFIG_DEFAULT_RML_PORT 5858
 #define CONFIG_DEFAULT_CUNCTATOR_PORT 3749
 #define CONFIG_DEFAULT_CIC_PORT 5001
+#define CONFIG_DEFAULT_NETCUE_PORT QString("/dev/ttyS0")
 #define CONFIG_DEFAULT_AUDIO_DELAY_CHANGE_PERCENT 5
 #define CONFIG_DEFAULT_AUDIO_INPUT_BUS_XFERS false
 #define CONFIG_DEFAULT_AUDIO_OUTPUT_BUS_XFERS true
@@ -47,6 +52,8 @@
 #include <QHostAddress>
 #include <QList>
 #include <QString>
+
+#include <sy/syconfig.h>
 
 class Config
 {
@@ -60,12 +67,14 @@ class Config
   uint16_t cunctatorPort() const;
   uint16_t cicPort() const;
   QList<QHostAddress> cicIpAddresses();
+  QString netcuePort() const;
   QHostAddress audioAdapterIpAddress() const;
   int audioDelayChangePercent() const;
   bool audioInputBusXfers() const;
   bool audioOutputBusXfers() const;
   int inputDelayControlSource(int input) const;
   int input(const QHostAddress &addr);
+  QString outputNetcue(int output,int line) const;
 
  private:
   int conf_input_quantity;
@@ -74,12 +83,14 @@ class Config
   uint16_t conf_cunctator_port;
   uint16_t conf_cic_port;
   QList<QHostAddress> conf_cic_addresses;
+  QString conf_netcue_port;
   QHostAddress conf_audio_adapter_ip_address;
   int conf_audio_delay_change_percent;
   bool conf_audio_input_bus_xfers;
   bool conf_audio_output_bus_xfers;
   int conf_input_delay_control_sources[MAX_INPUTS];
   QList<QHostAddress> conf_input_addresses[MAX_INPUTS];
+  QString conf_output_netcues[MAX_OUTPUTS][SWITCHYARD_GPIO_BUNDLE_SIZE];
 };
 
 

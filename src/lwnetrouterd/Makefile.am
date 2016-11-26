@@ -40,7 +40,8 @@ dist_lwnetrouterd_SOURCES = lwnetrouterd.cpp lwnetrouterd.h\
                             router_cic.cpp router_cic.h\
                             router_gpio.cpp router_gpio.h\
                             router_hpiaudio.cpp router_hpiaudio.h\
-                            streamcmdserver.cpp streamcmdserver.h
+                            streamcmdserver.cpp streamcmdserver.h\
+                            ttydevice.cpp ttydevice.h
 
 nodist_lwnetrouterd_SOURCES = config.cpp config.h\
                               moc_lwnetrouterd.cpp\
@@ -52,7 +53,8 @@ nodist_lwnetrouterd_SOURCES = config.cpp config.h\
                               moc_router_cic.cpp\
                               moc_router_gpio.cpp\
                               moc_router_hpiaudio.cpp\
-                              moc_streamcmdserver.cpp
+                              moc_streamcmdserver.cpp\
+                              moc_ttydevice.cpp
 
 lwnetrouterd_LDADD = @QT4CLI_LIBS@ @SWITCHYARD_LIBS@ -lhpi -lpthread
 

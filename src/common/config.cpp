@@ -33,6 +33,10 @@ Config::Config()
   bool ok=true;
 
   p->setSource(CONFIG_CONF_FILE);
+
+  //
+  // [Global] Section
+  //
   conf_input_quantity=
     p->intValue("Global","InputQuantity",CONFIG_DEFAULT_INPUT_QUANTITY);
   conf_output_quantity=
@@ -50,7 +54,12 @@ Config::Config()
     }
     count++;
   }
+  conf_netcue_port=
+    p->stringValue("Global","NetcuePort",CONFIG_DEFAULT_NETCUE_PORT);
 
+  //
+  // [Audio] Section
+  //
   conf_audio_adapter_ip_address=p->addressValue("Audio","AdapterIpAddress","");
   conf_audio_delay_change_percent=
     p->intValue("Audio","DelayChangePercent",
@@ -59,14 +68,16 @@ Config::Config()
     boolValue("Audio","InputBusXfers",CONFIG_DEFAULT_AUDIO_INPUT_BUS_XFERS);
   conf_audio_output_bus_xfers=p->
     boolValue("Audio","OutputBusXfers",CONFIG_DEFAULT_AUDIO_OUTPUT_BUS_XFERS);
+
+  //
+  // [Input<n>] Sections
+  //
   for(int i=0;i<MAX_INPUTS;i++) {
     count=0;
     ok=true;
-
     QString section=QString().sprintf("Input%d",i+1);
     conf_input_delay_control_sources[i]=
       p->intValue(section,"DelayControlSource");
-
     while(ok) {
       addr=p->addressValue(section,QString().sprintf("SourceIpAddress%d",
 						     count+1),"",&ok);
@@ -74,6 +85,17 @@ Config::Config()
 	conf_input_addresses[i].push_back(addr);
       }
       count++;
+    }
+  }
+
+  //
+  // [Output<n>] Sections
+  //
+  for(int i=0;i<MAX_OUTPUTS;i++) {
+    QString section=QString().sprintf("Output%d",i+1);
+    for(int j=0;j<SWITCHYARD_GPIO_BUNDLE_SIZE;j++) {
+      conf_output_netcues[i][j]=
+	p->stringValue(section,QString().sprintf("Netcue%d",j+1));
     }
   }
 
@@ -117,6 +139,12 @@ QList<QHostAddress> Config::cicIpAddresses()
 }
 
 
+QString Config::netcuePort() const
+{
+  return conf_netcue_port;
+}
+
+
 QHostAddress Config::audioAdapterIpAddress() const
 {
   return conf_audio_adapter_ip_address;
@@ -156,3 +184,10 @@ int Config::input(const QHostAddress &addr)
   }
   return -1;
 }
+
+
+QString Config::outputNetcue(int output,int line) const
+{
+  return conf_output_netcues[output][line];
+}
+

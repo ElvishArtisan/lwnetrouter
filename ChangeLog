@@ -52,3 +52,7 @@
 2016-11-26 Fred Gleason <fredg@paravelsystems.com>
 	* Added a Content Insertion Cue router in
 	'src/lwnetrouterd/router_cic.cpp' and 'src/lwnetrouterd/router_cic.h'.
+2016-11-26 Fred Gleason <fredg@paravelsystems.com>
+	* Added support for serial netcues in
+	 'src/lwnetrouter/router_gpio.cpp' and
+	 'src/lwnetrouter/router_gpio.h'.
