@@ -52,7 +52,10 @@ MainObject::MainObject(QObject *parent)
   //
   // GPIO Server
   //
-  main_gpio=new SyGpioServer(new SyRouting(0,0),this);
+  SyRouting *r=new SyRouting(0,0);
+  r->setNicAddress(main_config->livewireIpAddress());
+  r->save();
+  main_gpio=new SyGpioServer(r,this);
 
   //
   // Routers

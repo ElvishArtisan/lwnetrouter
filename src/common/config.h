@@ -68,6 +68,7 @@ class Config
   uint16_t cicPort() const;
   QList<QHostAddress> cicIpAddresses();
   QString netcuePort() const;
+  QHostAddress livewireIpAddress() const;
   QHostAddress adapterIpAddress() const;
   bool inputBusXfers() const;
   bool outputBusXfers() const;
@@ -84,6 +85,7 @@ class Config
   uint16_t conf_cic_port;
   QList<QHostAddress> conf_cic_addresses;
   QString conf_netcue_port;
+  QHostAddress conf_livewire_ip_address;
   QHostAddress conf_adapter_ip_address;
   bool conf_input_bus_xfers;
   bool conf_output_bus_xfers;

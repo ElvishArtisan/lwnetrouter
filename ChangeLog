@@ -74,3 +74,6 @@
 2016-11-27 Fred Gleason <fredg@paravelsystems.com>
 	* Consolidated the [Audio] section parameters of lwnetrouter.conf(5)
 	into the [Global] section.
+2016-11-27 Fred Gleason <fredg@paravelsystems.com>
+	* Added a 'LivewireIpAddress=' parameter to the [Global] section
+	of lwnetrouter.conf(5).

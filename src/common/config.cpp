@@ -56,6 +56,7 @@ Config::Config()
   }
   conf_netcue_port=
     p->stringValue("Global","NetcuePort",CONFIG_DEFAULT_NETCUE_PORT);
+  conf_livewire_ip_address=p->addressValue("Global","LivewireIpAddress","");
   conf_adapter_ip_address=p->addressValue("Global","AdapterIpAddress","");
   conf_input_bus_xfers=p->
     boolValue("Global","InputBusXfers",CONFIG_DEFAULT_AUDIO_INPUT_BUS_XFERS);
@@ -138,6 +139,12 @@ QList<QHostAddress> Config::cicIpAddresses()
 QString Config::netcuePort() const
 {
   return conf_netcue_port;
+}
+
+
+QHostAddress Config::livewireIpAddress() const
+{
+  return conf_livewire_ip_address;
 }
 
 
