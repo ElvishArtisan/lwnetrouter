@@ -51,7 +51,8 @@ class RouterGpio : public Router
 {
   Q_OBJECT;
  public:
-  RouterGpio(SyGpioServer *gpioserv,Config *c,QObject *parent=0);
+  RouterGpio(SyGpioServer *gpioserv,SyLwrpClient *lwrp,Config *c,
+	     QObject *parent=0);
   Config::DelayState delayState(int input) const;
   int delayInterval(int input);
 

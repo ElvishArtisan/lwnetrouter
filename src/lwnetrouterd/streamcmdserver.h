@@ -73,7 +73,9 @@ class StreamCmdServer : public QObject
 
  public slots:
   void sendCommand(int id,int cmd,const QStringList &args=QStringList());
+  void sendCommand(int id,const QString &str);
   void sendCommand(int cmd,const QStringList &args=QStringList());
+  void sendCommand(const QString &str);
   void connectToHost(const QString &hostname,uint16_t port);
   void closeConnection(int id);
 

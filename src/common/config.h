@@ -41,6 +41,7 @@
 #define CONFIG_DEFAULT_OUTPUT_QUANTITY 8
 #define CONFIG_DEFAULT_RML_PORT 5858
 #define CONFIG_DEFAULT_CUNCTATOR_PORT 3749
+#define CONFIG_DEFAULT_SOFTWARE_AUTHORITY_PORT 9500
 #define CONFIG_DEFAULT_CIC_PORT 5001
 #define CONFIG_DEFAULT_NETCUE_PORT QString("/dev/ttyS0")
 #define CONFIG_DEFAULT_INPUT_BUS_XFERS false
@@ -66,6 +67,7 @@ class Config
   int outputQuantity() const;
   uint16_t rmlPort() const;
   uint16_t cunctatorPort() const;
+  uint16_t softwareAuthorityPort() const;
   uint16_t cicPort() const;
   QList<QHostAddress> cicIpAddresses();
   QString netcuePort() const;
@@ -84,6 +86,7 @@ class Config
   int conf_output_quantity;
   uint16_t conf_rml_port;
   uint16_t conf_cunctator_port;
+  uint16_t conf_software_authority_port;
   uint16_t conf_cic_port;
   QList<QHostAddress> conf_cic_addresses;
   QString conf_netcue_port;

@@ -187,6 +187,12 @@ void StreamCmdServer::sendCommand(int id,int cmd,const QStringList &args)
 }
 
 
+void StreamCmdServer::sendCommand(int id,const QString &str)
+{
+  cmd_connections.at(id)->socket()->write(str.toAscii(),str.length());
+}
+
+
 void StreamCmdServer::sendCommand(int cmd,const QStringList &args)
 {
   StreamCmdConnection *conn;
@@ -195,6 +201,23 @@ void StreamCmdServer::sendCommand(int cmd,const QStringList &args)
     if((conn=cmd_connections.at(i))!=NULL) {
       if(conn->isConnected()) {
 	sendCommand(i,cmd,args);
+      }
+    }
+    else {
+      closeConnection(i);
+    }
+  }
+}
+
+
+void StreamCmdServer::sendCommand(const QString &str)
+{
+  StreamCmdConnection *conn;
+
+  for(unsigned i=0;i<cmd_connections.size();i++) {
+    if((conn=cmd_connections.at(i))!=NULL) {
+      if(conn->isConnected()) {
+	sendCommand(i,str);
       }
     }
     else {

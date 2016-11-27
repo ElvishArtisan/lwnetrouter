@@ -44,6 +44,9 @@ Config::Config()
   conf_rml_port=p->intValue("Global","RmlPort",CONFIG_DEFAULT_RML_PORT);
   conf_cunctator_port=
     p->intValue("Global","CunctatorPort",CONFIG_DEFAULT_CUNCTATOR_PORT);
+  conf_software_authority_port=
+    p->intValue("Global","SoftwareAutorityPort",
+		CONFIG_DEFAULT_SOFTWARE_AUTHORITY_PORT);
   conf_cic_port=
     p->intValue("Global","CicPort",CONFIG_DEFAULT_CIC_PORT);
   while(ok) {
@@ -123,6 +126,12 @@ uint16_t Config::rmlPort() const
 uint16_t Config::cunctatorPort() const
 {
   return conf_cunctator_port;
+}
+
+
+uint16_t Config::softwareAuthorityPort() const
+{
+  return conf_software_authority_port;
 }
 
 

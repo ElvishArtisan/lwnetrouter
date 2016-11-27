@@ -1,6 +1,6 @@
-// router.h
+// protocol_sap.h
 //
-// Abstract base class for router objects.
+// Software Authority protocol driver
 //
 //   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
 //
@@ -19,41 +19,36 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
-#ifndef ROUTER_H
-#define ROUTER_H
+#ifndef PROTOCOL_SAP_H
+#define PROTOCOL_SAP_H
 
-#include <vector>
+#include <sy/sylwrp_client.h>
 
-#include <QObject>
+#include "protocol.h"
+#include "streamcmdserver.h"
 
-#include "config.h"
-
-class Router : public QObject
+class ProtocolSap : public Protocol
 {
   Q_OBJECT;
  public:
-  Router(Config *config,QObject *parent=0);
-  int crossPoint(int output) const;
-  virtual Config::DelayState delayState(int input) const=0;
-  virtual int delayInterval(int input)=0;
+  ProtocolSap(SyLwrpClient *lwrp,Config *c,QObject *parent=0);
 
  signals:
-  void crossPointChanged(int output,int input);
-  void delayStateChanged(int input,Config::DelayState state,int msec);
+  void crosspointRequested(int id,int output);
 
  public slots:
-  void setCrossPoint(int output,int input);
-  virtual void setDelayState(int input,Config::DelayState state);
-  virtual void dumpDelay(int input);
+   void sendCrossPoint(int output,int input);
+   void sendCrossPoint(int id,int output,int input);
 
- protected:
-  virtual void crossPointSet(int output,int input);
-  Config *config() const;
+ private slots:
+  void commandReceivedData(int id,int cmd,const QStringList &args);
 
  private:
-  std::vector<int> router_crosspoints;
-  Config *router_config;
+  enum Commands {Login=0,Exit=1,RouterNames=2,SourceNames=3,DestNames=4,
+		 ActivateRoute=5,RouteStat=6};
+  StreamCmdServer *sap_server;
+  SyLwrpClient *sap_lwrp;
 };
 
 
-#endif  // ROUTER_H
+#endif  // PROTOCOL_SAP_H

@@ -58,10 +58,17 @@ MainObject::MainObject(QObject *parent)
   main_gpio=new SyGpioServer(r,this);
 
   //
+  // Adapter Control
+  //
+  main_lwrp=new SyLwrpClient(0,this);
+  main_lwrp->
+    connectToHost(main_config->adapterIpAddress(),SWITCHYARD_LWRP_PORT,"",true);
+
+  //
   // Routers
   //
   main_audio_router=new RouterHpiAudio(main_config,this);
-  main_gpio_router=new RouterGpio(main_gpio,main_config,this);
+  main_gpio_router=new RouterGpio(main_gpio,main_lwrp,main_config,this);
   connect(main_audio_router,
 	  SIGNAL(delayStateChanged(int,Config::DelayState,int)),
 	  main_gpio_router,SLOT(setDelayState(int,Config::DelayState,int)));
@@ -78,6 +85,16 @@ MainObject::MainObject(QObject *parent)
 	  main_audio_router,SLOT(setCrossPoint(int,int)));
   connect(main_rml_protocol,SIGNAL(crosspointChangeReceived(int,int)),
 	  main_gpio_router,SLOT(setCrossPoint(int,int)));
+
+  main_sap_protocol=new ProtocolSap(main_lwrp,main_config,this);
+  connect(main_sap_protocol,SIGNAL(crosspointChangeReceived(int,int)),
+	  main_audio_router,SLOT(setCrossPoint(int,int)));
+  connect(main_sap_protocol,SIGNAL(crosspointChangeReceived(int,int)),
+	  main_gpio_router,SLOT(setCrossPoint(int,int)));
+  connect(main_sap_protocol,SIGNAL(crosspointRequested(int,int)),
+	  this,SLOT(sapCrosspointRequestedData(int,int)));
+  connect(main_audio_router,SIGNAL(crossPointChanged(int,int)),
+	  main_sap_protocol,SLOT(sendCrossPoint(int,int)));
 
   main_cunc_protocol=new ProtocolCunc(main_config,this);
   connect(main_cunc_protocol,
@@ -108,6 +125,20 @@ void MainObject::cuncDelayStateRequestedData(int id,int input)
   main_cunc_protocol->
     sendDelayState(id,input,main_audio_router->delayState(input),
 		   main_audio_router->delayInterval(input));
+}
+
+
+void MainObject::sapCrosspointRequestedData(int id,int output)
+{
+  if(output<0) {
+    for(int i=0;i<main_config->outputQuantity();i++) {
+      main_sap_protocol->sendCrossPoint(id,i,main_audio_router->crossPoint(i));
+    }
+  }
+  else {
+    main_sap_protocol->
+      sendCrossPoint(id,output,main_audio_router->crossPoint(output));
+  }
 }
 
 

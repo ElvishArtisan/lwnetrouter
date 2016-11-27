@@ -80,3 +80,7 @@
 2016-11-27 Fred Gleason <fredg@paravelsystems.com>
 	* Added a 'FullDelay=' parameter to the [Input<n>] section
 	of lwnetrouter.conf(5).
+2016-11-27 Fred Gleason <fredg@paravelsystems.com>
+	* Added a protocol driver for Software Authority protocol in
+	'src/lwnetrouterd/protocol_sap.cpp' and
+	'src/lwnetrouterd/protocol_sap.h'.

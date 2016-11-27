@@ -30,6 +30,7 @@
 #include "protocol_cunc.h"
 #include "protocol_gpio.h"
 #include "protocol_rml.h"
+#include "protocol_sap.h"
 #include "router_cic.h"
 #include "router_gpio.h"
 #include "router_hpiaudio.h"
@@ -44,6 +45,7 @@ class MainObject : public QObject
 
  private slots:
   void cuncDelayStateRequestedData(int id,int input);
+  void sapCrosspointRequestedData(int id,int output);
 
  private:
   RouterHpiAudio *main_audio_router;
@@ -52,7 +54,9 @@ class MainObject : public QObject
   ProtocolCunc *main_cunc_protocol;
   ProtocolGpio *main_gpio_protocol;
   ProtocolRml *main_rml_protocol;
+  ProtocolSap *main_sap_protocol;
   SyGpioServer *main_gpio;
+  SyLwrpClient *main_lwrp;
   Config *main_config;
 };
 

@@ -42,6 +42,7 @@ void Router::setCrossPoint(int output,int input)
 {
   crossPointSet(output,input);
   router_crosspoints[output]=input;
+  emit crossPointChanged(output,input);
 }
 
 

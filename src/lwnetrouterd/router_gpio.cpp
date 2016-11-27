@@ -44,7 +44,8 @@ int RouterGpioEvent::line() const
 
 
 
-RouterGpio::RouterGpio(SyGpioServer *gpioserv,Config *c,QObject *parent)
+RouterGpio::RouterGpio(SyGpioServer *gpioserv,SyLwrpClient *lwrp,Config *c,
+		       QObject *parent)
   : Router(c,parent)
 {
   //
@@ -62,9 +63,7 @@ RouterGpio::RouterGpio(SyGpioServer *gpioserv,Config *c,QObject *parent)
   //
   // LWRP Connection
   //
-  gpio_lwrp=new SyLwrpClient(0,this);
-  gpio_lwrp->
-    connectToHost(c->adapterIpAddress(),SWITCHYARD_LWRP_PORT,"",true);
+  gpio_lwrp=lwrp;
 
   //
   // Netcue Port

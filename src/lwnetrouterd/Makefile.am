@@ -35,6 +35,7 @@ dist_lwnetrouterd_SOURCES = lwnetrouterd.cpp lwnetrouterd.h\
                             protocol_cunc.cpp protocol_cunc.h\
                             protocol_gpio.cpp protocol_gpio.h\
                             protocol_rml.cpp protocol_rml.h\
+                            protocol_sap.cpp protocol_sap.h\
                             ringbuffer.cpp ringbuffer.h\
                             router.cpp router.h\
                             router_cic.cpp router_cic.h\
@@ -49,6 +50,7 @@ nodist_lwnetrouterd_SOURCES = config.cpp config.h\
                               moc_protocol_cunc.cpp\
                               moc_protocol_gpio.cpp\
                               moc_protocol_rml.cpp\
+                              moc_protocol_sap.cpp\
                               moc_router.cpp\
                               moc_router_cic.cpp\
                               moc_router_gpio.cpp\
