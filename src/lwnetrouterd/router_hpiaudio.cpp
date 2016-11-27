@@ -29,7 +29,7 @@
 
 #include "router_hpiaudio.h"
 
-size_t SetpointBytes(uint32_t msec)
+size_t SetpointBytes(uint64_t msec)
 {
   return AUDIO_SAMPLE_RATE*AUDIO_CHANNELS*msec*sizeof(float)/1000;
 }
