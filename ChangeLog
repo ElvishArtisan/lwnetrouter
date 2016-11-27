@@ -84,3 +84,5 @@
 	* Added a protocol driver for Software Authority protocol in
 	'src/lwnetrouterd/protocol_sap.cpp' and
 	'src/lwnetrouterd/protocol_sap.h'.
+2016-11-27 Fred Gleason <fredg@paravelsystems.com>
+	* Incremented the package version to 0.6.0.
