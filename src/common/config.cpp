@@ -59,9 +59,9 @@ Config::Config()
   conf_livewire_ip_address=p->addressValue("Global","LivewireIpAddress","");
   conf_adapter_ip_address=p->addressValue("Global","AdapterIpAddress","");
   conf_input_bus_xfers=p->
-    boolValue("Global","InputBusXfers",CONFIG_DEFAULT_AUDIO_INPUT_BUS_XFERS);
+    boolValue("Global","InputBusXfers",CONFIG_DEFAULT_INPUT_BUS_XFERS);
   conf_output_bus_xfers=p->
-    boolValue("Global","OutputBusXfers",CONFIG_DEFAULT_AUDIO_OUTPUT_BUS_XFERS);
+    boolValue("Global","OutputBusXfers",CONFIG_DEFAULT_OUTPUT_BUS_XFERS);
 
   //
   // [Input<n>] Sections
@@ -70,6 +70,8 @@ Config::Config()
     count=0;
     ok=true;
     QString section=QString().sprintf("Input%d",i+1);
+    conf_input_full_delays[i]=
+      p->intValue(section,"FullDelay",CONFIG_DEFAULT_INPUT_FULL_DELAY);
     conf_input_delay_change_percent[i]=
       p->intValue(section,"DelayChangePercent",
 		  CONFIG_DEFAULT_INPUT_DELAY_CHANGE_PERCENT);
@@ -163,6 +165,12 @@ bool Config::inputBusXfers() const
 bool Config::outputBusXfers() const
 {
   return conf_output_bus_xfers;
+}
+
+
+int Config::inputFullDelay(int input) const
+{
+  return conf_input_full_delays[input];
 }
 
 

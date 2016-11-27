@@ -77,3 +77,6 @@
 2016-11-27 Fred Gleason <fredg@paravelsystems.com>
 	* Added a 'LivewireIpAddress=' parameter to the [Global] section
 	of lwnetrouter.conf(5).
+2016-11-27 Fred Gleason <fredg@paravelsystems.com>
+	* Added a 'FullDelay=' parameter to the [Input<n>] section
+	of lwnetrouter.conf(5).

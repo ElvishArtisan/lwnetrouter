@@ -43,8 +43,9 @@
 #define CONFIG_DEFAULT_CUNCTATOR_PORT 3749
 #define CONFIG_DEFAULT_CIC_PORT 5001
 #define CONFIG_DEFAULT_NETCUE_PORT QString("/dev/ttyS0")
-#define CONFIG_DEFAULT_AUDIO_INPUT_BUS_XFERS false
-#define CONFIG_DEFAULT_AUDIO_OUTPUT_BUS_XFERS true
+#define CONFIG_DEFAULT_INPUT_BUS_XFERS false
+#define CONFIG_DEFAULT_OUTPUT_BUS_XFERS true
+#define CONFIG_DEFAULT_INPUT_FULL_DELAY 10
 #define CONFIG_DEFAULT_INPUT_DELAY_CHANGE_PERCENT 5
 
 #include <stdint.h>
@@ -72,6 +73,7 @@ class Config
   QHostAddress adapterIpAddress() const;
   bool inputBusXfers() const;
   bool outputBusXfers() const;
+  int inputFullDelay(int input) const;
   int inputDelayChangePercent(int input) const;
   int inputDelayControlSource(int input) const;
   int input(const QHostAddress &addr);
@@ -89,6 +91,7 @@ class Config
   QHostAddress conf_adapter_ip_address;
   bool conf_input_bus_xfers;
   bool conf_output_bus_xfers;
+  int conf_input_full_delays[MAX_INPUTS];
   int conf_input_delay_change_percent[MAX_INPUTS];
   int conf_input_delay_control_sources[MAX_INPUTS];
   QList<QHostAddress> conf_input_addresses[MAX_INPUTS];

@@ -66,6 +66,7 @@ void *__AudioCallback(void *ptr)
   static uint32_t out_aux_to_play;
   static float pcm[262144];
   static int inputs=rha->config()->inputQuantity();
+  static int full_delays[MAX_INPUTS];
   static Ringbuffer *rb[MAX_INPUTS];
   static float timescale;
   static int i;
@@ -81,6 +82,7 @@ void *__AudioCallback(void *ptr)
       new Ringbuffer(SetpointBytes(MAX_DELAY*1100));
     rha->delay_interval[i]=0;
     rha->delay_state_taken[i]=Config::DelayBypassed;
+    full_delays[i]=rha->config()->inputFullDelay(i);
   }
 
   //
@@ -141,10 +143,10 @@ void *__AudioCallback(void *ptr)
 
 	switch(rha->delay_state_set[i]) {
 	case Config::DelayEntering:
-	  if(delay_frames>SetpointBytes(MAX_DELAY*1000)) {
+	  if(delay_frames>SetpointBytes(full_delays[i]*1000)) {
 	    timescale=1.0;
 	    rha->delay_state_taken[i]=Config::DelayEntered;
-	    rha->delay_interval[i]=MAX_DELAY*1000;
+	    rha->delay_interval[i]=full_delays[i]*1000;
 	  }
 	  else {
 	    if(rha->delay_state_taken[i]!=Config::DelayEntered) {
