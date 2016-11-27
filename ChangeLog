@@ -64,7 +64,7 @@
 	* Added 'xdg/lwnetdelay.desktop'.
 	* Enabled the 'make rpm' target.
 2016-11-27 Fred Gleason <fredg@paravelsystems.com>
-	* Changed 'MAY_DELAY' to '60' in 'src/common/config.h'.
+	* Changed 'MAX_DELAY' to '60' in 'src/common/config.h'.
 	* Fixed a bug in 'src'lwnetrouterd/lwnetrouterd.cpp' that caused
 	calculation of delay interval top be incorrect for intervals
 	greater than 15 seconds.
