@@ -68,9 +68,9 @@ class Config
   uint16_t cicPort() const;
   QList<QHostAddress> cicIpAddresses();
   QString netcuePort() const;
-  QHostAddress audioAdapterIpAddress() const;
-  bool audioInputBusXfers() const;
-  bool audioOutputBusXfers() const;
+  QHostAddress adapterIpAddress() const;
+  bool inputBusXfers() const;
+  bool outputBusXfers() const;
   int inputDelayChangePercent(int input) const;
   int inputDelayControlSource(int input) const;
   int input(const QHostAddress &addr);
@@ -84,9 +84,9 @@ class Config
   uint16_t conf_cic_port;
   QList<QHostAddress> conf_cic_addresses;
   QString conf_netcue_port;
-  QHostAddress conf_audio_adapter_ip_address;
-  bool conf_audio_input_bus_xfers;
-  bool conf_audio_output_bus_xfers;
+  QHostAddress conf_adapter_ip_address;
+  bool conf_input_bus_xfers;
+  bool conf_output_bus_xfers;
   int conf_input_delay_change_percent[MAX_INPUTS];
   int conf_input_delay_control_sources[MAX_INPUTS];
   QList<QHostAddress> conf_input_addresses[MAX_INPUTS];

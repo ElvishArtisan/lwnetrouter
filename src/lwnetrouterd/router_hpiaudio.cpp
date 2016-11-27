@@ -255,7 +255,7 @@ RouterHpiAudio::RouterHpiAudio(Config *c,QObject *parent)
     delay_change_up[i]=1.0+(float)(config()->inputDelayChangePercent(i))/100;
     HpiError(HPI_InStreamOpen(NULL,0,i,&hpi_input_streams[i]));
     HpiError(HPI_InStreamSetFormat(NULL,hpi_input_streams[i],hpi_format));
-    if(config()->audioInputBusXfers()) {
+    if(config()->inputBusXfers()) {
       if(HpiError(HPI_InStreamHostBufferAllocate(NULL,hpi_input_streams[i],
 						 bufsize))==
 	 HPI_ERROR_INVALID_DATASIZE) {
@@ -278,7 +278,7 @@ RouterHpiAudio::RouterHpiAudio(Config *c,QObject *parent)
     HpiError(HPI_OutStreamSetFormat(NULL,hpi_output_streams[i],hpi_format));
     HpiError(HPI_OutStreamSetTimeScale(NULL,hpi_output_streams[i],
 				       HPI_OSTREAM_TIMESCALE_PASSTHROUGH));
-    if(config()->audioOutputBusXfers()) {
+    if(config()->outputBusXfers()) {
       if(HpiError(HPI_OutStreamHostBufferAllocate(NULL,hpi_output_streams[i],
 						  bufsize))==
 	 HPI_ERROR_INVALID_DATASIZE) {

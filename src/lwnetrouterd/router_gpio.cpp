@@ -64,7 +64,7 @@ RouterGpio::RouterGpio(SyGpioServer *gpioserv,Config *c,QObject *parent)
   //
   gpio_lwrp=new SyLwrpClient(0,this);
   gpio_lwrp->
-    connectToHost(c->audioAdapterIpAddress(),SWITCHYARD_LWRP_PORT,"",true);
+    connectToHost(c->adapterIpAddress(),SWITCHYARD_LWRP_PORT,"",true);
 
   //
   // Netcue Port

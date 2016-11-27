@@ -71,3 +71,6 @@
 2016-11-27 Fred Gleason <fredg@paravelsystems.com>
 	* Moved the 'DelayChangePercent=' parameter in lwnetrouter.conf(5)
 	from the [Audio] to the [Input<n>] section.
+2016-11-27 Fred Gleason <fredg@paravelsystems.com>
+	* Consolidated the [Audio] section parameters of lwnetrouter.conf(5)
+	into the [Global] section.

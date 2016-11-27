@@ -56,15 +56,11 @@ Config::Config()
   }
   conf_netcue_port=
     p->stringValue("Global","NetcuePort",CONFIG_DEFAULT_NETCUE_PORT);
-
-  //
-  // [Audio] Section
-  //
-  conf_audio_adapter_ip_address=p->addressValue("Audio","AdapterIpAddress","");
-  conf_audio_input_bus_xfers=p->
-    boolValue("Audio","InputBusXfers",CONFIG_DEFAULT_AUDIO_INPUT_BUS_XFERS);
-  conf_audio_output_bus_xfers=p->
-    boolValue("Audio","OutputBusXfers",CONFIG_DEFAULT_AUDIO_OUTPUT_BUS_XFERS);
+  conf_adapter_ip_address=p->addressValue("Global","AdapterIpAddress","");
+  conf_input_bus_xfers=p->
+    boolValue("Global","InputBusXfers",CONFIG_DEFAULT_AUDIO_INPUT_BUS_XFERS);
+  conf_output_bus_xfers=p->
+    boolValue("Global","OutputBusXfers",CONFIG_DEFAULT_AUDIO_OUTPUT_BUS_XFERS);
 
   //
   // [Input<n>] Sections
@@ -145,21 +141,21 @@ QString Config::netcuePort() const
 }
 
 
-QHostAddress Config::audioAdapterIpAddress() const
+QHostAddress Config::adapterIpAddress() const
 {
-  return conf_audio_adapter_ip_address;
+  return conf_adapter_ip_address;
 }
 
 
-bool Config::audioInputBusXfers() const
+bool Config::inputBusXfers() const
 {
-  return conf_audio_input_bus_xfers;
+  return conf_input_bus_xfers;
 }
 
 
-bool Config::audioOutputBusXfers() const
+bool Config::outputBusXfers() const
 {
-  return conf_audio_output_bus_xfers;
+  return conf_output_bus_xfers;
 }
 
 
