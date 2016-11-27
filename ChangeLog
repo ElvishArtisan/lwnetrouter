@@ -68,3 +68,6 @@
 	* Fixed a bug in 'src'lwnetrouterd/lwnetrouterd.cpp' that caused
 	calculation of delay interval top be incorrect for intervals
 	greater than 15 seconds.
+2016-11-27 Fred Gleason <fredg@paravelsystems.com>
+	* Moved the 'DelayChangePercent=' parameter in lwnetrouter.conf(5)
+	from the [Audio] to the [Input<n>] section.

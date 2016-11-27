@@ -43,9 +43,9 @@
 #define CONFIG_DEFAULT_CUNCTATOR_PORT 3749
 #define CONFIG_DEFAULT_CIC_PORT 5001
 #define CONFIG_DEFAULT_NETCUE_PORT QString("/dev/ttyS0")
-#define CONFIG_DEFAULT_AUDIO_DELAY_CHANGE_PERCENT 5
 #define CONFIG_DEFAULT_AUDIO_INPUT_BUS_XFERS false
 #define CONFIG_DEFAULT_AUDIO_OUTPUT_BUS_XFERS true
+#define CONFIG_DEFAULT_INPUT_DELAY_CHANGE_PERCENT 5
 
 #include <stdint.h>
 
@@ -69,9 +69,9 @@ class Config
   QList<QHostAddress> cicIpAddresses();
   QString netcuePort() const;
   QHostAddress audioAdapterIpAddress() const;
-  int audioDelayChangePercent() const;
   bool audioInputBusXfers() const;
   bool audioOutputBusXfers() const;
+  int inputDelayChangePercent(int input) const;
   int inputDelayControlSource(int input) const;
   int input(const QHostAddress &addr);
   QString outputNetcue(int output,int line) const;
@@ -85,9 +85,9 @@ class Config
   QList<QHostAddress> conf_cic_addresses;
   QString conf_netcue_port;
   QHostAddress conf_audio_adapter_ip_address;
-  int conf_audio_delay_change_percent;
   bool conf_audio_input_bus_xfers;
   bool conf_audio_output_bus_xfers;
+  int conf_input_delay_change_percent[MAX_INPUTS];
   int conf_input_delay_control_sources[MAX_INPUTS];
   QList<QHostAddress> conf_input_addresses[MAX_INPUTS];
   QString conf_output_netcues[MAX_OUTPUTS][SWITCHYARD_GPIO_BUNDLE_SIZE];

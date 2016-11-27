@@ -152,7 +152,7 @@ void *__AudioCallback(void *ptr)
 		 rha->delay_interval[i]) {
 		rha->delay_interval[i]=delay_interval;
 	      }
-	      timescale=rha->delay_change_up;   // SLOWER
+	      timescale=rha->delay_change_up[i];   // SLOWER
 	      rha->delay_state_taken[i]=Config::DelayEntering;
 	    }
 	  }
@@ -170,7 +170,7 @@ void *__AudioCallback(void *ptr)
 		 rha->delay_interval[i]) {
 		rha->delay_interval[i]=delay_interval;
 	      }
-	      timescale=rha->delay_change_down;   // FASTER
+	      timescale=rha->delay_change_down[i];   // FASTER
 	      rha->delay_state_taken[i]=Config::DelayExiting;
 	    }
 	  }
@@ -220,12 +220,6 @@ RouterHpiAudio::RouterHpiAudio(Config *c,QObject *parent)
   uint32_t bufsize;
 
   //
-  // Delay Settings
-  //
-  delay_change_down=1.0-(float)(config()->audioDelayChangePercent())/100;
-  delay_change_up=1.0+(float)(config()->audioDelayChangePercent())/100;
-
-  //
   // Get Adapter Info
   //
   HpiError(HPI_AdapterGetInfo(NULL,0,&ostreams,&istreams,&version,&serial,
@@ -257,6 +251,8 @@ RouterHpiAudio::RouterHpiAudio(Config *c,QObject *parent)
   // Open Inputs
   //
   for(int i=0;i<config()->inputQuantity();i++) {
+    delay_change_down[i]=1.0-(float)(config()->inputDelayChangePercent(i))/100;
+    delay_change_up[i]=1.0+(float)(config()->inputDelayChangePercent(i))/100;
     HpiError(HPI_InStreamOpen(NULL,0,i,&hpi_input_streams[i]));
     HpiError(HPI_InStreamSetFormat(NULL,hpi_input_streams[i],hpi_format));
     if(config()->audioInputBusXfers()) {
@@ -348,7 +344,6 @@ void RouterHpiAudio::setDelayState(int input,Config::DelayState state)
 void RouterHpiAudio::dumpDelay(int input)
 {
   delay_dump[input]=true;
-  printf("dumpDelay(%d)\n",input);
 }
 
 

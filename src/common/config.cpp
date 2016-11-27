@@ -61,9 +61,6 @@ Config::Config()
   // [Audio] Section
   //
   conf_audio_adapter_ip_address=p->addressValue("Audio","AdapterIpAddress","");
-  conf_audio_delay_change_percent=
-    p->intValue("Audio","DelayChangePercent",
-		CONFIG_DEFAULT_AUDIO_DELAY_CHANGE_PERCENT);
   conf_audio_input_bus_xfers=p->
     boolValue("Audio","InputBusXfers",CONFIG_DEFAULT_AUDIO_INPUT_BUS_XFERS);
   conf_audio_output_bus_xfers=p->
@@ -76,6 +73,9 @@ Config::Config()
     count=0;
     ok=true;
     QString section=QString().sprintf("Input%d",i+1);
+    conf_input_delay_change_percent[i]=
+      p->intValue(section,"DelayChangePercent",
+		  CONFIG_DEFAULT_INPUT_DELAY_CHANGE_PERCENT);
     conf_input_delay_control_sources[i]=
       p->intValue(section,"DelayControlSource");
     while(ok) {
@@ -151,12 +151,6 @@ QHostAddress Config::audioAdapterIpAddress() const
 }
 
 
-int Config::audioDelayChangePercent() const
-{
-  return conf_audio_delay_change_percent;
-}
-
-
 bool Config::audioInputBusXfers() const
 {
   return conf_audio_input_bus_xfers;
@@ -166,6 +160,12 @@ bool Config::audioInputBusXfers() const
 bool Config::audioOutputBusXfers() const
 {
   return conf_audio_output_bus_xfers;
+}
+
+
+int Config::inputDelayChangePercent(int input) const
+{
+  return conf_input_delay_change_percent[input];
 }
 
 
