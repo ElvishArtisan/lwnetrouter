@@ -114,6 +114,7 @@ void *__AudioCallback(void *ptr)
 	  switch(rha->delay_state_taken[i]) {
 	  case Config::DelayEntering:
 	  case Config::DelayEntered:
+	    HpiError(HPI_OutStreamReset(NULL,rha->hpi_output_streams[i]));
 	    rb[i]->dump();
 	    rha->delay_interval[i]=0;
 	    rha->delay_dump[i]=false;
@@ -121,11 +122,13 @@ void *__AudioCallback(void *ptr)
 	    break;
 
 	  case Config::DelayExiting:
+	    HpiError(HPI_OutStreamReset(NULL,rha->hpi_output_streams[i]));
 	    rb[i]->dump();
 	    rha->delay_interval[i]=0;
 	    rha->delay_dump[i]=false;
 	    rha->delay_state_taken[i]=Config::DelayExited;
 	    break;
+
 	  case Config::DelayUnknown:
 	  case Config::DelayBypassed:
 	  case Config::DelayExited:

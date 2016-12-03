@@ -94,3 +94,6 @@
 2016-12-03 Fred Gleason <fredg@paravelsystems.com>
 	* Rearranged the order of the controls on the Delay Control widget
 	to match that of Element control surfaces.
+2016-12-03 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a bug in 'src/lwnetrouterd/lwnetrouterd.cpp' that caused
+	the first tenths of a second of audio to fail to be dumped.
