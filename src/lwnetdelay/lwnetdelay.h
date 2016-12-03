@@ -48,7 +48,9 @@ class MainWidget : public QMainWindow
   void socketDisconnectedData();
   void readyReadData();
   void errorData(QAbstractSocket::SocketError err);
-  
+
+ protected:
+  void resizeEvent(QResizeEvent *e);
 
  private:
   void ProcessCommand(const QString &msg);

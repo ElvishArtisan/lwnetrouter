@@ -91,7 +91,7 @@ QString hostname="localhost";
   QFont label_font("courier",40,QFont::Bold);
   label_font.setPixelSize(40);
 
-  setWindowTitle(tr("Broadcast Delay Control"));
+  setWindowTitle(tr("Delay Control"));
 
   //
   // Create Icons
@@ -102,7 +102,6 @@ QString hostname="localhost";
   // Enter Button
   //
   cunc_enter_button=new PushButton(tr("Start"),this);
-  cunc_enter_button->setGeometry(10,10,80,50);
   cunc_enter_button->setFont(button_font);
   connect(cunc_enter_button,SIGNAL(clicked()),this,SLOT(enterPushed()));
 
@@ -110,7 +109,6 @@ QString hostname="localhost";
   // Exit Button
   //
   cunc_exit_button=new PushButton(tr("Exit"),this);
-  cunc_exit_button->setGeometry(100,10,80,50);
   cunc_exit_button->setFont(button_font);
   connect(cunc_exit_button,SIGNAL(clicked()),this,SLOT(exitPushed()));
 
@@ -118,7 +116,6 @@ QString hostname="localhost";
   // Delay Time Display
   //
   cunc_delay_label=new QLabel(this);
-  cunc_delay_label->setGeometry(200,10,120,50);
   cunc_delay_label->setFont(label_font);
   cunc_delay_label->setAlignment(Qt::AlignCenter);
   cunc_delay_label->setFrameStyle(QFrame::Box|QFrame::Raised);
@@ -126,8 +123,7 @@ QString hostname="localhost";
   //
   // Dump Button
   //
-  cunc_dump_button=new PushButton(tr("#%!"),this);
-  cunc_dump_button->setGeometry(340,10,80,50);
+  cunc_dump_button=new PushButton(tr("Dump"),this);
   cunc_dump_button->setFont(button_font);
   cunc_dump_button->setFlashColor(Qt::red);
   connect(cunc_dump_button,SIGNAL(clicked()),this,SLOT(dumpPushed()));
@@ -248,6 +244,15 @@ void MainWidget::errorData(QAbstractSocket::SocketError err)
   QMessageBox::critical(this,"LwNetDelay",msg);
 
   exit(256);
+}
+
+
+void MainWidget::resizeEvent(QResizeEvent *e)
+{
+  cunc_dump_button->setGeometry(10,10,80,50);
+  cunc_exit_button->setGeometry(100,10,80,50);
+  cunc_enter_button->setGeometry(190,10,80,50);
+  cunc_delay_label->setGeometry(280,10,120,50);
 }
 
 

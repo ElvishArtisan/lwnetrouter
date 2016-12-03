@@ -91,3 +91,6 @@
 2016-12-03 Fred Gleason <fredg@paravelsystems.com>
 	* Fixed a bug in 'src/lwnetdelay/lwnetdelay.cpp that broke title
 	bar display.
+2016-12-03 Fred Gleason <fredg@paravelsystems.com>
+	* Rearranged the order of the controls on the Delay Control widget
+	to match that of Element control surfaces.
