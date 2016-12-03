@@ -86,3 +86,5 @@
 	'src/lwnetrouterd/protocol_sap.h'.
 2016-11-27 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the package version to 0.6.0.
+2016-12-03 Fred Gleason <fredg@paravelsystems.com>
+	* Implemented button lamp feedback for the GPIO delay controls.

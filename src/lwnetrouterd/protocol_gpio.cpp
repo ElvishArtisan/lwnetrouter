@@ -27,6 +27,29 @@ ProtocolGpio::ProtocolGpio(SyGpioServer *gpioserv,Config *c,QObject *parent)
   gpio_server=gpioserv;
   connect(gpio_server,SIGNAL(gpoReceived(int,int,bool,bool)),
 	  this,SLOT(gpoReceivedData(int,int,bool,bool)));
+
+  gpio_dump_reset_mapper=new QSignalMapper(this);
+  connect(gpio_dump_reset_mapper,SIGNAL(mapped(int)),
+	  this,SLOT(dumpResetData(int)));
+  for(int i=0;i<config()->inputQuantity();i++) {
+    gpio_controls[i]=
+      new DelayControl(config()->inputDelayControlSource(i),gpio_server,this);
+    gpio_dump_reset_timers[i]=new QTimer(this);
+    gpio_dump_reset_timers[i]->setSingleShot(true);
+    gpio_dump_reset_mapper->setMapping(gpio_dump_reset_timers[i],i);
+    connect(gpio_dump_reset_timers[i],SIGNAL(timeout()),
+	    gpio_dump_reset_mapper,SLOT(map()));
+  }
+}
+
+
+ProtocolGpio::~ProtocolGpio()
+{
+  for(int i=0;i<config()->inputQuantity();i++) {
+    delete gpio_dump_reset_timers[i];
+    delete gpio_controls[i];
+  }
+  delete gpio_dump_reset_mapper;
 }
 
 
@@ -38,28 +61,47 @@ void ProtocolGpio::sendDelayState(int input,Config::DelayState state,int msec)
     switch(state) {
     case Config::DelayUnknown:
     case Config::DelayBypassed:
-    case Config::DelayEntered:
-    case Config::DelayExited:
-      for(int i=0;i<SWITCHYARD_GPIO_BUNDLE_SIZE;i++) {
-	gpio_server->sendGpi(srcnum,i,false,false);
+      for(int i=1;i<SWITCHYARD_GPIO_BUNDLE_SIZE;i++) {
+	gpio_controls[input]->setButtonState(i,DelayControl::ButtonOff);
       }
       break;
 
     case Config::DelayEntering:
-      for(int i=0;i<SWITCHYARD_GPIO_BUNDLE_SIZE;i++) {
-	gpio_server->sendGpi(srcnum,i,false,false);
+      for(int i=1;i<SWITCHYARD_GPIO_BUNDLE_SIZE;i++) {
+	gpio_controls[input]->setButtonState(i,DelayControl::ButtonOff);
       }
-      gpio_server->sendGpi(srcnum,3,true,false);
+      gpio_controls[input]->setButtonState(3,DelayControl::ButtonSlowFlash);
+      break;
+
+    case Config::DelayEntered:
+      for(int i=1;i<SWITCHYARD_GPIO_BUNDLE_SIZE;i++) {
+	gpio_controls[input]->setButtonState(i,DelayControl::ButtonOff);
+      }
+      gpio_controls[input]->setButtonState(3,DelayControl::ButtonOn);
       break;
 
     case Config::DelayExiting:
-      for(int i=0;i<SWITCHYARD_GPIO_BUNDLE_SIZE;i++) {
-	gpio_server->sendGpi(srcnum,i,false,false);
+      for(int i=1;i<SWITCHYARD_GPIO_BUNDLE_SIZE;i++) {
+	gpio_controls[input]->setButtonState(i,DelayControl::ButtonOff);
       }
-      gpio_server->sendGpi(srcnum,1,true,false);
+      gpio_controls[input]->setButtonState(1,DelayControl::ButtonSlowFlash);
+      break;
+
+    case Config::DelayExited:
+      for(int i=1;i<SWITCHYARD_GPIO_BUNDLE_SIZE;i++) {
+	gpio_controls[input]->setButtonState(i,DelayControl::ButtonOff);
+      }
+      gpio_controls[input]->setButtonState(1,DelayControl::ButtonOn);
       break;
     }
   }
+}
+
+
+void ProtocolGpio::sendDelayDumped(int input)
+{
+  gpio_controls[input]->setButtonState(0,DelayControl::ButtonFastFlash);
+  gpio_dump_reset_timers[input]->start(2000);
 }
 
 
@@ -85,4 +127,10 @@ void ProtocolGpio::gpoReceivedData(int gpo,int line,bool state,bool pulse)
       }
     }
   }
+}
+
+
+void ProtocolGpio::dumpResetData(int input)
+{
+  gpio_controls[input]->setButtonState(0,DelayControl::ButtonOff);
 }

@@ -38,6 +38,11 @@ void Protocol::sendDelayState(int input,Config::DelayState state,int msec)
 }
 
 
+void Protocol::sendDelayDumped(int input)
+{
+}
+
+
 Config *Protocol::config() const
 {
   return protocol_config;

@@ -81,7 +81,7 @@ void *__AudioCallback(void *ptr)
     rb[i]=
       new Ringbuffer(SetpointBytes(MAX_DELAY*1100));
     rha->delay_interval[i]=0;
-    rha->delay_state_taken[i]=Config::DelayBypassed;
+    rha->delay_state_taken[i]=Config::DelayExited;
     full_delays[i]=rha->config()->inputFullDelay(i);
   }
 
@@ -317,7 +317,7 @@ Config::DelayState RouterHpiAudio::delayState(int input) const
 
 int RouterHpiAudio::delayInterval(int input)
 {
-  return 0;
+  return delay_interval[input];
 }
 
 
@@ -345,7 +345,10 @@ void RouterHpiAudio::setDelayState(int input,Config::DelayState state)
 
 void RouterHpiAudio::dumpDelay(int input)
 {
-  delay_dump[input]=true;
+  if(delayInterval(input)>0) {
+    delay_dump[input]=true;
+    emit delayDumped(input);
+  }
 }
 
 

@@ -1,6 +1,6 @@
-// router.h
+// delaycontrol.h
 //
-// Abstract base class for router objects.
+// Controller for a delay device via LiveWire GPIO
 //
 //   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
 //
@@ -19,42 +19,35 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
-#ifndef ROUTER_H
-#define ROUTER_H
-
-#include <vector>
+#ifndef DELAYCONTROL_H
+#define DELAYCONTROL_H
 
 #include <QObject>
+#include <QTimer>
 
-#include "config.h"
+#include <sy/sygpio_server.h>
 
-class Router : public QObject
+class DelayControl : public QObject
 {
   Q_OBJECT;
  public:
-  Router(Config *config,QObject *parent=0);
-  int crossPoint(int output) const;
-  virtual Config::DelayState delayState(int input) const=0;
-  virtual int delayInterval(int input)=0;
-
- signals:
-  void crossPointChanged(int output,int input);
-  void delayStateChanged(int input,Config::DelayState state,int msec);
-  void delayDumped(int input);
+  enum ButtonState {ButtonOff=0,ButtonOn=1,ButtonSlowFlash=2,ButtonFastFlash=3};
+  DelayControl(int source,SyGpioServer *gpio,QObject *parent=0);
+  ~DelayControl();
 
  public slots:
-  void setCrossPoint(int output,int input);
-  virtual void setDelayState(int input,Config::DelayState state);
-  virtual void dumpDelay(int input);
+  void setButtonState(int line,ButtonState state);
 
- protected:
-  virtual void crossPointSet(int output,int input);
-  Config *config() const;
+ private slots:
+  void flashData();
 
  private:
-  std::vector<int> router_crosspoints;
-  Config *router_config;
+  int delay_source;
+  SyGpioServer *delay_gpio;
+  ButtonState delay_states[SWITCHYARD_GPIO_BUNDLE_SIZE];
+  QTimer *delay_flash_timer;
+  unsigned delay_flash_phase;
 };
 
 
-#endif  // ROUTER_H
+#endif  // DELAYCONTROL_H

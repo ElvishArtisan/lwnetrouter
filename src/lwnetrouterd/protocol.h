@@ -40,6 +40,7 @@ class Protocol : public QObject
  public slots:
   virtual void sendCrossPoint(int output,int input);
   virtual void sendDelayState(int input,Config::DelayState state,int msec);
+  virtual void sendDelayDumped(int input);
 
  protected:
   Config *config() const;

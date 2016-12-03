@@ -30,6 +30,19 @@
 
 #include "lwnetrouterd.h"
 
+bool global_exiting=false;
+
+void SignalHandler(int signo)
+{
+  switch(signo) {
+  case SIGINT:
+  case SIGTERM:
+    global_exiting=true;
+    break;
+  }
+}
+
+
 MainObject::MainObject(QObject *parent)
   : QObject(parent)
 {
@@ -107,6 +120,8 @@ MainObject::MainObject(QObject *parent)
   connect(main_audio_router,
 	  SIGNAL(delayStateChanged(int,Config::DelayState,int)),
 	  main_cunc_protocol,SLOT(sendDelayState(int,Config::DelayState,int)));
+  connect(main_audio_router,SIGNAL(delayDumped(int)),
+	  main_cunc_protocol,SLOT(sendDelayDumped(int)));
 
   main_gpio_protocol=new ProtocolGpio(main_gpio,main_config,this);
   connect(main_gpio_protocol,
@@ -117,6 +132,17 @@ MainObject::MainObject(QObject *parent)
   connect(main_audio_router,
 	  SIGNAL(delayStateChanged(int,Config::DelayState,int)),
 	  main_gpio_protocol,SLOT(sendDelayState(int,Config::DelayState,int)));
+  connect(main_audio_router,SIGNAL(delayDumped(int)),
+	  main_gpio_protocol,SLOT(sendDelayDumped(int)));
+
+  //
+  // Signals
+  //
+  ::signal(SIGINT,SignalHandler);
+  ::signal(SIGTERM,SignalHandler);
+  main_exit_timer=new QTimer(this);
+  connect(main_exit_timer,SIGNAL(timeout()),this,SLOT(exitData()));
+  main_exit_timer->start(500);
 }
 
 
@@ -138,6 +164,15 @@ void MainObject::sapCrosspointRequestedData(int id,int output)
   else {
     main_sap_protocol->
       sendCrossPoint(id,output,main_audio_router->crossPoint(output));
+  }
+}
+
+
+void MainObject::exitData()
+{
+  if(global_exiting) {
+    delete main_gpio_protocol;
+    exit(0);
   }
 }
 

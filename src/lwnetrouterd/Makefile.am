@@ -30,7 +30,8 @@ moc_%.cpp:	%.h
 
 sbin_PROGRAMS = lwnetrouterd
 
-dist_lwnetrouterd_SOURCES = lwnetrouterd.cpp lwnetrouterd.h\
+dist_lwnetrouterd_SOURCES = delaycontrol.cpp delaycontrol.h\
+                            lwnetrouterd.cpp lwnetrouterd.h\
                             protocol.cpp protocol.h\
                             protocol_cunc.cpp protocol_cunc.h\
                             protocol_gpio.cpp protocol_gpio.h\
@@ -45,6 +46,7 @@ dist_lwnetrouterd_SOURCES = lwnetrouterd.cpp lwnetrouterd.h\
                             ttydevice.cpp ttydevice.h
 
 nodist_lwnetrouterd_SOURCES = config.cpp config.h\
+                              moc_delaycontrol.cpp\
                               moc_lwnetrouterd.cpp\
                               moc_protocol.cpp\
                               moc_protocol_cunc.cpp\

@@ -22,10 +22,12 @@
 #ifndef PROTOCOL_GPIO_H
 #define PROTOCOL_GPIO_H
 
+#include <QSignalMapper>
 #include <QTimer>
 
 #include <sy/sygpio_server.h>
 
+#include "delaycontrol.h"
 #include "protocol.h"
 
 class ProtocolGpio : public Protocol
@@ -33,14 +35,20 @@ class ProtocolGpio : public Protocol
   Q_OBJECT;
  public:
   ProtocolGpio(SyGpioServer *gpioserv,Config *c,QObject *parent=0);
+  ~ProtocolGpio();
 
  public slots:
   void sendDelayState(int input,Config::DelayState state,int msec);
+  void sendDelayDumped(int input);
 
  private slots:
   void gpoReceivedData(int gpo,int line,bool state,bool pulse);
+  void dumpResetData(int input);
 
  private:
+  DelayControl *gpio_controls[MAX_INPUTS];
+  QTimer *gpio_dump_reset_timers[MAX_INPUTS];
+  QSignalMapper *gpio_dump_reset_mapper;
   SyGpioServer *gpio_server;
 };
 

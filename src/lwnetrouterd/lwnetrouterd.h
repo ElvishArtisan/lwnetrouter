@@ -23,6 +23,7 @@
 #define LWNETROUTERD_H
 
 #include <QObject>
+#include <QTimer>
 
 #include <sy/sygpio_server.h>
 
@@ -46,6 +47,7 @@ class MainObject : public QObject
  private slots:
   void cuncDelayStateRequestedData(int id,int input);
   void sapCrosspointRequestedData(int id,int output);
+  void exitData();
 
  private:
   RouterHpiAudio *main_audio_router;
@@ -57,6 +59,7 @@ class MainObject : public QObject
   ProtocolSap *main_sap_protocol;
   SyGpioServer *main_gpio;
   SyLwrpClient *main_lwrp;
+  QTimer *main_exit_timer;
   Config *main_config;
 };
 
