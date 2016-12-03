@@ -89,6 +89,17 @@ void ProtocolCunc::sendDelayState(int id,int input,Config::DelayState state,
 }
 
 
+void ProtocolCunc::sendInputName(int id,int input,const QString &str)
+{
+  QStringList args;
+
+  args.push_back(QString().sprintf("%d",input+1));
+  args.push_back("LwNetRouter");
+  args.push_back(str);
+  cunc_server->sendCommand(id,(int)ProtocolCunc::DM,args);
+}
+
+
 void ProtocolCunc::commandReceivedData(int id,int cmd,const QStringList &args)
 {
   QStringList reply;
@@ -107,9 +118,10 @@ void ProtocolCunc::commandReceivedData(int id,int cmd,const QStringList &args)
     break;
 
   case ProtocolCunc::DM:
-    reply.push_back("1");
-    reply.push_back("LwNetRouter");
-    cunc_server->sendCommand(id,cmd,reply);
+    input=args.at(0).toUInt(&ok)-1;
+    if(ok&&(input<(unsigned)config()->inputQuantity())) {
+      emit inputNameRequested(id,input);
+    }
     break;
 
   case ProtocolCunc::DS:
@@ -134,6 +146,7 @@ void ProtocolCunc::commandReceivedData(int id,int cmd,const QStringList &args)
     if(ok&&(input<(unsigned)config()->inputQuantity())) {
       emit delayDumpReceived(input);
     }
+    break;
     break;
   }
 }

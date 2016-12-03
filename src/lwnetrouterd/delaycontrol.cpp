@@ -32,6 +32,7 @@ DelayControl::DelayControl(int source,SyGpioServer *gpio,QObject *parent)
   for(int i=0;i<SWITCHYARD_GPIO_BUNDLE_SIZE;i++) {
     delay_states[i]=DelayControl::ButtonOff;
     delay_gpio->sendGpi(delay_source,i,false,false);
+    delay_gpio_states[i]=false;
   }
 
   delay_flash_timer=new QTimer(this);
@@ -55,19 +56,19 @@ void DelayControl::setButtonState(int line,DelayControl::ButtonState state)
 
   switch(state) {
   case DelayControl::ButtonOff:
-    delay_gpio->sendGpi(delay_source,line,false,false);
+    SendGpi(line,false);
     break;
 
   case DelayControl::ButtonOn:
-    delay_gpio->sendGpi(delay_source,line,true,false);
+    SendGpi(line,true);
     break;
 
   case DelayControl::ButtonSlowFlash:
-    delay_gpio->sendGpi(delay_source,line,(phase==0)||(phase==1),false);
+    SendGpi(line,(phase==0)||(phase==1));
     break;
 
   case DelayControl::ButtonFastFlash:
-    delay_gpio->sendGpi(delay_source,line,(phase==0)||(phase==2),false);
+    SendGpi(line,(phase==0)||(phase==2));
     break;
   }
   delay_states[line]=state;
@@ -79,5 +80,14 @@ void DelayControl::flashData()
   ++delay_flash_phase;
   for(int i=0;i<4;i++) {
     setButtonState(i,delay_states[i]);
+  }
+}
+
+
+void DelayControl::SendGpi(int line,bool state)
+{
+  if(state!=delay_gpio_states[line]) {
+    delay_gpio->sendGpi(delay_source,line,state,false);
+    delay_gpio_states[line]=state;
   }
 }

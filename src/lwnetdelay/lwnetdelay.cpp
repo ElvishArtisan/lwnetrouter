@@ -126,7 +126,7 @@ QString hostname="localhost";
   //
   // Dump Button
   //
-  cunc_dump_button=new PushButton(tr("Dump"),this);
+  cunc_dump_button=new PushButton(tr("#%!"),this);
   cunc_dump_button->setGeometry(340,10,80,50);
   cunc_dump_button->setFont(button_font);
   cunc_dump_button->setFlashColor(Qt::red);
@@ -316,7 +316,7 @@ void MainWidget::ProcessCommand(const QString &msg)
     cunc_dump_timer->start(5000);
   }
 
-  if(cmds[0]=="DM") {   // Delay Model
+  if(cmds[0]=="DM") {   // Input Name
     id=cmds[1].toUInt(&ok);
     if((!ok)||(id!=cunc_delay_id)) {
       return;
@@ -324,7 +324,12 @@ void MainWidget::ProcessCommand(const QString &msg)
     for(int i=3;i<cmds.size();i++) {
       desc+=(cmds[i]+" ");
     }
-    setWindowTitle(desc);
+    if(desc.isEmpty()) {
+      setWindowTitle(tr("Delay Control"));
+    }
+    else {
+      setWindowTitle(tr("Delay Control")+": "+desc);
+    }
   }
 }
 

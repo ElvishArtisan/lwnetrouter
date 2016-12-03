@@ -42,9 +42,11 @@ class DelayControl : public QObject
   void flashData();
 
  private:
+  void SendGpi(int line,bool state);
   int delay_source;
   SyGpioServer *delay_gpio;
   ButtonState delay_states[SWITCHYARD_GPIO_BUNDLE_SIZE];
+  bool delay_gpio_states[SWITCHYARD_GPIO_BUNDLE_SIZE];
   QTimer *delay_flash_timer;
   unsigned delay_flash_phase;
 };

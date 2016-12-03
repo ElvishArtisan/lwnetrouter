@@ -34,9 +34,11 @@ class ProtocolCunc : public Protocol
  public slots:
   void sendDelayState(int input,Config::DelayState state,int msec);
   void sendDelayState(int id,int input,Config::DelayState state,int msec);
+  void sendInputName(int id,int input,const QString &str);
 
  signals:
   void delayStateRequested(int id,int input);
+  void inputNameRequested(int id,int input);
 
  private slots:
   void commandReceivedData(int id,int cmd,const QStringList &args);

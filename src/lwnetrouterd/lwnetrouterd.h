@@ -46,6 +46,7 @@ class MainObject : public QObject
 
  private slots:
   void cuncDelayStateRequestedData(int id,int input);
+  void cuncInputNameRequestedData(int id,int input);
   void sapCrosspointRequestedData(int id,int output);
   void exitData();
 

@@ -117,6 +117,8 @@ MainObject::MainObject(QObject *parent)
 	  main_audio_router,SLOT(dumpDelay(int)));
   connect(main_cunc_protocol,SIGNAL(delayStateRequested(int,int)),
 	  this,SLOT(cuncDelayStateRequestedData(int,int)));
+  connect(main_cunc_protocol,SIGNAL(inputNameRequested(int,int)),
+	  this,SLOT(cuncInputNameRequestedData(int,int)));
   connect(main_audio_router,
 	  SIGNAL(delayStateChanged(int,Config::DelayState,int)),
 	  main_cunc_protocol,SLOT(sendDelayState(int,Config::DelayState,int)));
@@ -151,6 +153,12 @@ void MainObject::cuncDelayStateRequestedData(int id,int input)
   main_cunc_protocol->
     sendDelayState(id,input,main_audio_router->delayState(input),
 		   main_audio_router->delayInterval(input));
+}
+
+
+void MainObject::cuncInputNameRequestedData(int id,int input)
+{
+  main_cunc_protocol->sendInputName(id,input,main_lwrp->dstName(input));
 }
 
 
