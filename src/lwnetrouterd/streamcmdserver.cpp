@@ -204,7 +204,9 @@ void StreamCmdServer::sendCommand(int cmd,const QStringList &args)
       }
     }
     else {
-      closeConnection(i);
+      if((conn=cmd_connections.at(i))!=NULL) {
+	closeConnection(i);
+      }
     }
   }
 }

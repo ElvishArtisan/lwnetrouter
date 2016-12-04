@@ -103,3 +103,8 @@
 	* Modified 'src/lwnetrouterd/protocol_gpio.cpp' to illuminate the
 	'Dump' button whenever there is at least 'DumpDelay' time on the
 	delay.
+2016-12-04 Fred Gleason <fredg@paravelsystems.com>
+	* Refactored 'PushButton' widget in 'src/lwnetdelay/pushbutton.cpp'
+	and 'src/lwnetdelay/pushbutton.h' to support multiple display states.
+	* Modified lwnetdelay(1) delay button control display states to match
+	those of the 'ProtocolGpio' interface.

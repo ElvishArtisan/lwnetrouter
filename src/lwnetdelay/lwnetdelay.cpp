@@ -42,6 +42,7 @@ QString hostname="localhost";
   unsigned port=3749;
   bool ok;
   cunc_delay_id=0;
+  cunc_safe_delay=1000*CONFIG_DEFAULT_INPUT_FULL_DELAY;
 
   //
   // Read Command Options
@@ -125,7 +126,7 @@ QString hostname="localhost";
   //
   cunc_dump_button=new PushButton(tr("Dump"),this);
   cunc_dump_button->setFont(button_font);
-  cunc_dump_button->setFlashColor(Qt::red);
+  cunc_dump_button->setFlashColor(Qt::darkGreen);
   connect(cunc_dump_button,SIGNAL(clicked()),this,SLOT(dumpPushed()));
 
   cunc_dump_timer=new QTimer(this);
@@ -180,14 +181,14 @@ void MainWidget::dumpPushed()
 
 void MainWidget::dumpFlashResetData()
 {
-  cunc_dump_button->setFlashingEnabled(false);
+  cunc_dump_button->setButtonMode(PushButton::ButtonOff);
 }
 
 
 void MainWidget::socketConnectedData()
 {
-  SendCommand(QString().sprintf("DS %u",cunc_delay_id));
   SendCommand(QString().sprintf("DM %u",cunc_delay_id));
+  SendCommand(QString().sprintf("DS %u",cunc_delay_id));
 }
 
 
@@ -278,22 +279,27 @@ void MainWidget::ProcessCommand(const QString &msg)
     //
     // Update Buttons
     //
+    
     switch((Config::DelayState)cmds[2].toInt()) {
-    case Config::DelayBypassed:
-    case Config::DelayEntered:
-    case Config::DelayExited:
-      cunc_enter_button->setFlashingEnabled(false);
-      cunc_exit_button->setFlashingEnabled(false);
+    case Config::DelayEntering:
+      cunc_enter_button->setButtonMode(PushButton::ButtonSlowFlash);
+      cunc_exit_button->setButtonMode(PushButton::ButtonOff);
       break;
 
-    case Config::DelayEntering:
-      cunc_enter_button->setFlashingEnabled(true);
-      cunc_exit_button->setFlashingEnabled(false);
+    case Config::DelayEntered:
+      cunc_enter_button->setButtonMode(PushButton::ButtonOn);
+      cunc_exit_button->setButtonMode(PushButton::ButtonOff);
       break;
 
     case Config::DelayExiting:
-      cunc_enter_button->setFlashingEnabled(false);
-      cunc_exit_button->setFlashingEnabled(true);
+      cunc_enter_button->setButtonMode(PushButton::ButtonOff);
+      cunc_exit_button->setButtonMode(PushButton::ButtonSlowFlash);
+      break;
+
+    case Config::DelayBypassed:
+    case Config::DelayExited:
+      cunc_enter_button->setButtonMode(PushButton::ButtonOff);
+      cunc_exit_button->setButtonMode(PushButton::ButtonOn);
       break;
 
     case Config::DelayUnknown:
@@ -307,17 +313,24 @@ void MainWidget::ProcessCommand(const QString &msg)
     if(!ok) {
       return;
     }
-    //cunc_delay_lcd->display(delay_len/1000);
     cunc_delay_label->
       setText(QString().sprintf("%4.1f",(float)delay_len/1000.0));
+  
+    if(delay_len>=cunc_safe_delay) {
+      cunc_dump_button->setButtonMode(PushButton::ButtonOn);
+    }
+    else {
+      cunc_dump_button->setButtonMode(PushButton::ButtonOff);
+    }
   }
+
 
   if(cmds[0]=="DP") {   // Delay Dump
     id=cmds[1].toUInt(&ok);
     if((!ok)||(id!=cunc_delay_id)) {
       return;
     }
-    cunc_dump_button->setFlashingEnabled(true);
+    cunc_dump_button->setButtonMode(PushButton::ButtonFastFlash);
     cunc_dump_timer->start(5000);
   }
 
@@ -326,6 +339,11 @@ void MainWidget::ProcessCommand(const QString &msg)
     if((!ok)||(id!=cunc_delay_id)) {
       return;
     }
+    delay_len=cmds[2].toInt(&ok);
+    if(!ok) {
+      return;
+    }
+    cunc_safe_delay=1000*delay_len;
     for(int i=3;i<cmds.size();i++) {
       desc+=(cmds[i]+" ");
     }

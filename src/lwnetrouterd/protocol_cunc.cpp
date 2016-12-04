@@ -94,7 +94,7 @@ void ProtocolCunc::sendInputName(int id,int input,const QString &str)
   QStringList args;
 
   args.push_back(QString().sprintf("%d",input+1));
-  args.push_back("LwNetRouter");
+  args.push_back(QString().sprintf("%d",config()->inputDumpDelay(input)));
   args.push_back(str);
   cunc_server->sendCommand(id,(int)ProtocolCunc::DM,args);
 }

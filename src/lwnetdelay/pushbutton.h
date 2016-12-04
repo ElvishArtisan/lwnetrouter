@@ -37,33 +37,27 @@ class PushButton : public QPushButton
 {
   Q_OBJECT
  public:
-  enum ClockSource {InternalClock=0,ExternalClock=1};
+  enum ButtonMode {ButtonOff=0,ButtonOn=1,ButtonSlowFlash=2,ButtonFastFlash=3};
   PushButton(QWidget *parent);
   PushButton(const QString &text,QWidget *parent);
   QColor flashColor() const;
   void setFlashColor(QColor color);
-  int flashPeriod() const;
-  void setFlashPeriod(int period);
-  ClockSource clockSource() const;
-  void setClockSource(ClockSource src);
-  bool flashingEnabled() const;
+  ButtonMode buttonMode() const; 
 
  public slots:
-  void setFlashingEnabled(bool state);
-  void tickClock();
-  void tickClock(bool state);
+  void setButtonMode(ButtonMode mode);
+
+ private slots:
+  void flashData();
 
  private:
-  void flashOn();
-  void flashOff();
+  void UpdateButton(bool state);
   void Init();
-  bool flash_state;
-  int flash_period;
-  bool flashing_enabled;
+  unsigned flash_phase;
   QColor flash_color;
   QColor flash_background_color;
+  ButtonMode flash_button_mode;
   QTimer *flash_timer;
-  ClockSource flash_clock_source;
 };
 
 

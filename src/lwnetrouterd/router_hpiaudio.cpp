@@ -349,7 +349,7 @@ RouterHpiAudio::RouterHpiAudio(Config *c,QObject *parent)
 
 Config::DelayState RouterHpiAudio::delayState(int input) const
 {
-  return Config::DelayBypassed;
+  return delay_state_taken[input];
 }
 
 

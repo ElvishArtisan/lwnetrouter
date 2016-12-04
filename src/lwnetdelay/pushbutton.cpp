@@ -68,114 +68,67 @@ void PushButton::setFlashColor(QColor color)
 }
 
 
-bool PushButton::flashingEnabled() const
+PushButton::ButtonMode PushButton::buttonMode() const
 {
-  return flashing_enabled;
+  return flash_button_mode;
 }
 
 
-void PushButton::setFlashingEnabled(bool state)
+void PushButton::setButtonMode(PushButton::ButtonMode mode)
 {
-  flashing_enabled=state;
-  if(flashing_enabled) {
-    flashOn();
-  }
-  else {
-    flashOff();
+  if(mode!=flash_button_mode) {
+    flashData();
+    flash_button_mode=mode;
   }
 }
 
 
-int PushButton::flashPeriod() const
+void PushButton::flashData()
 {
-  return flash_period;
-}
+  flash_phase++;
 
+  unsigned phase=flash_phase%4;
 
-void PushButton::setFlashPeriod(int period)
-{
-  flash_period=period;
-  if(flash_timer->isActive()) {
-    flash_timer->stop();
-    flash_timer->start(flash_period);
+  switch(flash_button_mode) {
+  case PushButton::ButtonOff:
+    UpdateButton(false);
+    break;
+
+  case PushButton::ButtonOn:
+    UpdateButton(true);
+    break;
+
+  case PushButton::ButtonSlowFlash:
+    UpdateButton((phase==0)||(phase==1));
+    break;
+
+  case PushButton::ButtonFastFlash:
+    UpdateButton((phase==0)||(phase==2));
+    break;
   }
 }
 
 
-PushButton::ClockSource PushButton::clockSource() const
+void PushButton::UpdateButton(bool state)
 {
-  return flash_clock_source;
-}
-
-
-void PushButton::setClockSource(ClockSource src)
-{
-  if(src==flash_clock_source) {
-    return;
-  }
-  flash_clock_source=src;
-  if((src==PushButton::ExternalClock)&&(flash_timer->isActive())) {
-    flash_timer->stop();
-  }
-  if((src==PushButton::InternalClock)&&flashing_enabled) {
-    flashOn();
-  }
-}
-
-
-void PushButton::tickClock()
-{
-  tickClock(flash_state);
-}
-
-
-void PushButton::tickClock(bool state)
-{
-  if(!flashing_enabled) {
-    return;
-  }
-  //  QKeySequence a=accel();
   if(state) {
-    flash_state=false;
-    setStyleSheet("");
-  }
-  else {
-    flash_state=true;
     setStyleSheet("color: "+flash_color.name()+
 		  ";background-color: "+flash_background_color.name()+";");
   }
-  //  setAccel(a);
-}
-
-
-void PushButton::flashOn()
-{
-  if((!flash_timer->isActive())&&
-     (flash_clock_source==PushButton::InternalClock)) {
-    flash_timer->start(flash_period);
+  else {
+    setStyleSheet("");
   }
-}
-
-
-void PushButton::flashOff()
-{
-  if(flash_timer->isActive()&&
-     (flash_clock_source==PushButton::InternalClock)) {
-    flash_timer->stop();
-  }
-  setStyleSheet("");
 }
 
 
 void PushButton::Init()
 {
+  flash_phase=0;
+  flash_button_mode=PushButton::ButtonOff;
   flash_timer=new QTimer(this);
-  connect(flash_timer,SIGNAL(timeout()),this,SLOT(tickClock()));
-  flash_state=true;
-  flashing_enabled=false;
-  flash_clock_source=PushButton::InternalClock;
-  flash_period=PUSHBUTTON_DEFAULT_FLASH_PERIOD;
+  connect(flash_timer,SIGNAL(timeout()),this,SLOT(flashData()));
   setFlashColor(PUSHBUTTON_DEFAULT_FLASH_COLOR);
+  flash_timer->start(200);
 }
 
 
