@@ -95,6 +95,7 @@ size_t Ringbuffer::dump(size_t len)
   if((len>readSpace())||(len==0)) {
     len=readSpace();
   }
+  memmove(ring_buffer,ring_buffer+len,ring_size-len);
   ring_length-=len;
 
   return len;

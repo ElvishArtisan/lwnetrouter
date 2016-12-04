@@ -75,6 +75,8 @@ Config::Config()
     QString section=QString().sprintf("Input%d",i+1);
     conf_input_full_delays[i]=
       p->intValue(section,"FullDelay",CONFIG_DEFAULT_INPUT_FULL_DELAY);
+    conf_input_dump_delays[i]=
+      p->intValue(section,"DumpDelay",conf_input_full_delays[i]);
     conf_input_delay_change_percent[i]=
       p->intValue(section,"DelayChangePercent",
 		  CONFIG_DEFAULT_INPUT_DELAY_CHANGE_PERCENT);
@@ -180,6 +182,12 @@ bool Config::outputBusXfers() const
 int Config::inputFullDelay(int input) const
 {
   return conf_input_full_delays[input];
+}
+
+
+int Config::inputDumpDelay(int input) const
+{
+  return conf_input_dump_delays[input];
 }
 
 

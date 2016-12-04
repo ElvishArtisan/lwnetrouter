@@ -60,6 +60,8 @@ class RouterHpiAudio : public Router
   uint32_t hpi_delay_interval[MAX_INPUTS];
   QTimer *hpi_scan_timer;
   friend void *__AudioCallback(void *ptr);
+  friend void __AudioDump(int input,int dump_delay,Ringbuffer *fb,
+			  RouterHpiAudio *rha);
 
   //
   // Class -> Callback

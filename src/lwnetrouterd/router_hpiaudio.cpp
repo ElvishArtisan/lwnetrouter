@@ -51,6 +51,33 @@ hpi_err_t HpiError(hpi_err_t err,const QString &flag="")
 }
 
 
+void __AudioDump(int input,int dump_delay,Ringbuffer *rb,RouterHpiAudio *rha)
+{
+  static uint16_t out_state;
+  static uint32_t out_buffer_size;
+  static uint32_t out_data_to_play;
+  static uint32_t out_frames_played;
+  static uint32_t out_aux_to_play;
+  static uint32_t msecs;
+  static uint32_t bytes;
+
+  HpiError(HPI_OutStreamGetInfoEx(NULL,rha->hpi_output_streams[input],
+				  &out_state,
+				  &out_buffer_size,&out_data_to_play,
+				  &out_frames_played,&out_aux_to_play));
+  msecs=out_data_to_play/(8*48);
+  if((unsigned)dump_delay>msecs) {
+    bytes=8*48*dump_delay-out_data_to_play;
+    if(bytes<=rb->readSpace()) {
+      rb->dump(bytes);
+      rha->delay_interval[input]-=((bytes+out_data_to_play)/(8*48));
+      HpiError(HPI_OutStreamReset(NULL,rha->hpi_output_streams[input]));
+    }
+  }
+  rha->delay_dump[input]=false;
+}
+
+
 void *__AudioCallback(void *ptr)
 {
   static RouterHpiAudio *rha=(RouterHpiAudio *)ptr;
@@ -67,6 +94,7 @@ void *__AudioCallback(void *ptr)
   static float pcm[262144];
   static int inputs=rha->config()->inputQuantity();
   static int full_delays[MAX_INPUTS];
+  static int dump_delays[MAX_INPUTS];
   static Ringbuffer *rb[MAX_INPUTS];
   static float timescale;
   static int i;
@@ -83,6 +111,7 @@ void *__AudioCallback(void *ptr)
     rha->delay_interval[i]=0;
     rha->delay_state_taken[i]=Config::DelayExited;
     full_delays[i]=rha->config()->inputFullDelay(i);
+    dump_delays[i]=1000*rha->config()->inputDumpDelay(i);
   }
 
   //
@@ -114,18 +143,24 @@ void *__AudioCallback(void *ptr)
 	  switch(rha->delay_state_taken[i]) {
 	  case Config::DelayEntering:
 	  case Config::DelayEntered:
+	    __AudioDump(i,dump_delays[i],rb[i],rha);
+	    /*
 	    HpiError(HPI_OutStreamReset(NULL,rha->hpi_output_streams[i]));
 	    rb[i]->dump();
 	    rha->delay_interval[i]=0;
 	    rha->delay_dump[i]=false;
+	    */
 	    rha->delay_state_taken[i]=Config::DelayEntering;
 	    break;
 
 	  case Config::DelayExiting:
+	    __AudioDump(i,dump_delays[i],rb[i],rha);
+	    /*
 	    HpiError(HPI_OutStreamReset(NULL,rha->hpi_output_streams[i]));
 	    rb[i]->dump();
 	    rha->delay_interval[i]=0;
 	    rha->delay_dump[i]=false;
+	    */
 	    rha->delay_state_taken[i]=Config::DelayExited;
 	    break;
 

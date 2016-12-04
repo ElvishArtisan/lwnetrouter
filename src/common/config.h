@@ -76,6 +76,7 @@ class Config
   bool inputBusXfers() const;
   bool outputBusXfers() const;
   int inputFullDelay(int input) const;
+  int inputDumpDelay(int input) const;
   int inputDelayChangePercent(int input) const;
   int inputDelayControlSource(int input) const;
   int input(const QHostAddress &addr);
@@ -95,6 +96,7 @@ class Config
   bool conf_input_bus_xfers;
   bool conf_output_bus_xfers;
   int conf_input_full_delays[MAX_INPUTS];
+  int conf_input_dump_delays[MAX_INPUTS];
   int conf_input_delay_change_percent[MAX_INPUTS];
   int conf_input_delay_control_sources[MAX_INPUTS];
   QList<QHostAddress> conf_input_addresses[MAX_INPUTS];
