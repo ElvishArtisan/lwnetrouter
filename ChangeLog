@@ -99,3 +99,7 @@
 	the first tenths of a second of audio to fail to be dumped.
 2016-12-04 Fred Gleason <fredg@paravelsystems.com>
 	* Added support for incremental dumping.
+2016-12-04 Fred Gleason <fredg@paravelsystems.com>
+	* Modified 'src/lwnetrouterd/protocol_gpio.cpp' to illuminate the
+	'Dump' button whenever there is at least 'DumpDelay' time on the
+	delay.

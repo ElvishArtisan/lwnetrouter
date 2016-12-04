@@ -95,6 +95,14 @@ void ProtocolGpio::sendDelayState(int input,Config::DelayState state,int msec)
       break;
     }
   }
+  if(!gpio_dump_reset_timers[input]->isActive()) {
+    if(msec>=(1000*config()->inputDumpDelay(input))) {
+      gpio_controls[input]->setButtonState(0,DelayControl::ButtonOn);
+    }
+    else {
+      gpio_controls[input]->setButtonState(0,DelayControl::ButtonOff);
+    }
+  }
 }
 
 
