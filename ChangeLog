@@ -110,3 +110,7 @@
 	those of the 'ProtocolGpio' interface.
 2016-12-04 Fred Gleason <fredg@paravelsystems.com>
 	* Made the 'Dump' button in lwnetdelay(1) do fast flash after a dump.
+2016-12-04 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a bug in 'src/lwnetrouterd/router_hpiaudio.cpp' that caused
+	delay exiting to freeze after processing a Dump while in Exiting
+	mode.

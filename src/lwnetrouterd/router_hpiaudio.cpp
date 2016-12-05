@@ -149,7 +149,6 @@ void *__AudioCallback(void *ptr)
 
 	  case Config::DelayExiting:
 	    __AudioDump(i,dump_delays[i],rb[i],rha);
-	    rha->delay_state_taken[i]=Config::DelayExited;
 	    break;
 
 	  case Config::DelayUnknown:
