@@ -71,8 +71,12 @@ void __AudioDump(int input,int dump_delay,Ringbuffer *rb,RouterHpiAudio *rha)
     if(bytes<=rb->readSpace()) {
       rb->dump(bytes);
       rha->delay_interval[input]-=((bytes+out_data_to_play)/(8*48));
-      HpiError(HPI_OutStreamReset(NULL,rha->hpi_output_streams[input]));
     }
+    else {
+      rb->dump();
+      rha->delay_interval[input]=0;
+    }
+    HpiError(HPI_OutStreamReset(NULL,rha->hpi_output_streams[input]));
   }
   rha->delay_dump[input]=false;
 }
@@ -149,6 +153,9 @@ void *__AudioCallback(void *ptr)
 
 	  case Config::DelayExiting:
 	    __AudioDump(i,dump_delays[i],rb[i],rha);
+	    if(rha->delay_interval[i]==0) {
+	      rha->delay_state_taken[i]=Config::DelayExited;
+	    }
 	    break;
 
 	  case Config::DelayUnknown:

@@ -114,3 +114,7 @@
 	* Fixed a bug in 'src/lwnetrouterd/router_hpiaudio.cpp' that caused
 	delay exiting to freeze after processing a Dump while in Exiting
 	mode.
+2016-12-04 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a bug in 'src/lwnetrouterd/router_hpiaudio.cpp' that caused
+	Dump to fail if the time on the delay was less than the DumpDelay
+	setting.
