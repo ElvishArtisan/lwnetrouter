@@ -35,6 +35,7 @@ class ProtocolCunc : public Protocol
   void sendDelayState(int input,Config::DelayState state,int msec);
   void sendDelayState(int id,int input,Config::DelayState state,int msec);
   void sendInputName(int id,int input,const QString &str);
+  void sendDelayDumped(int input);
 
  signals:
   void delayStateRequested(int id,int input);

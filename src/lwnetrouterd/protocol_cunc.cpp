@@ -100,6 +100,15 @@ void ProtocolCunc::sendInputName(int id,int input,const QString &str)
 }
 
 
+void ProtocolCunc::sendDelayDumped(int input)
+{
+  QStringList args;
+
+  args.push_back(QString().sprintf("%d",input+1));
+  cunc_server->sendCommand((int)ProtocolCunc::DP,args);
+}
+
+
 void ProtocolCunc::commandReceivedData(int id,int cmd,const QStringList &args)
 {
   QStringList reply;

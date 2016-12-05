@@ -108,3 +108,5 @@
 	and 'src/lwnetdelay/pushbutton.h' to support multiple display states.
 	* Modified lwnetdelay(1) delay button control display states to match
 	those of the 'ProtocolGpio' interface.
+2016-12-04 Fred Gleason <fredg@paravelsystems.com>
+	* Made the 'Dump' button in lwnetdelay(1) do fast flash after a dump.

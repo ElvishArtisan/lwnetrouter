@@ -144,23 +144,11 @@ void *__AudioCallback(void *ptr)
 	  case Config::DelayEntering:
 	  case Config::DelayEntered:
 	    __AudioDump(i,dump_delays[i],rb[i],rha);
-	    /*
-	    HpiError(HPI_OutStreamReset(NULL,rha->hpi_output_streams[i]));
-	    rb[i]->dump();
-	    rha->delay_interval[i]=0;
-	    rha->delay_dump[i]=false;
-	    */
 	    rha->delay_state_taken[i]=Config::DelayEntering;
 	    break;
 
 	  case Config::DelayExiting:
 	    __AudioDump(i,dump_delays[i],rb[i],rha);
-	    /*
-	    HpiError(HPI_OutStreamReset(NULL,rha->hpi_output_streams[i]));
-	    rb[i]->dump();
-	    rha->delay_interval[i]=0;
-	    rha->delay_dump[i]=false;
-	    */
 	    rha->delay_state_taken[i]=Config::DelayExited;
 	    break;
 
@@ -361,8 +349,6 @@ int RouterHpiAudio::delayInterval(int input)
 
 void RouterHpiAudio::setDelayState(int input,Config::DelayState state)
 {
-  printf("setDelayState(%d,%d)\n",input,state);
-
   switch(state) {
   case Config::DelayEntering:
     delay_state_set[input]=Config::DelayEntering;

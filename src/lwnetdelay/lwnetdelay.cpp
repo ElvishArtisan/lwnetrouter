@@ -102,7 +102,7 @@ QString hostname="localhost";
   //
   // Enter Button
   //
-  cunc_enter_button=new PushButton(tr("Start"),this);
+  cunc_enter_button=new PushButton(tr("Enter"),this);
   cunc_enter_button->setFont(button_font);
   connect(cunc_enter_button,SIGNAL(clicked()),this,SLOT(enterPushed()));
 
@@ -316,14 +316,15 @@ void MainWidget::ProcessCommand(const QString &msg)
     cunc_delay_label->
       setText(QString().sprintf("%4.1f",(float)delay_len/1000.0));
   
-    if(delay_len>=cunc_safe_delay) {
-      cunc_dump_button->setButtonMode(PushButton::ButtonOn);
-    }
-    else {
-      cunc_dump_button->setButtonMode(PushButton::ButtonOff);
+    if(!cunc_dump_timer->isActive()) {
+      if(delay_len>=cunc_safe_delay) {
+	cunc_dump_button->setButtonMode(PushButton::ButtonOn);
+      }
+      else {
+	cunc_dump_button->setButtonMode(PushButton::ButtonOff);
+      }
     }
   }
-
 
   if(cmds[0]=="DP") {   // Delay Dump
     id=cmds[1].toUInt(&ok);
