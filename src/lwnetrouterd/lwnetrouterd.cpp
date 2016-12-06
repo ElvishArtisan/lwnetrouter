@@ -81,10 +81,18 @@ MainObject::MainObject(QObject *parent)
   // Routers
   //
   main_audio_router=new RouterHpiAudio(main_config,this);
+
   main_gpio_router=new RouterGpio(main_gpio,main_lwrp,main_config,this);
   connect(main_audio_router,
 	  SIGNAL(delayStateChanged(int,Config::DelayState,int)),
 	  main_gpio_router,SLOT(setDelayState(int,Config::DelayState,int)));
+
+  main_breakaway_router=new RouterBreakaway(main_config,this);
+  connect(main_audio_router,
+	  SIGNAL(delayStateChanged(int,Config::DelayState,int)),
+	  main_breakaway_router,
+	  SLOT(setDelayState(int,Config::DelayState,int)));
+
   main_cic_router=new RouterCic(main_config,this);
   connect(main_audio_router,
 	  SIGNAL(delayStateChanged(int,Config::DelayState,int)),
@@ -98,14 +106,20 @@ MainObject::MainObject(QObject *parent)
 	  main_audio_router,SLOT(setCrossPoint(int,int)));
   connect(main_rml_protocol,SIGNAL(crosspointChangeReceived(int,int)),
 	  main_gpio_router,SLOT(setCrossPoint(int,int)));
+  connect(main_rml_protocol,SIGNAL(crosspointChangeReceived(int,int)),
+	  main_breakaway_router,SLOT(setCrossPoint(int,int)));
   connect(main_rml_protocol,SIGNAL(relayReceived(int,int)),
 	  main_gpio_router,SLOT(sendRelay(int,int)));
+  connect(main_rml_protocol,SIGNAL(breakawayReceived(int,int)),
+	  main_breakaway_router,SLOT(sendBreakaway(int,int)));
 
   main_sap_protocol=new ProtocolSap(main_lwrp,main_config,this);
   connect(main_sap_protocol,SIGNAL(crosspointChangeReceived(int,int)),
 	  main_audio_router,SLOT(setCrossPoint(int,int)));
   connect(main_sap_protocol,SIGNAL(crosspointChangeReceived(int,int)),
 	  main_gpio_router,SLOT(setCrossPoint(int,int)));
+  connect(main_sap_protocol,SIGNAL(crosspointChangeReceived(int,int)),
+	  main_breakaway_router,SLOT(setCrossPoint(int,int)));
   connect(main_sap_protocol,SIGNAL(crosspointRequested(int,int)),
 	  this,SLOT(sapCrosspointRequestedData(int,int)));
   connect(main_audio_router,SIGNAL(crossPointChanged(int,int)),

@@ -101,6 +101,10 @@ Config::Config()
   for(int i=0;i<MAX_OUTPUTS;i++) {
     QString section=QString().sprintf("Output%d",i+1);
     for(int j=0;j<SWITCHYARD_GPIO_BUNDLE_SIZE;j++) {
+      conf_output_breakaway_ip_addresses[i]=
+	p->addressValue(section,"BreakawayIpAddress","");
+      conf_output_breakaway_slot_numbers[i]=
+	p->intValue(section,"BreakawaySlotNumber",i+1);
       conf_output_netcues[i][j]=
 	p->stringValue(section,QString().sprintf("Netcue%d",j+1));
     }
@@ -220,6 +224,18 @@ int Config::input(const QHostAddress &addr)
     }
   }
   return -1;
+}
+
+
+QHostAddress Config::outputBreakawayIpAddress(int output) const
+{
+  return conf_output_breakaway_ip_addresses[output];
+}
+
+
+int Config::outputBreakawaySlotNumber(int output) const
+{
+  return conf_output_breakaway_slot_numbers[output];
 }
 
 

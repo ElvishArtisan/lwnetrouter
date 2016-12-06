@@ -38,6 +38,7 @@ dist_lwnetrouterd_SOURCES = delaycontrol.cpp delaycontrol.h\
                             protocol_rml.cpp protocol_rml.h\
                             protocol_sap.cpp protocol_sap.h\
                             ringbuffer.cpp ringbuffer.h\
+                            router_breakaway.cpp router_breakaway.h\
                             router.cpp router.h\
                             router_cic.cpp router_cic.h\
                             router_gpio.cpp router_gpio.h\
@@ -54,6 +55,7 @@ nodist_lwnetrouterd_SOURCES = config.cpp config.h\
                               moc_protocol_rml.cpp\
                               moc_protocol_sap.cpp\
                               moc_router.cpp\
+                              moc_router_breakaway.cpp\
                               moc_router_cic.cpp\
                               moc_router_gpio.cpp\
                               moc_router_hpiaudio.cpp\

@@ -34,8 +34,8 @@ class Router : public QObject
  public:
   Router(Config *config,QObject *parent=0);
   int crossPoint(int output) const;
-  virtual Config::DelayState delayState(int input) const=0;
-  virtual int delayInterval(int input)=0;
+  virtual Config::DelayState delayState(int input) const;
+  virtual int delayInterval(int input);
 
  signals:
   void crossPointChanged(int output,int input);
@@ -46,6 +46,7 @@ class Router : public QObject
   void setCrossPoint(int output,int input);
   virtual void setDelayState(int input,Config::DelayState state);
   virtual void dumpDelay(int input);
+  virtual void sendBreakaway(int input,int msec);
 
  protected:
   virtual void crossPointSet(int output,int input);
@@ -53,6 +54,8 @@ class Router : public QObject
 
  private:
   std::vector<int> router_crosspoints;
+  Config::DelayState router_delay_states[MAX_INPUTS];
+  int router_delay_intervals[MAX_INPUTS];
   Config *router_config;
 };
 

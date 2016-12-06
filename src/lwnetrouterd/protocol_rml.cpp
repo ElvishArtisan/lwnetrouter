@@ -64,6 +64,16 @@ void ProtocolRml::ProcessCommand(const QString &cmd)
   QStringList cmds=cmd.split(" ",QString::SkipEmptyParts);
   bool ok=false;
 
+  if((cmds.at(0)=="DX")&&(cmds.size()==3)) {
+    unsigned input=cmds.at(1).toUInt(&ok)-1;
+    if(ok&&(input<(unsigned)config()->inputQuantity())) {
+      unsigned msec=cmds.at(1).toUInt(&ok);
+      if(ok) {
+	emit breakawayReceived(input,msec);
+      }
+    }
+  }
+
   if((cmds.at(0)=="GO")&&(cmds.size()==5)) {
     unsigned input=cmds.at(1).toUInt(&ok)-1;
     if(ok&&(input<(unsigned)config()->inputQuantity())) {

@@ -38,6 +38,18 @@ int Router::crossPoint(int output) const
 }
 
 
+Config::DelayState Router::delayState(int input) const
+{
+  return router_delay_states[input];
+}
+
+
+int Router::delayInterval(int input)
+{
+  return 0;
+}
+
+
 void Router::setCrossPoint(int output,int input)
 {
   crossPointSet(output,input);
@@ -48,10 +60,16 @@ void Router::setCrossPoint(int output,int input)
 
 void Router::setDelayState(int input,Config::DelayState state)
 {
+  router_delay_states[input]=state;
 }
 
 
 void Router::dumpDelay(int input)
+{
+}
+
+
+void Router::sendBreakaway(int input,int msec)
 {
 }
 

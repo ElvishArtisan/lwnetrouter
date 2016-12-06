@@ -126,3 +126,8 @@
 2016-12-06 Fred Gleason <fredg@paravelsystems.com>
 	* Implemented the 'GO' RML for sending relays in
 	'src/lwnetrouter/protocol_rml.cpp'.
+2016-12-06 Fred Gleason <fredg@paravelsystems.com>
+	* Implemented the 'DX' RML in 'src/lwnetrouter/protocol_rml.cpp'.
+	* Added support for routing RDCartSlots breakaways in
+	'src/lwnetrouterd/router_breakaway.cpp' and
+	'src/lwnetrouterd/router_breakaway.h'.

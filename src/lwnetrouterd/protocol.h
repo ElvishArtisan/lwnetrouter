@@ -37,6 +37,7 @@ class Protocol : public QObject
   void crosspointChangeReceived(int output,int input);
   void delayStateChangeReceived(int input,Config::DelayState state);
   void delayDumpReceived(int input);
+  void breakawayReceived(int input,int msec);
 
  public slots:
   virtual void sendRelay(int input,int line);
