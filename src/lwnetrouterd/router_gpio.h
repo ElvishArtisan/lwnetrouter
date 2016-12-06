@@ -57,6 +57,7 @@ class RouterGpio : public Router
   int delayInterval(int input);
 
  public slots:
+  void sendRelay(int input,int line);
   void setDelayState(int input,Config::DelayState state,int msec);
 
  private slots:

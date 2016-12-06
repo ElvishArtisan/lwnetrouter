@@ -113,13 +113,21 @@ void RouterGpio::gpoReceivedData(int gpo,int line,bool state,bool pulse)
   //printf("gpoReceivedData(%d,%d,%d,%d)\n",gpo,line,state,pulse);
 
   for(int i=0;i<config()->inputQuantity();i++) {
-    if(state&&(gpo==(int)SyRouting::livewireNumber(gpio_lwrp->dstAddress(i)))&&
-       (!gpio_debounce_timers[i][line]->isActive())) {
-      if(config()->relayDebounceInterval()>0) {
-	gpio_debounce_timers[i][line]->start(config()->relayDebounceInterval());
-      }
-      gpio_events[i].push(new RouterGpioEvent(line));
+    if(state&&(gpo==(int)SyRouting::livewireNumber(gpio_lwrp->dstAddress(i)))) {
+      sendRelay(i,line);
     }
+  }
+}
+
+
+void RouterGpio::sendRelay(int input,int line)
+{
+  if(!gpio_debounce_timers[input][line]->isActive()) {
+    if(config()->relayDebounceInterval()>0) {
+      gpio_debounce_timers[input][line]->
+	start(config()->relayDebounceInterval());
+    }
+    gpio_events[input].push(new RouterGpioEvent(line));
   }
 }
 

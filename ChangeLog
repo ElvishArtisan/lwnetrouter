@@ -123,3 +123,6 @@
 2016-12-06 Fred Gleason <fredg@paravelsystems.com>
 	* Added a 'RelayDebounceInterval=' directive to the [Global] section
 	of lwnetrouter.conf(5).
+2016-12-06 Fred Gleason <fredg@paravelsystems.com>
+	* Implemented the 'GO' RML for sending relays in
+	'src/lwnetrouter/protocol_rml.cpp'.

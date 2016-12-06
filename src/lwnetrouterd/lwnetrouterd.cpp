@@ -98,6 +98,8 @@ MainObject::MainObject(QObject *parent)
 	  main_audio_router,SLOT(setCrossPoint(int,int)));
   connect(main_rml_protocol,SIGNAL(crosspointChangeReceived(int,int)),
 	  main_gpio_router,SLOT(setCrossPoint(int,int)));
+  connect(main_rml_protocol,SIGNAL(relayReceived(int,int)),
+	  main_gpio_router,SLOT(sendRelay(int,int)));
 
   main_sap_protocol=new ProtocolSap(main_lwrp,main_config,this);
   connect(main_sap_protocol,SIGNAL(crosspointChangeReceived(int,int)),

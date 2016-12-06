@@ -28,6 +28,11 @@ Protocol::Protocol(Config *c,QObject *parent)
 }
 
 
+void Protocol::sendRelay(int input,int line)
+{
+}
+
+
 void Protocol::sendCrossPoint(int output,int input)
 {
 }

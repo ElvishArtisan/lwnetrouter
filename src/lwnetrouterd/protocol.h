@@ -33,11 +33,13 @@ class Protocol : public QObject
   Protocol(Config *c,QObject *parent=0);
 
  signals:
+  void relayReceived(int input,int line);
   void crosspointChangeReceived(int output,int input);
   void delayStateChangeReceived(int input,Config::DelayState state);
   void delayDumpReceived(int input);
 
  public slots:
+  virtual void sendRelay(int input,int line);
   virtual void sendCrossPoint(int output,int input);
   virtual void sendDelayState(int input,Config::DelayState state,int msec);
   virtual void sendDelayDumped(int input);

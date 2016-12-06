@@ -64,6 +64,16 @@ void ProtocolRml::ProcessCommand(const QString &cmd)
   QStringList cmds=cmd.split(" ",QString::SkipEmptyParts);
   bool ok=false;
 
+  if((cmds.at(0)=="GO")&&(cmds.size()==5)) {
+    unsigned input=cmds.at(1).toUInt(&ok)-1;
+    if(ok&&(input<(unsigned)config()->inputQuantity())) {
+      unsigned line=cmds.at(2).toUInt(&ok)-1;
+      if(ok&&(line<SWITCHYARD_GPIO_BUNDLE_SIZE)&&cmds.at(3)=="1") {
+	emit relayReceived(input,line);
+      }
+    }
+  }
+
   if((cmds.at(0)=="ST")&&(cmds.size()==4)) {
     unsigned matrix=cmds.at(1).toUInt(&ok);
     if(ok&&(matrix==0)) {
