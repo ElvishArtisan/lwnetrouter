@@ -87,6 +87,12 @@ RouterGpio::RouterGpio(SyGpioServer *gpioserv,SyLwrpClient *lwrp,Config *c,
   gpio_scan_timer=new QTimer(this);
   connect(gpio_scan_timer,SIGNAL(timeout()),this,SLOT(scanTimerData()));
   gpio_scan_timer->start(50);
+  for(int i=0;i<config()->inputQuantity();i++) {
+    for(int j=0;j<SWITCHYARD_GPIO_BUNDLE_SIZE;j++) {
+      gpio_debounce_timers[i][j]=new QTimer(this);
+      gpio_debounce_timers[i][j]->setSingleShot(true);
+    }
+  }
 }
 
 
@@ -104,12 +110,15 @@ int RouterGpio::delayInterval(int input)
 
 void RouterGpio::gpoReceivedData(int gpo,int line,bool state,bool pulse)
 {
-  //  printf("gpoReceivedData(%d,%d,%d,%d)\n",gpo,line,state,pulse);
+  //printf("gpoReceivedData(%d,%d,%d,%d)\n",gpo,line,state,pulse);
 
   for(int i=0;i<config()->inputQuantity();i++) {
-    if(state&&(gpo==(int)SyRouting::livewireNumber(gpio_lwrp->dstAddress(i)))) {
+    if(state&&(gpo==(int)SyRouting::livewireNumber(gpio_lwrp->dstAddress(i)))&&
+       (!gpio_debounce_timers[i][line]->isActive())) {
+      if(config()->relayDebounceInterval()>0) {
+	gpio_debounce_timers[i][line]->start(config()->relayDebounceInterval());
+      }
       gpio_events[i].push(new RouterGpioEvent(line));
-      //      SendGpo(i,line);
     }
   }
 }
@@ -139,6 +148,7 @@ void RouterGpio::scanTimerData()
 
 void RouterGpio::SendGpo(int input,int line)
 {
+  //  printf("SendGpo(%d,%d)\n",input,line);
   for(int i=0;i<config()->outputQuantity();i++) {
     if(crossPoint(i)==input) {
       gpio_server->sendGpo(SyRouting::livewireNumber(gpio_lwrp->srcAddress(i)),

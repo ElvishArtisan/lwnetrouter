@@ -72,6 +72,7 @@ class RouterGpio : public Router
   Config::DelayState gpio_delay_states[MAX_INPUTS];
   int gpio_delay_intervals[MAX_INPUTS];
   std::queue<RouterGpioEvent *> gpio_events[MAX_INPUTS];
+  QTimer *gpio_debounce_timers[MAX_INPUTS][SWITCHYARD_GPIO_BUNDLE_SIZE];
 };
 
 

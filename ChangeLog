@@ -120,3 +120,6 @@
 	setting.
 2016-12-04 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the package version to 0.6.1.
+2016-12-06 Fred Gleason <fredg@paravelsystems.com>
+	* Added a 'RelayDebounceInterval=' directive to the [Global] section
+	of lwnetrouter.conf(5).

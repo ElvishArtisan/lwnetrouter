@@ -61,6 +61,9 @@ Config::Config()
     p->stringValue("Global","NetcuePort",CONFIG_DEFAULT_NETCUE_PORT);
   conf_livewire_ip_address=p->addressValue("Global","LivewireIpAddress","");
   conf_adapter_ip_address=p->addressValue("Global","AdapterIpAddress","");
+  conf_relay_debounce_interval=
+    p->intValue("Global","RelayDebounceInterval",
+		CONFIG_DEFAULT_RELAY_DEBOUNCE_INTERVAL);
   conf_input_bus_xfers=p->
     boolValue("Global","InputBusXfers",CONFIG_DEFAULT_INPUT_BUS_XFERS);
   conf_output_bus_xfers=p->
@@ -164,6 +167,12 @@ QHostAddress Config::livewireIpAddress() const
 QHostAddress Config::adapterIpAddress() const
 {
   return conf_adapter_ip_address;
+}
+
+
+int Config::relayDebounceInterval() const
+{
+  return conf_relay_debounce_interval;
 }
 
 
