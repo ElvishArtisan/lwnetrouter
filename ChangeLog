@@ -131,3 +131,5 @@
 	* Added support for routing RDCartSlots breakaways in
 	'src/lwnetrouterd/router_breakaway.cpp' and
 	'src/lwnetrouterd/router_breakaway.h'.
+2016-12-06 Fred Gleason <fredg@paravelsystems.com>
+	* Incremented the package version to 0.6.2.
