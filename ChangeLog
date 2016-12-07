@@ -151,3 +151,5 @@
 	'src/lwnetrouterd/router_hpiaudio.cpp'.
 	* Added syslog notation whenever a delay is dumped in
 	'src/lwnetrouterd/router_hpiaudio.cpp'.
+2016-12-07 Fred Gleason <fredg@paravelsystems.com>
+	* Incremented the package version to 0.6.3.
