@@ -161,9 +161,14 @@ void RouterGpio::SendGpo(int input,int line)
     if(crossPoint(i)==input) {
       gpio_server->sendGpo(SyRouting::livewireNumber(gpio_lwrp->srcAddress(i)),
 			   line,true,true);
+      syslog(LOG_DEBUG,"sent LiveWire GPO from input %d to %d:%d",input+1,
+	     SyRouting::livewireNumber(gpio_lwrp->srcAddress(i)),line+1);
       if(gpio_netcue_device->isOpen()) {
 	QString netcue=config()->outputNetcue(i,line)+"\n";
 	gpio_netcue_device->write(netcue.toAscii(),netcue.toAscii().length());
+	syslog(LOG_DEBUG,"sent NetCue \"%s\" from input %d to %s",
+	       (const char *)config()->outputNetcue(i,line).toAscii(),input+1,
+	       (const char *)config()->netcuePort().toUtf8());
       }
     }
   }

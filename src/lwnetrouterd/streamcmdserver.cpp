@@ -222,9 +222,6 @@ void StreamCmdServer::sendCommand(const QString &str)
 	sendCommand(i,str);
       }
     }
-    else {
-      closeConnection(i);
-    }
   }
 }
 

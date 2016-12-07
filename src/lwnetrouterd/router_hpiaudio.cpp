@@ -378,6 +378,7 @@ void RouterHpiAudio::dumpDelay(int input)
   if(delayInterval(input)>0) {
     delay_dump[input]=true;
     emit delayDumped(input);
+    syslog(LOG_DEBUG,"delay %d DUMPED",input+1);
   }
 }
 
@@ -385,6 +386,11 @@ void RouterHpiAudio::dumpDelay(int input)
 void RouterHpiAudio::scanTimerData()
 {
   for(int i=0;i<config()->inputQuantity();i++) {
+    if(hpi_delay_state[i]!=delay_state_taken[i]) {
+      syslog(LOG_DEBUG,"delay %d changing to state %s",i+1,
+	     (const char *)Config::delayStateText(delay_state_taken[i]).
+	     toUpper().toUtf8());
+    }
     if((hpi_delay_state[i]!=delay_state_taken[i])||
        (hpi_delay_interval[i]!=delay_interval[i])) {
       hpi_delay_state[i]=delay_state_taken[i];
@@ -400,6 +406,7 @@ void RouterHpiAudio::crossPointSet(int output,int input)
   short on_gain[HPI_MAX_CHANNELS]={0,0};
   short off_gain[HPI_MAX_CHANNELS]={-10000,-10000};
 
+  syslog(LOG_DEBUG,"set output %d to input %d",output+1,input+1);
   for(int i=0;i<config()->inputQuantity();i++) {
     HpiError(HPI_VolumeSetGain(NULL,hpi_output_volumes[i][output],off_gain));
   }

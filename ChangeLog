@@ -133,3 +133,21 @@
 	'src/lwnetrouterd/router_breakaway.h'.
 2016-12-06 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the package version to 0.6.2.
+2016-12-07 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a bug in 'src/lwnetrouterd/streamcmdserver.cpp' that threw
+	a segfault.
+2016-12-07 Fred Gleason <fredg@paravelsystems.com>
+	* Added syslog notation whenever a breakaway is sent in
+	'src/lwnetrouterd/router_breakaway.cpp'.
+	* Added syslog notation whenever a CIC is sent in
+	'src/lwnetrouterd/router_cic.cpp'.
+	* Added syslog notation whenever a LiveWire GPO message is sent in
+	'src/lwnetrouterd/router_gpio.cpp'.
+	* Added syslog notation whenever a NetCue is sent in
+	'src/lwnetrouterd/router_gpio.cpp'.
+	* Added syslog notation whenever a crosspoint is changed in
+	'src/lwnetrouterd/router_hpiaudio.cpp'.
+	* Added syslog notation whenever delay state changes in
+	'src/lwnetrouterd/router_hpiaudio.cpp'.
+	* Added syslog notation whenever a delay is dumped in
+	'src/lwnetrouterd/router_hpiaudio.cpp'.

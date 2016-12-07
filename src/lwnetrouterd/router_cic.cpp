@@ -121,5 +121,9 @@ void RouterCic::SendPacket(int input,const QByteArray &data)
 
   for(int i=0;i<cic_addrs.size();i++) {
     cic_socket->writeDatagram(data,cic_addrs.at(i),config()->cicPort());
+    syslog(LOG_DEBUG,"sent CIC \"%s\" from input %d to %s:%u",
+	   data.constData(),input+1,
+	   (const char *)cic_addrs.at(i).toString().toAscii(),
+	   0xFFFF&config()->cicPort());
   }
 }

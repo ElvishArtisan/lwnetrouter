@@ -19,6 +19,8 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
+#include <syslog.h>
+
 #include "router_breakaway.h"
 
 RouterBreakawayEvent::RouterBreakawayEvent(int msec)
@@ -93,10 +95,10 @@ void RouterBreakaway::SendBreakaway(int input,int msec)
 			      config()->outputBreakawaySlotNumber(i),msec);
 	break_socket->writeDatagram(rml.toAscii(),
 				    config()->outputBreakawayIpAddress(i),5859);
-	/*
-	printf("send \"%s\" to %s\n",(const char *)rml.toUtf8(),
-	       (const char *)config()->outputBreakawayIpAddress(i).toString().toUtf8());
-	*/
+	syslog(LOG_DEBUG,"sent breakaway \"%s\" from input %d to %s",
+	       (const char *)rml.toAscii(),input+1,
+	       (const char *)config()->outputBreakawayIpAddress(i).toString().
+	       toAscii());
       }
     }
   }

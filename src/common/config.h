@@ -85,6 +85,7 @@ class Config
   QHostAddress outputBreakawayIpAddress(int output) const;
   int outputBreakawaySlotNumber(int output) const;
   QString outputNetcue(int output,int line) const;
+  static QString delayStateText(DelayState state);
 
  private:
   int conf_input_quantity;

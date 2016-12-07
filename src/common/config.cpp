@@ -244,3 +244,37 @@ QString Config::outputNetcue(int output,int line) const
   return conf_output_netcues[output][line];
 }
 
+
+QString Config::delayStateText(DelayState state)
+{
+  QString ret=
+    QObject::tr("Unknown delay state")+QString().sprintf(" [%d]",state);
+
+  switch(state) {
+  case Config::DelayUnknown:
+    ret=QObject::tr("unknown");
+    break;
+
+  case Config::DelayBypassed:
+    ret=QObject::tr("bypassed");
+    break;
+
+  case Config::DelayEntered:
+    ret=QObject::tr("entered");
+    break;
+
+  case Config::DelayEntering:
+    ret=QObject::tr("entering");
+    break;
+
+  case Config::DelayExited:
+    ret=QObject::tr("exited");
+    break;
+
+  case Config::DelayExiting:
+    ret=QObject::tr("exiting");
+    break;
+  }
+
+  return ret;
+}
