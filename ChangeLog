@@ -171,3 +171,5 @@
 	* Renamed a variable in 'src/lwnetrouterd/route_hpiaudio.cpp'.
 2016-12-08 Fred Gleason <fredg@paravelsystems.com>
 	* Tweaked latency parameters in 'src/tests/audio_delay_test.cpp'.
+2016-12-08 Fred Gleason <fredg@paravelsystems.com>
+	* Incremetned the package version to 0.6.4.
