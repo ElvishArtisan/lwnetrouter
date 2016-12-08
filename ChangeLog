@@ -167,3 +167,5 @@
 	'src/lwnetrouterd/router_hpiaudio.cpp'.
 2016-12-08 Fred Gleason <fredg@paravelsystems.com>
 	* Added an audio_delay_test(1) test harness in 'src/tests/'.
+2016-12-08 Fred Gleason <fredg@paravelsystems.com>
+	* Renamed a variable in 'src/lwnetrouterd/route_hpiaudio.cpp'.

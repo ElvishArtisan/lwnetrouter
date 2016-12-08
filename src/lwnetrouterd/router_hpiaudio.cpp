@@ -111,7 +111,7 @@ void *__AudioCallback(void *ptr)
   static float timescale;
   static int i;
   static uint32_t space;
-  static uint32_t delay_frames;
+  static uint32_t delay_bytes;
   static uint32_t delay_interval;
 
   //
@@ -179,18 +179,18 @@ void *__AudioCallback(void *ptr)
 					&out_frames_played,&out_aux_to_play));
 	space=38400-out_data_to_play;
 	space=rb[i]->read((float *)pcm,space);
-	delay_frames=out_data_to_play+rb[i]->readSpace();
+	delay_bytes=out_data_to_play+rb[i]->readSpace();
 
 	switch(rha->delay_state_set[i]) {
 	case Config::DelayEntering:
-	  if(delay_frames>SetpointBytes(full_delays[i]*1000)) {
+	  if(delay_bytes>SetpointBytes(full_delays[i]*1000)) {
 	    timescale=1.0;
 	    rha->delay_state_taken[i]=Config::DelayEntered;
 	    rha->delay_interval[i]=full_delays[i]*1000;
 	  }
 	  else {
 	    if(rha->delay_state_taken[i]!=Config::DelayEntered) {
-	      if((delay_interval=100*(delay_frames/38400))>
+	      if((delay_interval=100*(delay_bytes/38400))>
 		 rha->delay_interval[i]) {
 		rha->delay_interval[i]=delay_interval;
 	      }
@@ -201,14 +201,14 @@ void *__AudioCallback(void *ptr)
 	  break;
 
 	case Config::DelayExiting:
-	  if(delay_frames<4096) {
+	  if(delay_bytes<4096) {
 	    timescale=1.0;
 	    rha->delay_state_taken[i]=Config::DelayExited;
 	    rha->delay_interval[i]=0;
 	  }
 	  else {
 	    if(rha->delay_state_taken[i]!=Config::DelayExited) {
-	      if((delay_interval=100*(delay_frames/38400))<
+	      if((delay_interval=100*(delay_bytes/38400))<
 		 rha->delay_interval[i]) {
 		rha->delay_interval[i]=delay_interval;
 	      }
