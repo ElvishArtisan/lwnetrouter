@@ -22,7 +22,8 @@
 
 SUBDIRS = common\
           lwnetdelay\
-          lwnetrouterd
+          lwnetrouterd\
+          tests
 
 CLEANFILES = *~\
              *.idb\

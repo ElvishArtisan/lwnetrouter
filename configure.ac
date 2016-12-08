@@ -100,6 +100,7 @@ AC_CONFIG_FILES([ \
     src/common/Makefile \
     src/lwnetdelay/Makefile \
     src/lwnetrouterd/Makefile \
+    src/tests/Makefile \
     xdg/Makefile \
     lwnetrouter.service \
     lwnetrouter.spec \
@@ -111,6 +112,7 @@ AC_OUTPUT()
 #
 ./link_common.sh lwnetdelay
 ./link_common.sh lwnetrouterd
+./link_common.sh tests
 
 AC_MSG_NOTICE()
 AC_MSG_NOTICE(Now enter 'make' to build the software.)

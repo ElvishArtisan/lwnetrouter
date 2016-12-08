@@ -160,3 +160,5 @@
 	in 'src/lwnetrouterd/router_cic.cpp'.
 	* Changed the value of the delay scan interval from 50 to 10 mS
 	in 'src/lwnetrouterd/router_breakaway.cpp'.
+2016-12-08 Fred Gleason <fredg@paravelsystems.com>
+	* Added a gpio_delay_test(1) test harness in 'src/tests/'.
