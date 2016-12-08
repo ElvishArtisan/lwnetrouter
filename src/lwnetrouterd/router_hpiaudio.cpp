@@ -31,7 +31,15 @@
 
 size_t SetpointBytes(uint64_t msec)
 {
-  return AUDIO_SAMPLE_RATE*AUDIO_CHANNELS*msec*sizeof(float)/1000;
+  //
+  // FIXME: This is totally ad-hoc, and needs to be replaced by a model
+  //        that actually takes account of all of the latencies in the
+  //        audio chain!
+  //
+  if(msec<775) {
+    return 0;
+  }
+  return AUDIO_SAMPLE_RATE*AUDIO_CHANNELS*(msec-775)*sizeof(float)/1000;
 }
 
 
