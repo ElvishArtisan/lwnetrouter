@@ -25,3 +25,4 @@ src/lwnetrouterd/lwnetrouterd
 src/tests/config.cpp
 src/tests/config.h
 src/tests/gpio_delay_test
+src/tests/audio_delay_test
