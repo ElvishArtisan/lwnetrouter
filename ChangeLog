@@ -153,3 +153,10 @@
 	'src/lwnetrouterd/router_hpiaudio.cpp'.
 2016-12-07 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the package version to 0.6.3.
+2016-12-08 Fred Gleason <fredg@paravelsystems.com>
+	* Changed the value of the delay scan interval from 50 to 10 mS
+	in 'src/lwnetrouterd/router_gpio.cpp'.
+	* Changed the value of the delay scan interval from 50 to 10 mS
+	in 'src/lwnetrouterd/router_cic.cpp'.
+	* Changed the value of the delay scan interval from 50 to 10 mS
+	in 'src/lwnetrouterd/router_breakaway.cpp'.

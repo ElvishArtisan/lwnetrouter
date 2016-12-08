@@ -55,7 +55,7 @@ RouterBreakaway::RouterBreakaway(Config *c,QObject *parent)
 
   break_scan_timer=new QTimer(this);
   connect(break_scan_timer,SIGNAL(timeout()),this,SLOT(scanTimerData()));
-  break_scan_timer->start(50);
+  break_scan_timer->start(10);
 }
 
 

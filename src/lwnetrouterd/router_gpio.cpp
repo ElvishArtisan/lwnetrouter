@@ -86,7 +86,7 @@ RouterGpio::RouterGpio(SyGpioServer *gpioserv,SyLwrpClient *lwrp,Config *c,
   //
   gpio_scan_timer=new QTimer(this);
   connect(gpio_scan_timer,SIGNAL(timeout()),this,SLOT(scanTimerData()));
-  gpio_scan_timer->start(50);
+  gpio_scan_timer->start(10);
   for(int i=0;i<config()->inputQuantity();i++) {
     for(int j=0;j<SWITCHYARD_GPIO_BUNDLE_SIZE;j++) {
       gpio_debounce_timers[i][j]=new QTimer(this);

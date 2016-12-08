@@ -61,7 +61,7 @@ RouterCic::RouterCic(Config *c,QObject *parent)
 
   cic_scan_timer=new QTimer(this);
   connect(cic_scan_timer,SIGNAL(timeout()),this,SLOT(scanTimerData()));
-  cic_scan_timer->start(50);
+  cic_scan_timer->start(10);
 }
 
 
