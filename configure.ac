@@ -55,6 +55,11 @@ PKG_CHECK_MODULES(SWITCHYARD,[switchyard],[],[AC_MSG_ERROR([*** Switchyard not f
 AC_CHECK_HEADER(asihpi/hpi.h,[],[AC_MSG_ERROR([*** AudioScience HPI not found ***])])
 
 #
+# Check for ALSA
+#
+PKG_CHECK_MODULES(ALSA,alsa,[],[AC_MSG_ERROR([*** ALSA not found ***])])
+
+#
 # Check for DocBook Toolchain
 #
 if test -z $DOCBOOK_DISABLED ; then
