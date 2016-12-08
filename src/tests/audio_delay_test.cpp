@@ -39,11 +39,11 @@ void *__AlsaCaptureCallback(void *priv)
   static int i=0;
 
   while(!test_finished) {
-    n=snd_pcm_readi(mo->test_capture_pcm,pcm,1024);
+    n=snd_pcm_readi(mo->test_capture_pcm,pcm,16);
+    gettimeofday(&mo->test_recv_tv,NULL);
     if(n>=0) {
       for(i=0;i<(2*n);i++) {
 	if(pcm[i]>=0x0000FFFF) {
-	  gettimeofday(&mo->test_recv_tv,NULL);
 	  test_finished=true;
 	  break;
 	}
