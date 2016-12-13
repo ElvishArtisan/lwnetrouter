@@ -74,6 +74,9 @@ ProtocolSap::ProtocolSap(SyLwrpClient *lwrp,Config *c,QObject *parent)
 
 void ProtocolSap::sendCrossPoint(int output,int input)
 {
+  if(input<0) {
+    input=config()->inputQuantity();
+  }
   sap_server->sendCommand(QString().sprintf("RouteStat 1 %d %d False\r\n",
 					    output+1,input+1));
 }
@@ -81,6 +84,9 @@ void ProtocolSap::sendCrossPoint(int output,int input)
 
 void ProtocolSap::sendCrossPoint(int id,int output,int input)
 {
+  if(input<0) {
+    input=config()->inputQuantity();
+  }
   sap_server->sendCommand(id,QString().sprintf("RouteStat 1 %d %d False\r\n",
 					       output+1,input+1));
 }
@@ -124,6 +130,17 @@ void ProtocolSap::commandReceivedData(int id,int cmd,const QStringList &args)
 	  "\r\n";
 	sap_server->sendCommand(id,reply);
       }
+      // OFF Source
+      reply=QString().sprintf("    %d",config()->inputQuantity())+
+	"\t"+tr("*** OFF ***")+
+	"\t"+tr("*** OFF ***")+
+	"\t"+sap_lwrp->hostAddress().toString()+
+	"\t"+sap_lwrp->hostName()+
+	"\t"+QString().sprintf("%d",config()->inputQuantity())+
+	"\t0"+
+	"\t0.0.0.0"+
+	"\r\n";
+      sap_server->sendCommand(id,reply);
       sap_server->sendCommand(id,"End SourceNames - 1\r\n");
     }
     else {
@@ -158,7 +175,12 @@ void ProtocolSap::commandReceivedData(int id,int cmd,const QStringList &args)
       if(ok) {
 	input=args[2].toInt(&ok)-1;
 	if(ok) {
-	  emit crosspointChangeReceived(output,input);
+	  if(input>=config()->inputQuantity()) {
+	    emit crosspointChangeReceived(output,-1);
+	  }
+	  else {
+	    emit crosspointChangeReceived(output,input);
+	  }
 	}
 	else {
 	  sap_server->sendCommand(id,"Error\r\n");
