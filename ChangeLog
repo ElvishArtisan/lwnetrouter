@@ -173,3 +173,7 @@
 	* Tweaked latency parameters in 'src/tests/audio_delay_test.cpp'.
 2016-12-08 Fred Gleason <fredg@paravelsystems.com>
 	* Incremetned the package version to 0.6.4.
+2016-12-13 Fred Gleason <fredg@paravelsystems.com>
+	* Removed the hostname from the Software Authority Protocol long
+	Source and Destination name fields in
+	'src/lwnetrouterd/protocol_sap.cpp'.

@@ -115,7 +115,7 @@ void ProtocolSap::commandReceivedData(int id,int cmd,const QStringList &args)
       for(int i=0;i<config()->inputQuantity();i++) {
 	reply=QString().sprintf("    %d",i+1)+
 	  "\t"+sap_lwrp->dstName(i)+
-	  "\t"+sap_lwrp->dstName(i)+" ON "+sap_lwrp->hostName()+
+	  "\t"+sap_lwrp->dstName(i)+
 	  "\t"+sap_lwrp->hostAddress().toString()+
 	  "\t"+sap_lwrp->hostName()+
 	  "\t"+QString().sprintf("%d",i+1)+
@@ -137,7 +137,7 @@ void ProtocolSap::commandReceivedData(int id,int cmd,const QStringList &args)
       for(int i=0;i<config()->outputQuantity();i++) {
 	reply=QString().sprintf("    %d",i+1)+
 	  "\t"+sap_lwrp->srcName(i)+
-	  "\t"+sap_lwrp->srcName(i)+" ON "+sap_lwrp->hostName()+
+	  "\t"+sap_lwrp->srcName(i)+
 	  "\t"+sap_lwrp->hostAddress().toString()+
 	  "\t"+sap_lwrp->hostName()+
 	  "\t"+QString().sprintf("%d",i+1)+
