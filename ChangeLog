@@ -185,3 +185,6 @@
 2016-12-14 Fred Gleason <fredg@paravelsystems.com>
 	* Changed 'src/lwnetrouterd/protocol_gpio.cpp' to use the
 	'SyGpioServer::gpioReceived()' signal.
+2016-12-14 Fred Gleason <fredg@paravelsystems.com>
+	* Modified relay processing so as to require a GPIO source to be
+	one the list of input IP addresses in lwnetrouter.conf(5).

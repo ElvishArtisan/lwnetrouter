@@ -61,7 +61,7 @@ class RouterGpio : public Router
   void setDelayState(int input,Config::DelayState state,int msec);
 
  private slots:
-  void gpoReceivedData(int gpo,int line,bool state,bool pulse);
+  void gpioReceivedData(SyGpioEvent *e);
   void scanTimerData();
 
  private:

@@ -52,8 +52,8 @@ RouterGpio::RouterGpio(SyGpioServer *gpioserv,SyLwrpClient *lwrp,Config *c,
   // GPIO Server
   //
   gpio_server=gpioserv;
-  connect(gpio_server,SIGNAL(gpoReceived(int,int,bool,bool)),
-	  this,SLOT(gpoReceivedData(int,int,bool,bool)));
+  connect(gpio_server,SIGNAL(gpioReceived(SyGpioEvent *)),
+	  this,SLOT(gpioReceivedData(SyGpioEvent *)));
 
   for(int i=0;i<MAX_INPUTS;i++) {
     gpio_delay_states[i]=Config::DelayBypassed;
@@ -108,13 +108,14 @@ int RouterGpio::delayInterval(int input)
 }
 
 
-void RouterGpio::gpoReceivedData(int gpo,int line,bool state,bool pulse)
+void RouterGpio::gpioReceivedData(SyGpioEvent *e)
 {
-  //printf("gpoReceivedData(%d,%d,%d,%d)\n",gpo,line,state,pulse);
+  int input;
 
-  for(int i=0;i<config()->inputQuantity();i++) {
-    if(state&&(gpo==(int)SyRouting::livewireNumber(gpio_lwrp->dstAddress(i)))) {
-      sendRelay(i,line);
+  if((input=config()->input(e->originAddress()))>=0) {
+    if(e->state()&&(e->sourceNumber()==
+	      (int)SyRouting::livewireNumber(gpio_lwrp->dstAddress(input)))) {
+      sendRelay(input,e->line());
     }
   }
 }
