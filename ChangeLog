@@ -182,3 +182,6 @@
 2016-12-13 Fred Gleason <fredg@paravelsystems.com>
 	* Implemented persistent crosspoint and delay states in
 	lwnetrouterd(8).
+2016-12-14 Fred Gleason <fredg@paravelsystems.com>
+	* Changed 'src/lwnetrouterd/protocol_gpio.cpp' to use the
+	'SyGpioServer::gpioReceived()' signal.

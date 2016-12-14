@@ -25,8 +25,8 @@ ProtocolGpio::ProtocolGpio(SyGpioServer *gpioserv,Config *c,QObject *parent)
   : Protocol(c,parent)
 {
   gpio_server=gpioserv;
-  connect(gpio_server,SIGNAL(gpoReceived(int,int,bool,bool)),
-	  this,SLOT(gpoReceivedData(int,int,bool,bool)));
+  connect(gpio_server,SIGNAL(gpioReceived(SyGpioEvent *)),
+	  this,SLOT(gpioReceivedData(SyGpioEvent *)));
 
   gpio_dump_reset_mapper=new QSignalMapper(this);
   connect(gpio_dump_reset_mapper,SIGNAL(mapped(int)),
@@ -113,25 +113,28 @@ void ProtocolGpio::sendDelayDumped(int input)
 }
 
 
-void ProtocolGpio::gpoReceivedData(int gpo,int line,bool state,bool pulse)
+void ProtocolGpio::gpioReceivedData(SyGpioEvent *e)
 {
-  for(int i=0;i<config()->inputQuantity();i++) {
-    if((gpo==config()->inputDelayControlSource(i))&&state) {
-      switch(line) {
-      case 0:   // Dump
-	emit delayDumpReceived(i);
-	break;
+  if(e->type()==SyGpioEvent::TypeGpo) {
+    for(int i=0;i<config()->inputQuantity();i++) {
+      if((e->sourceNumber()==config()->inputDelayControlSource(i))&&
+	 e->state()) {
+	switch(e->line()) {
+	case 0:   // Dump
+	  emit delayDumpReceived(i);
+	  break;
 
-      case 1:   // Exit
-	emit delayStateChangeReceived(i,Config::DelayExiting);
-	break;
+	case 1:   // Exit
+	  emit delayStateChangeReceived(i,Config::DelayExiting);
+	  break;
 
-      case 2:   // Pause
-	break;
+	case 2:   // Pause
+	  break;
 
-      case 3:   // Engage
-	emit delayStateChangeReceived(i,Config::DelayEntering);
-	break;
+	case 3:   // Engage
+	  emit delayStateChangeReceived(i,Config::DelayEntering);
+	  break;
+	}
       }
     }
   }

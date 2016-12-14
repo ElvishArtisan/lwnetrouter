@@ -42,7 +42,8 @@ class ProtocolGpio : public Protocol
   void sendDelayDumped(int input);
 
  private slots:
-  void gpoReceivedData(int gpo,int line,bool state,bool pulse);
+  void gpioReceivedData(SyGpioEvent *e);
+  //  void gpoReceivedData(int gpo,int line,bool state,bool pulse);
   void dumpResetData(int input);
 
  private:
