@@ -179,3 +179,6 @@
 	'src/lwnetrouterd/protocol_sap.cpp'.
 2016-12-13 Fred Gleason <fredg@paravelsystems.com>
 	* Implemented an 'OFF' source in 'src/lwnetrouterd/protocol_sap.cpp'.
+2016-12-13 Fred Gleason <fredg@paravelsystems.com>
+	* Implemented persistent crosspoint and delay states in
+	lwnetrouterd(8).

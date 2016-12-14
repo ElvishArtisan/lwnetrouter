@@ -36,6 +36,7 @@
 #include "router_cic.h"
 #include "router_gpio.h"
 #include "router_hpiaudio.h"
+#include "state.h"
 
 #define LWNETROUTERD_USAGE "[options]\n"
 
@@ -49,6 +50,7 @@ class MainObject : public QObject
   void cuncDelayStateRequestedData(int id,int input);
   void cuncInputNameRequestedData(int id,int input);
   void sapCrosspointRequestedData(int id,int output);
+  void delayStateChangedData(int input,Config::DelayState state,int msec);
   void exitData();
 
  private:
@@ -64,6 +66,7 @@ class MainObject : public QObject
   SyLwrpClient *main_lwrp;
   QTimer *main_exit_timer;
   Config *main_config;
+  State *main_state;
 };
 
 

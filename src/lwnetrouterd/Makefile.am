@@ -43,6 +43,7 @@ dist_lwnetrouterd_SOURCES = delaycontrol.cpp delaycontrol.h\
                             router_cic.cpp router_cic.h\
                             router_gpio.cpp router_gpio.h\
                             router_hpiaudio.cpp router_hpiaudio.h\
+                            state.cpp state.h\
                             streamcmdserver.cpp streamcmdserver.h\
                             ttydevice.cpp ttydevice.h
 
@@ -59,6 +60,7 @@ nodist_lwnetrouterd_SOURCES = config.cpp config.h\
                               moc_router_cic.cpp\
                               moc_router_gpio.cpp\
                               moc_router_hpiaudio.cpp\
+                              moc_state.cpp\
                               moc_streamcmdserver.cpp\
                               moc_ttydevice.cpp
 

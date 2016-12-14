@@ -57,6 +57,9 @@ MainObject::MainObject(QObject *parent)
 
   main_config=new Config();
 
+  main_state=new State();
+  main_state->load();
+
   //
   // Open the Syslog
   //
@@ -81,6 +84,10 @@ MainObject::MainObject(QObject *parent)
   // Routers
   //
   main_audio_router=new RouterHpiAudio(main_config,this);
+  connect(main_audio_router,
+	  SIGNAL(delayStateChanged(int,Config::DelayState,int)),
+	  this,
+	  SLOT(delayStateChangedData(int,Config::DelayState,int)));
 
   main_gpio_router=new RouterGpio(main_gpio,main_lwrp,main_config,this);
   connect(main_audio_router,
@@ -108,6 +115,8 @@ MainObject::MainObject(QObject *parent)
 	  main_gpio_router,SLOT(setCrossPoint(int,int)));
   connect(main_rml_protocol,SIGNAL(crosspointChangeReceived(int,int)),
 	  main_breakaway_router,SLOT(setCrossPoint(int,int)));
+  connect(main_rml_protocol,SIGNAL(crosspointChangeReceived(int,int)),
+	  main_state,SLOT(setCrossPoint(int,int)));
   connect(main_rml_protocol,SIGNAL(relayReceived(int,int)),
 	  main_gpio_router,SLOT(sendRelay(int,int)));
   connect(main_rml_protocol,SIGNAL(breakawayReceived(int,int)),
@@ -120,6 +129,8 @@ MainObject::MainObject(QObject *parent)
 	  main_gpio_router,SLOT(setCrossPoint(int,int)));
   connect(main_sap_protocol,SIGNAL(crosspointChangeReceived(int,int)),
 	  main_breakaway_router,SLOT(setCrossPoint(int,int)));
+  connect(main_sap_protocol,SIGNAL(crosspointChangeReceived(int,int)),
+	  main_state,SLOT(setCrossPoint(int,int)));
   connect(main_sap_protocol,SIGNAL(crosspointRequested(int,int)),
 	  this,SLOT(sapCrosspointRequestedData(int,int)));
   connect(main_audio_router,SIGNAL(crossPointChanged(int,int)),
@@ -161,6 +172,16 @@ MainObject::MainObject(QObject *parent)
   main_exit_timer=new QTimer(this);
   connect(main_exit_timer,SIGNAL(timeout()),this,SLOT(exitData()));
   main_exit_timer->start(500);
+
+  //
+  // Initialize State
+  //
+  for(int i=0;i<main_config->outputQuantity();i++) {
+    main_audio_router->setCrossPoint(i,main_state->crossPoint(i));
+    main_cic_router->setCrossPoint(i,main_state->crossPoint(i));
+    main_gpio_router->setCrossPoint(i,main_state->crossPoint(i));
+    main_breakaway_router->setCrossPoint(i,main_state->crossPoint(i));
+  }
 }
 
 
@@ -188,6 +209,33 @@ void MainObject::sapCrosspointRequestedData(int id,int output)
   else {
     main_sap_protocol->
       sendCrossPoint(id,output,main_audio_router->crossPoint(output));
+  }
+}
+
+
+void MainObject::delayStateChangedData(int input,Config::DelayState state,
+				       int msec)
+{
+  if(main_state->delayInitialized(input)) {
+    switch(state) {
+    case Config::DelayUnknown:
+    case Config::DelayBypassed:
+    case Config::DelayExiting:
+    case Config::DelayExited:
+      main_state->setDelayActive(input,false);
+      break;
+      
+    case Config::DelayEntering:
+    case Config::DelayEntered:
+      main_state->setDelayActive(input,true);
+      break;
+    }
+  }
+  else {
+    if(main_state->delayActive(input)) {
+      main_audio_router->setDelayState(input,Config::DelayEntering);
+    }
+    main_state->setDelayInitialized(input);
   }
 }
 
