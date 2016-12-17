@@ -24,7 +24,6 @@
 
 #include <queue>
 
-#include <QByteArray>
 #include <QDateTime>
 #include <QTimer>
 #include <QUdpSocket>
@@ -34,13 +33,13 @@
 class RouterCicEvent
 {
  public:
-  RouterCicEvent(const QByteArray &data);
+  RouterCicEvent(const QString &isci);
   QDateTime timestamp() const;
-  QByteArray data() const;
+  QString isciCode() const;
 
  private:
   QDateTime evt_timestamp;
-  QByteArray evt_data;
+  QString evt_isci_code;
 };
 
 
@@ -61,7 +60,7 @@ class RouterCic : public Router
   void scanTimerData();
 
  private:
-  void SendPacket(int input,const QByteArray &data);
+  void SendPacket(int input,const QString &cic);
   QUdpSocket *cic_socket;
   QTimer *cic_scan_timer;
   Config::DelayState cic_delay_states[MAX_INPUTS];

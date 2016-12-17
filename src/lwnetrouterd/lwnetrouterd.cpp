@@ -130,6 +130,8 @@ MainObject::MainObject(QObject *parent)
   connect(main_sap_protocol,SIGNAL(crosspointChangeReceived(int,int)),
 	  main_breakaway_router,SLOT(setCrossPoint(int,int)));
   connect(main_sap_protocol,SIGNAL(crosspointChangeReceived(int,int)),
+	  main_cic_router,SLOT(setCrossPoint(int,int)));
+  connect(main_sap_protocol,SIGNAL(crosspointChangeReceived(int,int)),
 	  main_state,SLOT(setCrossPoint(int,int)));
   connect(main_sap_protocol,SIGNAL(crosspointRequested(int,int)),
 	  this,SLOT(sapCrosspointRequestedData(int,int)));

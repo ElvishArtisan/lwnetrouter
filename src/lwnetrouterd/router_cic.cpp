@@ -21,12 +21,14 @@
 
 #include <syslog.h>
 
+#include <QStringList>
+
 #include "router_cic.h"
 
-RouterCicEvent::RouterCicEvent(const QByteArray &data)
+RouterCicEvent::RouterCicEvent(const QString &isci)
 {
   evt_timestamp=QDateTime::currentDateTime();
-  evt_data=data;
+  evt_isci_code=isci;
 }
 
 
@@ -36,9 +38,9 @@ QDateTime RouterCicEvent::timestamp() const
 }
 
 
-QByteArray RouterCicEvent::data() const
+QString RouterCicEvent::isciCode() const
 {
-  return evt_data;
+  return evt_isci_code;
 }
 
 
@@ -94,7 +96,11 @@ void RouterCic::readyReadData()
 
   while((n=cic_socket->readDatagram(data,1500,&addr,&port))>0) {
     if((input=config()->input(addr))>=0) {
-      cic_events[input].push(new RouterCicEvent(QByteArray(data,n)));
+      data[n]=0;
+      QStringList f0=QString(data).split(":",QString::KeepEmptyParts);
+      if((f0.size()==4)&&(f0.at(0)=="0")&&(f0.at(3)=="*")) {
+	cic_events[input].push(new RouterCicEvent(f0.at(2)));
+      }
     }
   }
 }
@@ -107,7 +113,12 @@ void RouterCic::scanTimerData()
     while((cic_events[i].size()>0)&&
 	  (cic_events[i].front()->
 	   timestamp().addMSecs(cic_delay_intervals[i])<=now)) {
-      SendPacket(i,cic_events[i].front()->data());
+      for(int j=0;j<config()->outputQuantity();j++) {
+	if((crossPoint(j)==i)&&(!config()->outputCicProgramCode(j).isEmpty())) {
+	  SendPacket(i,"0:"+config()->outputCicProgramCode(j)+":"+
+		     cic_events[i].front()->isciCode()+":*");
+	}
+      }
       delete cic_events[i].front();
       cic_events[i].pop();
     }
@@ -115,14 +126,14 @@ void RouterCic::scanTimerData()
 }
 
 
-void RouterCic::SendPacket(int input,const QByteArray &data)
+void RouterCic::SendPacket(int input,const QString &cic)
 {
   QList<QHostAddress> cic_addrs=config()->cicIpAddresses();
 
   for(int i=0;i<cic_addrs.size();i++) {
-    cic_socket->writeDatagram(data,cic_addrs.at(i),config()->cicPort());
+    cic_socket->writeDatagram(cic.toUtf8(),cic_addrs.at(i),config()->cicPort());
     syslog(LOG_DEBUG,"sent CIC \"%s\" from input %d to %s:%u",
-	   data.constData(),input+1,
+	   (const char *)cic.toUtf8(),input+1,
 	   (const char *)cic_addrs.at(i).toString().toAscii(),
 	   0xFFFF&config()->cicPort());
   }

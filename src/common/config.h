@@ -82,6 +82,7 @@ class Config
   int inputDelayChangePercent(int input) const;
   int inputDelayControlSource(int input) const;
   int input(const QHostAddress &addr);
+  QString outputCicProgramCode(int output) const;
   QHostAddress outputBreakawayIpAddress(int output) const;
   int outputBreakawaySlotNumber(int output) const;
   QString outputNetcue(int output,int line) const;
@@ -106,6 +107,7 @@ class Config
   int conf_input_delay_change_percent[MAX_INPUTS];
   int conf_input_delay_control_sources[MAX_INPUTS];
   QList<QHostAddress> conf_input_addresses[MAX_INPUTS];
+  QString conf_output_cic_program_codes[MAX_INPUTS];
   QHostAddress conf_output_breakaway_ip_addresses[MAX_OUTPUTS];
   int conf_output_breakaway_slot_numbers[MAX_OUTPUTS];
   QString conf_output_netcues[MAX_OUTPUTS][SWITCHYARD_GPIO_BUNDLE_SIZE];

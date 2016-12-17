@@ -100,6 +100,7 @@ Config::Config()
   //
   for(int i=0;i<MAX_OUTPUTS;i++) {
     QString section=QString().sprintf("Output%d",i+1);
+    conf_output_cic_program_codes[i]=p->stringValue(section,"CicProgramCode");
     for(int j=0;j<SWITCHYARD_GPIO_BUNDLE_SIZE;j++) {
       conf_output_breakaway_ip_addresses[i]=
 	p->addressValue(section,"BreakawayIpAddress","");
@@ -224,6 +225,12 @@ int Config::input(const QHostAddress &addr)
     }
   }
   return -1;
+}
+
+
+QString Config::outputCicProgramCode(int output) const
+{
+  return conf_output_cic_program_codes[output];
 }
 
 
