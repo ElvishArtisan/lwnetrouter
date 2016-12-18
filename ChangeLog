@@ -191,3 +191,5 @@
 2016-12-17 Fred Gleason <fredg@paravelsystems.com>
 	* Added a 'CicProgramCode=' directive to the [Outputs] section of
 	lwnetrouter.conf(5).
+2016-12-18 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed an error in the installation location for icons.

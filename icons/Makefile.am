@@ -21,11 +21,11 @@
 ## Use automake to process this into a Makefile.in
 
 install-exec-am:	
-	mkdir -p $(DESTDIR)@prefix@/share/icons/48x48/apps
-	cp lwnetdelay-48x48.png $(DESTDIR)@prefix@/share/icons/48x48/apps/lwnetdelay.png
+	mkdir -p $(DESTDIR)@prefix@/share/icons/hicolor/48x48/apps
+	cp lwnetdelay-48x48.png $(DESTDIR)@prefix@/share/icons/hicolor/48x48/apps/lwnetdelay.png
 
 uninstall-local:	
-	rm -f $(DESTDIR)@prefix@/share/icons/48x48/apps/lwnetdelay
+	rm -f $(DESTDIR)@prefix@/share/icons/hicolor/48x48/apps/lwnetdelay
 
 EXTRA_DIST = lwnetdelay-16x16.xpm\
              lwnetdelay-48x48.png\
