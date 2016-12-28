@@ -88,6 +88,13 @@ Config::Config()
     while(ok) {
       addr=p->addressValue(section,QString().sprintf("SourceIpAddress%d",
 						     count+1),"",&ok);
+      for(int j=0;j<=i;j++) {   // Check for duplicates
+	if(conf_input_addresses[j].contains(addr)) {
+	  fprintf(stderr,"lwnetrouterd: duplicate SourceIpAddress entry \"%s\" in [Input%d] and [Input%d]\n",
+		  (const char *)addr.toString().toUtf8(),j+1,i+1);
+	  exit(256);
+	}
+      }
       if(ok) {
 	conf_input_addresses[i].push_back(addr);
       }

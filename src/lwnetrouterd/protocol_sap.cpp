@@ -119,16 +119,18 @@ void ProtocolSap::commandReceivedData(int id,int cmd,const QStringList &args)
     if(args.at(0).toInt()==1) {
       sap_server->sendCommand(id,"Begin SourceNames - 1\r\n");
       for(int i=0;i<config()->inputQuantity();i++) {
-	reply=QString().sprintf("    %d",i+1)+
-	  "\t"+sap_lwrp->dstName(i)+
-	  "\t"+sap_lwrp->dstName(i)+
-	  "\t"+sap_lwrp->hostAddress().toString()+
-	  "\t"+sap_lwrp->hostName()+
-	  "\t"+QString().sprintf("%d",i+1)+
-	  "\t"+QString().sprintf("%u",SyRouting::livewireNumber(sap_lwrp->dstAddress(i)))+
-	  "\t"+sap_lwrp->dstAddress(i).toString()+
-	  "\r\n";
-	sap_server->sendCommand(id,reply);
+	if(i<(int)sap_lwrp->dstSlots()) {
+	  reply=QString().sprintf("    %d",i+1)+
+	    "\t"+sap_lwrp->dstName(i)+
+	    "\t"+sap_lwrp->dstName(i)+
+	    "\t"+sap_lwrp->hostAddress().toString()+
+	    "\t"+sap_lwrp->hostName()+
+	    "\t"+QString().sprintf("%d",i+1)+
+	    "\t"+QString().sprintf("%u",SyRouting::livewireNumber(sap_lwrp->dstAddress(i)))+
+	    "\t"+sap_lwrp->dstAddress(i).toString()+
+	    "\r\n";
+	  sap_server->sendCommand(id,reply);
+	}
       }
       // OFF Source
       reply=QString().sprintf("    %d",config()->inputQuantity())+
@@ -152,14 +154,16 @@ void ProtocolSap::commandReceivedData(int id,int cmd,const QStringList &args)
     if(args.at(0).toInt()==1) {
       sap_server->sendCommand(id,"Begin DestNames - 1\r\n");
       for(int i=0;i<config()->outputQuantity();i++) {
-	reply=QString().sprintf("    %d",i+1)+
-	  "\t"+sap_lwrp->srcName(i)+
-	  "\t"+sap_lwrp->srcName(i)+
-	  "\t"+sap_lwrp->hostAddress().toString()+
-	  "\t"+sap_lwrp->hostName()+
-	  "\t"+QString().sprintf("%d",i+1)+
-	  "\r\n";
-	sap_server->sendCommand(id,reply);
+	if(i<(int)sap_lwrp->srcSlots()) {
+	  reply=QString().sprintf("    %d",i+1)+
+	    "\t"+sap_lwrp->srcName(i)+
+	    "\t"+sap_lwrp->srcName(i)+
+	    "\t"+sap_lwrp->hostAddress().toString()+
+	    "\t"+sap_lwrp->hostName()+
+	    "\t"+QString().sprintf("%d",i+1)+
+	    "\r\n";
+	  sap_server->sendCommand(id,reply);
+	}
       }
       sap_server->sendCommand(id,"End DestNames - 1\r\n");
     }

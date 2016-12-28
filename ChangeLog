@@ -195,3 +195,10 @@
 	* Fixed an error in the installation location for icons.
 2016-12-26 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the package version to 0.9.0.
+2016-12-28 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a bug in 'src/lwnetrouterd/protocol_sap.cpp' that caused
+	a segfault when the LiveWire device specified in
+	'AdapterIpAddress=' had fewer destination slots than specified in the
+	'InputQuantity=' parameter.
+	* Added a sanity check in 'src/common/config.cpp' against duplicate
+	'SourceIpAddress<n>=' values.
