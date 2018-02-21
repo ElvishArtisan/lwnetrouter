@@ -206,3 +206,6 @@
 	* Added support for the SA command 'Snapshots'.
 	* Changed the name of the Livewire router from 'Livewire Audio'
 	to 'Livewire_Audio'.
+2018-02-21 Fred Gleason <fredg@paravelsystems.com>
+	* Changed the legend of the 'OFF' source from '*** OFF ***' to
+	'--OFF--'.

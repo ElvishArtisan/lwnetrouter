@@ -148,8 +148,8 @@ void ProtocolSap::commandReceivedData(int id,int cmd,const QStringList &args)
       }
       // OFF Source
       reply=QString().sprintf("    %d",config()->inputQuantity())+
-	"\t"+tr("*** OFF ***")+
-	"\t"+tr("*** OFF ***")+
+	"\t"+tr("--OFF--")+
+	"\t"+tr("--OFF--")+
 	"\t"+sap_lwrp->hostAddress().toString()+
 	"\t"+sap_lwrp->hostName()+
 	"\t"+QString().sprintf("%d",config()->inputQuantity())+
