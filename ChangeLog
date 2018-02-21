@@ -209,3 +209,6 @@
 2018-02-21 Fred Gleason <fredg@paravelsystems.com>
 	* Changed the legend of the 'OFF' source from '*** OFF ***' to
 	'--OFF--'.
+2018-02-21 Fred Gleason <fredg@paravelsystems.com>
+	* Updated 'NEWS'.
+	* Incremented the package version to 1.0.0.
