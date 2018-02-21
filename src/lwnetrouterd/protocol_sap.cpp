@@ -2,7 +2,7 @@
 //
 // Software Authority protocol driver
 //
-//   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2018 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License as
@@ -65,6 +65,10 @@ ProtocolSap::ProtocolSap(SyLwrpClient *lwrp,Config *c,QObject *parent)
   upper_limits[ProtocolSap::RouteStat]=2;
   lower_limits[ProtocolSap::RouteStat]=1;
 
+  cmds[ProtocolSap::Snapshots]="Snapshots";
+  upper_limits[ProtocolSap::Snapshots]=1;
+  lower_limits[ProtocolSap::Snapshots]=1;
+
   sap_server=
     new StreamCmdServer(cmds,upper_limits,lower_limits,server,this);
   connect(sap_server,SIGNAL(commandReceived(int,int,const QStringList &)),
@@ -111,8 +115,18 @@ void ProtocolSap::commandReceivedData(int id,int cmd,const QStringList &args)
 
   case ProtocolSap::RouterNames:
     sap_server->sendCommand(id,"Begin RouterNames\r\n");
-    sap_server->sendCommand(id,"    1 LiveWire Audio\r\n");
+    sap_server->sendCommand(id,"    1 LiveWire_Audio\r\n");
     sap_server->sendCommand(id,"End RouterNames\r\n");
+    break;
+
+  case ProtocolSap::Snapshots:
+    if(args.at(0).toInt()==1) {
+      sap_server->sendCommand(id,"Begin SnapshotNames - 1\r\n");
+      sap_server->sendCommand(id,"End SnapshotNames - 1\r\n");
+    }
+    else {
+      sap_server->sendCommand(id,"Error - Bay Does Not exist.\r\n");
+    }
     break;
 
   case ProtocolSap::SourceNames:

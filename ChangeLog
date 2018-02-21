@@ -202,3 +202,7 @@
 	'InputQuantity=' parameter.
 	* Added a sanity check in 'src/common/config.cpp' against duplicate
 	'SourceIpAddress<n>=' values.
+2018-02-21 Fred Gleason <fredg@paravelsystems.com>
+	* Added support for the SA command 'Snapshots'.
+	* Changed the name of the Livewire router from 'Livewire Audio'
+	to 'Livewire_Audio'.

@@ -2,7 +2,7 @@
 //
 // Software Authority protocol driver
 //
-//   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2018 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License as
@@ -45,7 +45,7 @@ class ProtocolSap : public Protocol
 
  private:
   enum Commands {Login=0,Exit=1,RouterNames=2,SourceNames=3,DestNames=4,
-		 ActivateRoute=5,RouteStat=6};
+		 ActivateRoute=5,RouteStat=6,Snapshots=7};
   StreamCmdServer *sap_server;
   SyLwrpClient *sap_lwrp;
 };
