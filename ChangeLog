@@ -215,3 +215,6 @@
 2018-02-27 Fred Gleason <fredg@paravelsystems.com>
 	* Fixed a bug in lwnetrouterd(8) that caused the 'OFF' source to
 	not be advertised correctly via SA protocol.
+2018-02-27 Fred Gleason <fredg@paravelsystems.com>
+	* Updated 'NEWS'.
+	* Incremented the package version to 1.0.1.

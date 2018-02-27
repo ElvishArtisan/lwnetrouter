@@ -1,6 +1,11 @@
 The NEWS file for the lwnetrouter package.
 
 -------------------------------------------------------------------------------
+v1.0.1 - 02/27/2018
+
+Bugfixes. See the ChangeLog for details.
+
+-------------------------------------------------------------------------------
 v1.0.0 - 02/21/2018
 
 The first production release.
