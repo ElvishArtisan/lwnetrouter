@@ -95,7 +95,7 @@ void *__AudioCallback(void *ptr)
   static RouterHpiAudio *rha=(RouterHpiAudio *)ptr;
   static uint16_t in_state;
   static uint32_t in_buffer_size;
-  static uint32_t in_data_len;
+  static uint32_t in_data_len[MAX_INPUTS];
   static uint32_t in_frame_len;
   static uint32_t in_aux_len;
   static uint16_t out_state;
@@ -133,21 +133,21 @@ void *__AudioCallback(void *ptr)
     //
     // Process Inputs
     //
-    in_data_len=0;
-    HpiError(HPI_InStreamGetInfoEx(NULL,rha->hpi_input_streams[0],&in_state,
-				   &in_buffer_size,&in_data_len,&in_frame_len,
-				   &in_aux_len));
     for(i=0;i<inputs;i++) {
+      in_data_len[i]=0;
+      HpiError(HPI_InStreamGetInfoEx(NULL,rha->hpi_input_streams[0],&in_state,
+				     &in_buffer_size,&in_data_len[i],
+				     &in_frame_len,&in_aux_len));
       HpiError(HPI_InStreamReadBuf(NULL,rha->hpi_input_streams[i],
-				   (uint8_t *)pcm,in_data_len));
-      rb[i]->write(pcm,in_data_len);
+				   (uint8_t *)pcm,in_data_len[i]));
+      rb[i]->write(pcm,in_data_len[i]);
     }
  
     //
     // Process Outputs
     //
-    if(in_data_len>0) {
-      for(i=0;i<inputs;i++) {
+    for(i=0;i<inputs;i++) {
+      if(in_data_len[i]>0) {
 	//
 	// Process Dump
 	//
@@ -386,7 +386,7 @@ void RouterHpiAudio::dumpDelay(int input)
   if(delayInterval(input)>0) {
     delay_dump[input]=true;
     emit delayDumped(input);
-    syslog(LOG_DEBUG,"delay %d DUMPED",input+1);
+    syslog(LOG_DEBUG,"delay %d DUMPED [hpiaudio]",input+1);
   }
 }
 
@@ -395,7 +395,7 @@ void RouterHpiAudio::scanTimerData()
 {
   for(int i=0;i<config()->inputQuantity();i++) {
     if(hpi_delay_state[i]!=delay_state_taken[i]) {
-      syslog(LOG_DEBUG,"delay %d changing to state %s",i+1,
+      syslog(LOG_DEBUG,"delay %d changing to state %s [hpiaudio]",i+1,
 	     (const char *)Config::delayStateText(delay_state_taken[i]).
 	     toUpper().toUtf8());
     }
@@ -414,7 +414,7 @@ void RouterHpiAudio::crossPointSet(int output,int input)
   short on_gain[HPI_MAX_CHANNELS]={0,0};
   short off_gain[HPI_MAX_CHANNELS]={-10000,-10000};
 
-  syslog(LOG_DEBUG,"set output %d to input %d",output+1,input+1);
+  syslog(LOG_DEBUG,"set output %d to input %d [hpiaudio]",output+1,input+1);
   for(int i=0;i<config()->inputQuantity();i++) {
     HpiError(HPI_VolumeSetGain(NULL,hpi_output_volumes[i][output],off_gain));
   }
