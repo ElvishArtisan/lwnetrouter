@@ -2,7 +2,7 @@
 //
 // Protocol driver for the Cuntator Delay Control System
 //
-//   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2022 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License as
@@ -111,36 +111,41 @@ void ProtocolCunc::sendDelayDumped(int input)
 
 void ProtocolCunc::commandReceivedData(int id,int cmd,const QStringList &args)
 {
+  //
+  // MAINTAINER'S NOTE: For a description of this protocol, see
+  //                    'docs/protocol.odt' in the
+  //                    https://github.com/ElvishArtisan/cunctator repo.
+  //
   QStringList reply;
   unsigned input;
   bool ok=false;
   Config::DelayState state;
 
   switch((ProtocolCunc::Commands)cmd) {
-  case ProtocolCunc::DC:
+  case ProtocolCunc::DC:  // Drop Connection
     cunc_server->closeConnection(id);
     break;
 
-  case ProtocolCunc::DQ:
+  case ProtocolCunc::DQ:  // List Delay Quantity
     reply.push_back(QString().sprintf("%d",config()->inputQuantity()));
     cunc_server->sendCommand(id,cmd,reply);
     break;
 
-  case ProtocolCunc::DM:
+  case ProtocolCunc::DM:  // Get Delay Model
     input=args.at(0).toUInt(&ok)-1;
     if(ok&&(input<(unsigned)config()->inputQuantity())) {
       emit inputNameRequested(id,input);
     }
     break;
 
-  case ProtocolCunc::DS:
+  case ProtocolCunc::DS:  // Get Delay State
     input=args.at(0).toUInt(&ok)-1;
     if(ok&&(input<(unsigned)config()->inputQuantity())) {
       emit delayStateRequested(id,input);
     }
     break;
 
-  case ProtocolCunc::SS:
+  case ProtocolCunc::SS:  // Set Delay State
     input=args.at(0).toUInt(&ok)-1;
     if(ok&&(input<(unsigned)config()->inputQuantity())) {
       state=(Config::DelayState)args.at(1).toUInt(&ok);
@@ -150,12 +155,11 @@ void ProtocolCunc::commandReceivedData(int id,int cmd,const QStringList &args)
     }
     break;
 
-  case ProtocolCunc::DP:
+  case ProtocolCunc::DP:  // Dump Delay
     input=args.at(0).toUInt(&ok)-1;
     if(ok&&(input<(unsigned)config()->inputQuantity())) {
       emit delayDumpReceived(input);
     }
-    break;
     break;
   }
 }
