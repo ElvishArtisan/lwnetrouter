@@ -2,7 +2,7 @@
 //
 // RML protocol for lwnetrouterd(8)
 //
-//   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License as
@@ -61,7 +61,7 @@ void ProtocolRml::readyReadData()
 
 void ProtocolRml::ProcessCommand(const QString &cmd)
 {
-  QStringList cmds=cmd.split(" ",QString::SkipEmptyParts);
+  QStringList cmds=cmd.split(" ",Qt::SkipEmptyParts);
   bool ok=false;
 
   if((cmds.at(0)=="DX")&&(cmds.size()==3)) {

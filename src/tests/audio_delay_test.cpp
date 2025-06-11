@@ -2,7 +2,7 @@
 //
 // Test delay intervals of LiveWire Audio
 //
-//   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License as
@@ -24,7 +24,7 @@
 
 #include <QCoreApplication>
 
-#include <sy/sycmdswitch.h>
+#include <sy6/sycmdswitch.h>
 
 #include "audio_delay_test.h"
 
@@ -95,9 +95,9 @@ MainObject::MainObject(QObject *parent)
 {
   test_alsa_device="hw:0";
 
-  SyCmdSwitch *cmd=new SyCmdSwitch(qApp->argc(),qApp->argv(),"audio_delay_test",
-				   VERSION,AUDIO_DELAY_TEST_USAGE);
-  for(unsigned i=0;i<cmd->keys();i++) {
+  SyCmdSwitch *cmd=
+    new SyCmdSwitch("audio_delay_test",VERSION,AUDIO_DELAY_TEST_USAGE);
+  for(int i=0;i<cmd->keys();i++) {
     if(cmd->key(i)=="--alsa-device") {
       test_alsa_device=cmd->value(i);
       cmd->setProcessed(i,true);

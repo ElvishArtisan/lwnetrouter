@@ -2,7 +2,7 @@
 //
 // Utility for controlling broadcast delays.
 //
-//   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -25,7 +25,7 @@
 #include <QMessageBox>
 #include <QPixmap>
 
-#include <sy/sycmdswitch.h>
+#include <sy6/sycmdswitch.h>
 
 #include "config.h"
 #include "lwnetdelay.h"
@@ -47,9 +47,8 @@ QString hostname="localhost";
   //
   // Read Command Options
   //
-  SyCmdSwitch *cmd=
-    new SyCmdSwitch(qApp->argc(),qApp->argv(),"cunc",VERSION,LWNETDELAY_USAGE);
-  for(unsigned i=0;i<cmd->keys();i++) {
+  SyCmdSwitch *cmd=new SyCmdSwitch("cunc",VERSION,LWNETDELAY_USAGE);
+  for(int i=0;i<cmd->keys();i++) {
     if(cmd->key(i)=="--hostname") {
       hostname=cmd->value(i);
       cmd->setProcessed(i,true);
@@ -161,21 +160,21 @@ QSizePolicy MainWidget::sizePolicy() const
 
 void MainWidget::enterPushed()
 {
-  SendCommand(QString().sprintf("SS %u %u",cunc_delay_id,
+  SendCommand(QString::asprintf("SS %u %u",cunc_delay_id,
 				Config::DelayEntering));
 }
 
 
 void MainWidget::exitPushed()
 {
-  SendCommand(QString().sprintf("SS %u %u",cunc_delay_id,
+  SendCommand(QString::asprintf("SS %u %u",cunc_delay_id,
 				Config::DelayExiting));
 }
 
 
 void MainWidget::dumpPushed()
 {
-  SendCommand(QString().sprintf("DP %u",cunc_delay_id));
+  SendCommand(QString::asprintf("DP %u",cunc_delay_id));
 }
 
 
@@ -187,8 +186,8 @@ void MainWidget::dumpFlashResetData()
 
 void MainWidget::socketConnectedData()
 {
-  SendCommand(QString().sprintf("DM %u",cunc_delay_id));
-  SendCommand(QString().sprintf("DS %u",cunc_delay_id));
+  SendCommand(QString::asprintf("DM %u",cunc_delay_id));
+  SendCommand(QString::asprintf("DS %u",cunc_delay_id));
 }
 
 
@@ -224,7 +223,7 @@ void MainWidget::readyReadData()
 void MainWidget::errorData(QAbstractSocket::SocketError err)
 {
   QString msg=tr("Received network socket error")+
-    QString().sprintf(" %d.",err);
+    QString::asprintf(" %d.",err);
 
   switch(err) {
   case QAbstractSocket::ConnectionRefusedError:
@@ -314,7 +313,7 @@ void MainWidget::ProcessCommand(const QString &msg)
       return;
     }
     cunc_delay_label->
-      setText(QString().sprintf("%4.1f",(float)delay_len/1000.0));
+      setText(QString::asprintf("%4.1f",(float)delay_len/1000.0));
   
     if(!cunc_dump_timer->isActive()) {
       if(delay_len>=cunc_safe_delay) {
@@ -360,7 +359,7 @@ void MainWidget::ProcessCommand(const QString &msg)
 
 void MainWidget::SendCommand(const QString &msg)
 {
-  cunc_socket->write((msg+"\r\n").toAscii());
+  cunc_socket->write((msg+"\r\n").toUtf8());
 }
 
 

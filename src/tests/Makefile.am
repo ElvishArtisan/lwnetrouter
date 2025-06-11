@@ -1,8 +1,8 @@
-## automake.am
+## Makefile.am
 ##
-## Automake.am for src/tests
+## Makefile.am for src/tests
 ##
-##   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
+##   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 ##
 ##   This program is free software; you can redistribute it and/or modify
 ##   it under the terms of the GNU General Public License version 2 as
@@ -19,8 +19,8 @@
 ##
 ## Use automake to process this into a Makefile.in
 
-AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -Wno-strict-aliasing @QT4CLI_CFLAGS@ @SWITCHYARD_CFLAGS@ @ALSA_CFLAGS@
-MOC = @QT4_MOC@
+AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -std=c++17 -fPIC -Wno-strict-aliasing @QT6_CFLAGS@ @SWITCHYARD6_CFLAGS@ @ALSA_CFLAGS@
+MOC = @QT6_MOC@
 
 # The dependency for qt's Meta Object Compiler (moc)
 moc_%.cpp:	%.h
@@ -31,11 +31,11 @@ noinst_PROGRAMS = audio_delay_test\
 
 dist_audio_delay_test_SOURCES = audio_delay_test.cpp audio_delay_test.h
 nodist_audio_delay_test_SOURCES = moc_audio_delay_test.cpp
-audio_delay_test_LDADD = @QT4CLI_LIBS@ @SWITCHYARD_LIBS@ @ALSA_LIBS@ -lpthread
+audio_delay_test_LDADD = @SWITCHYARD6_LIBS@ @ALSA_LIBS@ -lpthread @QT6_LIBS@
 
 dist_gpio_delay_test_SOURCES = gpio_delay_test.cpp gpio_delay_test.h
 nodist_gpio_delay_test_SOURCES = moc_gpio_delay_test.cpp
-gpio_delay_test_LDADD = @QT4CLI_LIBS@ @SWITCHYARD_LIBS@
+gpio_delay_test_LDADD = @SWITCHYARD6_LIBS@ @QT6_LIBS@
 
 CLEANFILES = *~ moc_* *.qm *.obj *.idb *.pdb *ilk
 

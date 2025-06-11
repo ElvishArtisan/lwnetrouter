@@ -2,7 +2,7 @@
 //
 // LiveWire GPIO router.
 //
-//   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License as
@@ -27,8 +27,8 @@
 #include <QDateTime>
 #include <QTimer>
 
-#include <sy/sygpio_server.h>
-#include <sy/sylwrp_client.h>
+#include <sy6/sygpio_server.h>
+#include <sy6/sylwrp_client.h>
 
 #include "router.h"
 #include "ttydevice.h"

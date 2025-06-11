@@ -2,7 +2,7 @@
 //
 // Controller for a delay device via LiveWire GPIO
 //
-//   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License as
@@ -25,7 +25,7 @@
 #include <QObject>
 #include <QTimer>
 
-#include <sy/sygpio_server.h>
+#include <sy6/sygpio_server.h>
 
 class DelayControl : public QObject
 {

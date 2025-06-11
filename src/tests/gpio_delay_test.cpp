@@ -2,7 +2,7 @@
 //
 // Test delay intervals of LiveWire GPIO events
 //
-//   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License as
@@ -23,20 +23,20 @@
 
 #include <QCoreApplication>
 
-#include <sy/sycmdswitch.h>
+#include <sy6/sycmdswitch.h>
 
 #include "gpio_delay_test.h"
 
 MainObject::MainObject(QObject *parent)
   : QObject(parent)
 {
-  SyCmdSwitch *cmd=new SyCmdSwitch(qApp->argc(),qApp->argv(),"gpio_delay_test",
-				   VERSION,GPIO_DELAY_TEST_USAGE);
+  SyCmdSwitch *cmd=
+    new SyCmdSwitch("gpio_delay_test",VERSION,GPIO_DELAY_TEST_USAGE);
   test_send_sourcenum=0;
   test_recv_sourcenum=0;
   bool ok;
 
-  for(unsigned i=0;i<cmd->keys();i++) {
+  for(int i=0;i<cmd->keys();i++) {
     if(cmd->key(i)=="--send-source") {
       test_send_sourcenum=cmd->value(i).toInt(&ok);
       if((!ok)||(test_send_sourcenum<=0)||(test_send_sourcenum>32768)) {

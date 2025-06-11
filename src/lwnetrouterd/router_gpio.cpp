@@ -2,7 +2,7 @@
 //
 // LiveWire GPIO router.
 //
-//   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License as
@@ -166,9 +166,9 @@ void RouterGpio::SendGpo(int input,int line)
 	     SyRouting::livewireNumber(gpio_lwrp->srcAddress(i)),line+1);
       if(gpio_netcue_device->isOpen()) {
 	QString netcue=config()->outputNetcue(i,line)+"\n";
-	gpio_netcue_device->write(netcue.toAscii(),netcue.toAscii().length());
+	gpio_netcue_device->write(netcue.toUtf8(),netcue.toUtf8().length());
 	syslog(LOG_DEBUG,"sent NetCue \"%s\" from input %d to %s",
-	       (const char *)config()->outputNetcue(i,line).toAscii(),input+1,
+	       (const char *)config()->outputNetcue(i,line).toUtf8(),input+1,
 	       (const char *)config()->netcuePort().toUtf8());
       }
     }

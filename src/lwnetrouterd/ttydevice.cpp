@@ -2,7 +2,7 @@
 //
 //   A Qt driver for tty ports.
 //
-//   (C) Copyright 2009-2013,2016 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2009-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU Library General Public License 
@@ -73,7 +73,7 @@ bool TTYDevice::open(QIODevice::OpenMode mode)
     flags|=O_TRUNC;
   }
 
-  if((tty_fd=::open(tty_name.toAscii(),flags))<0) {
+  if((tty_fd=::open(tty_name.toUtf8(),flags))<0) {
     return false;
   }
   tty_open=true;
@@ -580,7 +580,7 @@ void TTYDevice::readTtyData(int sock)
 }
 
 
-void TTYDevice::writeTtyData()
+int TTYDevice::writeTtyData()
 {
   char data[2048];
   int bytes=0;
@@ -591,12 +591,12 @@ void TTYDevice::writeTtyData()
     n=tty_write_queue.size();
   }
   if(n==0) {
-    return;
+    return 0;
   }
 
   for(ssize_t i=0;i<n;i++) {
     data[i]=tty_write_queue.front();
     tty_write_queue.pop();
   }
-  ::write(tty_fd,data,n);
+  return ::write(tty_fd,data,n);
 }

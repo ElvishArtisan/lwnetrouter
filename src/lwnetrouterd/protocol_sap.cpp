@@ -2,7 +2,7 @@
 //
 // Software Authority protocol driver
 //
-//   (C) Copyright 2016-2018 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License as
@@ -81,7 +81,7 @@ void ProtocolSap::sendCrossPoint(int output,int input)
   if(input<0) {
     input=config()->inputQuantity();
   }
-  sap_server->sendCommand(QString().sprintf("RouteStat 1 %d %d False\r\n",
+  sap_server->sendCommand(QString::asprintf("RouteStat 1 %d %d False\r\n",
 					    output+1,input+1));
 }
 
@@ -91,7 +91,7 @@ void ProtocolSap::sendCrossPoint(int id,int output,int input)
   if(input<0) {
     input=config()->inputQuantity();
   }
-  sap_server->sendCommand(id,QString().sprintf("RouteStat 1 %d %d False\r\n",
+  sap_server->sendCommand(id,QString::asprintf("RouteStat 1 %d %d False\r\n",
 					       output+1,input+1));
 }
 
@@ -134,20 +134,20 @@ void ProtocolSap::commandReceivedData(int id,int cmd,const QStringList &args)
       sap_server->sendCommand(id,"Begin SourceNames - 1\r\n");
       for(int i=0;i<config()->inputQuantity();i++) {
 	if(i<(int)sap_lwrp->dstSlots()) {
-	  reply=QString().sprintf("    %d",i+1)+
+	  reply=QString::asprintf("    %d",i+1)+
 	    "\t"+sap_lwrp->dstName(i)+
 	    "\t"+sap_lwrp->dstName(i)+
 	    "\t"+sap_lwrp->hostAddress().toString()+
 	    "\t"+sap_lwrp->hostName()+
-	    "\t"+QString().sprintf("%d",i+1)+
-	    "\t"+QString().sprintf("%u",SyRouting::livewireNumber(sap_lwrp->dstAddress(i)))+
+	    "\t"+QString::asprintf("%d",i+1)+
+	    "\t"+QString::asprintf("%u",SyRouting::livewireNumber(sap_lwrp->dstAddress(i)))+
 	    "\t"+sap_lwrp->dstAddress(i).toString()+
 	    "\r\n";
 	  sap_server->sendCommand(id,reply);
 	}
       }
       // OFF Source
-      reply=QString().sprintf("    %d",config()->inputQuantity()+1)+
+      reply=QString::asprintf("    %d",config()->inputQuantity()+1)+
 	"\t"+tr("--OFF--")+
 	"\t"+tr("--OFF--")+
 	"\t0.0.0.0"+
@@ -169,12 +169,12 @@ void ProtocolSap::commandReceivedData(int id,int cmd,const QStringList &args)
       sap_server->sendCommand(id,"Begin DestNames - 1\r\n");
       for(int i=0;i<config()->outputQuantity();i++) {
 	if(i<(int)sap_lwrp->srcSlots()) {
-	  reply=QString().sprintf("    %d",i+1)+
+	  reply=QString::asprintf("    %d",i+1)+
 	    "\t"+sap_lwrp->srcName(i)+
 	    "\t"+sap_lwrp->srcName(i)+
 	    "\t"+sap_lwrp->hostAddress().toString()+
 	    "\t"+sap_lwrp->hostName()+
-	    "\t"+QString().sprintf("%d",i+1)+
+	    "\t"+QString::asprintf("%d",i+1)+
 	    "\r\n";
 	  sap_server->sendCommand(id,reply);
 	}

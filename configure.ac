@@ -4,7 +4,7 @@ dnl Autoconf configuration
 dnl
 dnl Use autoconf to process this into a configure script
 dnl
-dnl   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
+dnl   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 dnl
 dnl   This program is free software; you can redistribute it and/or modify
 dnl   it under the terms of the GNU General Public License version 2 as
@@ -37,17 +37,18 @@ AC_LANG(C++)
 AC_ARG_ENABLE(docbook,[  --disable-docbook       disable building of documentation],[DOCBOOK_DISABLED=yes],[])
 
 #
-# Check for Qt4 (Mandatory)
+# Check for Qt6 (Mandatory)
 #
-PKG_CHECK_MODULES(QT4CLI,QtCore QtNetwork,[],[AC_MSG_ERROR([*** Qt4 not found ***])])
-PKG_CHECK_MODULES(QT4GUI,QtCore QtGui QtNetwork,[],[AC_MSG_ERROR([*** Qt4 not found ***])])
-AC_CHECK_PROG(MOC_NAME,moc-qt4,[moc-qt4],[moc])
-AC_SUBST(QT4_MOC,$MOC_NAME)
+#PKG_CHECK_MODULES(QT4CLI,QtCore QtNetwork,[],[AC_MSG_ERROR([*** Qt4 not found ***])])
+#PKG_CHECK_MODULES(QT4GUI,QtCore QtGui QtNetwork,[],[AC_MSG_ERROR([*** Qt4 not found ***])])
+#AC_CHECK_PROG(MOC_NAME,moc-qt4,[moc-qt4],[moc])
+#AC_SUBST(QT4_MOC,$MOC_NAME)
+AQ_FIND_QT6(QT6,Core Gui Widgets Network,[],[AC_MSG_ERROR([*** Qt6 not found ***])])
 
 #
-# Check for Switchyard
+# Check for Switchyard6
 #
-PKG_CHECK_MODULES(SWITCHYARD,[switchyard],[],[AC_MSG_ERROR([*** Switchyard not found ***])])
+PKG_CHECK_MODULES(SWITCHYARD6,[switchyard6],[],[AC_MSG_ERROR([*** Switchyard not found ***])])
 
 #
 # Check for AudioScience HPI

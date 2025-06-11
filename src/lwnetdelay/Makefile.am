@@ -1,8 +1,8 @@
-## automake.am
+## Makefile.am
 ##
-## Automake.am for src/lwnetdelay
+## Makefile.am for src/lwnetdelay
 ##
-##   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
+##   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 ##
 ##   This program is free software; you can redistribute it and/or modify
 ##   it under the terms of the GNU General Public License version 2 as
@@ -19,8 +19,8 @@
 ##
 ## Use automake to process this into a Makefile.in
 
-AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -Wno-strict-aliasing @QT4GUI_CFLAGS@ @SWITCHYARD_CFLAGS@
-MOC = @QT4_MOC@
+AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -std=c++17 -fPIC -Wno-strict-aliasing @QT6_CFLAGS@ @SWITCHYARD6_CFLAGS@
+MOC = @QT6_MOC@
 
 # The dependency for qt's Meta Object Compiler (moc)
 moc_%.cpp:	%.h
@@ -35,7 +35,7 @@ nodist_lwnetdelay_SOURCES = config.cpp config.h\
                             moc_lwnetdelay.cpp\
                             moc_pushbutton.cpp
 
-lwnetdelay_LDADD = @QT4GUI_LIBS@ @SWITCHYARD_LIBS@
+lwnetdelay_LDADD = @QT6_LIBS@ @SWITCHYARD6_LIBS@
 
 CLEANFILES = *~ moc_* *.qm *.obj *.idb *.pdb *ilk
 

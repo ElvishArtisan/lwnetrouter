@@ -2,7 +2,7 @@
 //
 // Configuration File Accessor for lwnetrouter
 //
-//   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License as
@@ -56,7 +56,7 @@
 #include <QList>
 #include <QString>
 
-#include <sy/syconfig.h>
+#include <sy6/syconfig.h>
 
 class Config
 {

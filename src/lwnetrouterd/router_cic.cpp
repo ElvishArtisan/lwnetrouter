@@ -2,7 +2,7 @@
 //
 // LiveWire CIC router.
 //
-//   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License as
@@ -97,7 +97,7 @@ void RouterCic::readyReadData()
   while((n=cic_socket->readDatagram(data,1500,&addr,&port))>0) {
     if((input=config()->input(addr))>=0) {
       data[n]=0;
-      QStringList f0=QString(data).split(":",QString::KeepEmptyParts);
+      QStringList f0=QString(data).split(":",Qt::KeepEmptyParts);
       if((f0.size()==4)&&(f0.at(0)=="0")&&(f0.at(3)=="*")) {
 	cic_events[input].push(new RouterCicEvent(f0.at(2)));
       }
@@ -134,7 +134,7 @@ void RouterCic::SendPacket(int input,const QString &cic)
     cic_socket->writeDatagram(cic.toUtf8(),cic_addrs.at(i),config()->cicPort());
     syslog(LOG_DEBUG,"sent CIC \"%s\" from input %d to %s:%u",
 	   (const char *)cic.toUtf8(),input+1,
-	   (const char *)cic_addrs.at(i).toString().toAscii(),
+	   (const char *)cic_addrs.at(i).toString().toUtf8(),
 	   0xFFFF&config()->cicPort());
   }
 }

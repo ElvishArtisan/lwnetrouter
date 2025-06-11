@@ -2,7 +2,7 @@
 //
 // Protocol driver for the Cuntator Delay Control System
 //
-//   (C) Copyright 2016-2022 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License as
@@ -70,9 +70,9 @@ void ProtocolCunc::sendDelayState(int input,Config::DelayState state,int msec)
 {
   QStringList args;
 
-  args.push_back(QString().sprintf("%d",input+1));
-  args.push_back(QString().sprintf("%d",state));
-  args.push_back(QString().sprintf("%d",msec));
+  args.push_back(QString::asprintf("%d",input+1));
+  args.push_back(QString::asprintf("%d",state));
+  args.push_back(QString::asprintf("%d",msec));
   cunc_server->sendCommand(ProtocolCunc::DS,args);
 }
 
@@ -82,9 +82,9 @@ void ProtocolCunc::sendDelayState(int id,int input,Config::DelayState state,
 {
   QStringList args;
 
-  args.push_back(QString().sprintf("%d",input+1));
-  args.push_back(QString().sprintf("%d",state));
-  args.push_back(QString().sprintf("%d",msec));
+  args.push_back(QString::asprintf("%d",input+1));
+  args.push_back(QString::asprintf("%d",state));
+  args.push_back(QString::asprintf("%d",msec));
   cunc_server->sendCommand(id,ProtocolCunc::DS,args);
 }
 
@@ -93,8 +93,8 @@ void ProtocolCunc::sendInputName(int id,int input,const QString &str)
 {
   QStringList args;
 
-  args.push_back(QString().sprintf("%d",input+1));
-  args.push_back(QString().sprintf("%d",config()->inputDumpDelay(input)));
+  args.push_back(QString::asprintf("%d",input+1));
+  args.push_back(QString::asprintf("%d",config()->inputDumpDelay(input)));
   args.push_back(str);
   cunc_server->sendCommand(id,(int)ProtocolCunc::DM,args);
 }
@@ -104,7 +104,7 @@ void ProtocolCunc::sendDelayDumped(int input)
 {
   QStringList args;
 
-  args.push_back(QString().sprintf("%d",input+1));
+  args.push_back(QString::asprintf("%d",input+1));
   cunc_server->sendCommand((int)ProtocolCunc::DP,args);
 }
 
@@ -127,7 +127,7 @@ void ProtocolCunc::commandReceivedData(int id,int cmd,const QStringList &args)
     break;
 
   case ProtocolCunc::DQ:  // List Delay Quantity
-    reply.push_back(QString().sprintf("%d",config()->inputQuantity()));
+    reply.push_back(QString::asprintf("%d",config()->inputQuantity()));
     cunc_server->sendCommand(id,cmd,reply);
     break;
 

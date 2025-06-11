@@ -2,7 +2,7 @@
 //
 // Software Authority protocol driver
 //
-//   (C) Copyright 2016-2018 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License as
@@ -22,7 +22,7 @@
 #ifndef PROTOCOL_SAP_H
 #define PROTOCOL_SAP_H
 
-#include <sy/sylwrp_client.h>
+#include <sy6/sylwrp_client.h>
 
 #include "protocol.h"
 #include "streamcmdserver.h"

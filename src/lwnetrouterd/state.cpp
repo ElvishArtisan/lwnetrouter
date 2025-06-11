@@ -2,7 +2,7 @@
 //
 // Persistent device state for lwnetrouterd(8)
 //
-//   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License as
@@ -21,7 +21,7 @@
 
 #include <stdio.h>
 
-#include <sy/syprofile.h>
+#include <sy6/syprofile.h>
 
 #include "state.h"
 
@@ -72,11 +72,11 @@ void State::load()
 
   for(int i=0;i<MAX_INPUTS;i++) {
     state_delay_actives[i]=
-      p->intValue(QString().sprintf("Input%d",i+1),"DelayActive");
+      p->intValue(QString::asprintf("Input%d",i+1),"DelayActive");
   }
   for(int i=0;i<MAX_OUTPUTS;i++) {
     state_cross_points[i]=
-      p->intValue(QString().sprintf("Output%d",i+1),"CrossPoint",-1);
+      p->intValue(QString::asprintf("Output%d",i+1),"CrossPoint",-1);
   }
 
   delete p;

@@ -2,7 +2,7 @@
 //
 // Router for processing Internet breakaways.
 //
-//   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License as
@@ -91,14 +91,14 @@ void RouterBreakaway::SendBreakaway(int input,int msec)
   for(int i=0;i<config()->outputQuantity();i++) {
     if(crossPoint(i)==input) {
       if(!config()->outputBreakawayIpAddress(i).isNull()) {
-	QString rml=QString().sprintf("DX %d %d!",
+	QString rml=QString::asprintf("DX %d %d!",
 			      config()->outputBreakawaySlotNumber(i),msec);
-	break_socket->writeDatagram(rml.toAscii(),
+	break_socket->writeDatagram(rml.toUtf8(),
 				    config()->outputBreakawayIpAddress(i),5859);
 	syslog(LOG_DEBUG,"sent breakaway \"%s\" from input %d to %s",
-	       (const char *)rml.toAscii(),input+1,
+	       (const char *)rml.toUtf8(),input+1,
 	       (const char *)config()->outputBreakawayIpAddress(i).toString().
-	       toAscii());
+	       toUtf8());
       }
     }
   }

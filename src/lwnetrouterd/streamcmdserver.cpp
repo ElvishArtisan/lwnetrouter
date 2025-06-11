@@ -2,7 +2,7 @@
 //
 // Parse commands on connection-oriented protocols.
 //
-//   (C) Copyright 2012,2016 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2012-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -183,13 +183,13 @@ void StreamCmdServer::sendCommand(int id,int cmd,const QStringList &args)
     str+=QString(" ")+args[i];
   }
   str+="\r\n";
-  cmd_connections.at(id)->socket()->write(str.toAscii(),str.length());
+  cmd_connections.at(id)->socket()->write(str.toUtf8(),str.length());
 }
 
 
 void StreamCmdServer::sendCommand(int id,const QString &str)
 {
-  cmd_connections.at(id)->socket()->write(str.toAscii(),str.length());
+  cmd_connections.at(id)->socket()->write(str.toUtf8(),str.length());
 }
 
 

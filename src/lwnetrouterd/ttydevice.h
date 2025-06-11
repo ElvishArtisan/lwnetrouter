@@ -2,7 +2,7 @@
 //
 //   A Qt driver for serial ports.
 //
-//   (C) Copyright 2010-2013,2016 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2010-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU Library General Public License 
@@ -84,7 +84,7 @@ class TTYDevice : public QIODevice
 
  private slots:
   void readTtyData(int sock);
-  void writeTtyData();
+  int writeTtyData();
 
  private:
   Parity tty_parity;

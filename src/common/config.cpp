@@ -2,7 +2,7 @@
 //
 // Configuration File Accessor for lwnetrouter
 //
-//   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License as
@@ -21,7 +21,7 @@
 
 #include <stdio.h>
 
-#include <sy/syprofile.h>
+#include <sy6/syprofile.h>
 
 #include "config.h"
 
@@ -50,7 +50,7 @@ Config::Config()
   conf_cic_port=
     p->intValue("Global","CicPort",CONFIG_DEFAULT_CIC_PORT);
   while(ok) {
-    addr=p->addressValue("Global",QString().sprintf("CicIpAddress%d",
+    addr=p->addressValue("Global",QString::asprintf("CicIpAddress%d",
 						   count+1),"",&ok);
     if(ok) {
       conf_cic_addresses.push_back(addr);
@@ -75,7 +75,7 @@ Config::Config()
   for(int i=0;i<MAX_INPUTS;i++) {
     count=0;
     ok=true;
-    QString section=QString().sprintf("Input%d",i+1);
+    QString section=QString::asprintf("Input%d",i+1);
     conf_input_full_delays[i]=
       p->intValue(section,"FullDelay",CONFIG_DEFAULT_INPUT_FULL_DELAY);
     conf_input_dump_delays[i]=
@@ -86,7 +86,7 @@ Config::Config()
     conf_input_delay_control_sources[i]=
       p->intValue(section,"DelayControlSource");
     while(ok) {
-      addr=p->addressValue(section,QString().sprintf("SourceIpAddress%d",
+      addr=p->addressValue(section,QString::asprintf("SourceIpAddress%d",
 						     count+1),"",&ok);
       for(int j=0;j<=i;j++) {   // Check for duplicates
 	if(conf_input_addresses[j].contains(addr)) {
@@ -106,7 +106,7 @@ Config::Config()
   // [Output<n>] Sections
   //
   for(int i=0;i<MAX_OUTPUTS;i++) {
-    QString section=QString().sprintf("Output%d",i+1);
+    QString section=QString::asprintf("Output%d",i+1);
     conf_output_cic_program_codes[i]=p->stringValue(section,"CicProgramCode");
     for(int j=0;j<SWITCHYARD_GPIO_BUNDLE_SIZE;j++) {
       conf_output_breakaway_ip_addresses[i]=
@@ -114,7 +114,7 @@ Config::Config()
       conf_output_breakaway_slot_numbers[i]=
 	p->intValue(section,"BreakawaySlotNumber",i+1);
       conf_output_netcues[i][j]=
-	p->stringValue(section,QString().sprintf("Netcue%d",j+1));
+	p->stringValue(section,QString::asprintf("Netcue%d",j+1));
     }
   }
 
@@ -262,7 +262,7 @@ QString Config::outputNetcue(int output,int line) const
 QString Config::delayStateText(DelayState state)
 {
   QString ret=
-    QObject::tr("Unknown delay state")+QString().sprintf(" [%d]",state);
+    QObject::tr("Unknown delay state")+QString::asprintf(" [%d]",state);
 
   switch(state) {
   case Config::DelayUnknown:
