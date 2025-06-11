@@ -223,5 +223,3 @@
 2022-06-20 Fred Gleason <fredg@paravelsystems.com>
 	* Commented the entry points for command operations in
 	'src/lwnetrouterd/protocol_cunc.cpp'.
-2025-06-11 Fred Gleason <fredg@paravelsystems.com>
-	* Completed rough port to Qt6.
