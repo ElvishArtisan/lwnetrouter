@@ -230,3 +230,5 @@
 	lwnetrouter.conf(5).
 2025-06-12 Fred Gleason <fredg@paravelsystems.com>
 	* Fixed 'no such signal' errors in lwnetrouterd(8) and lwnetdelay(1).
+2025-06-12 Fred Gleason <fredg@paravelsystems.com>
+	* Moved systemd control components to 'systemd/'.

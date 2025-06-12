@@ -107,8 +107,8 @@ AC_CONFIG_FILES([ \
     src/lwnetdelay/Makefile \
     src/lwnetrouterd/Makefile \
     src/tests/Makefile \
+    systemd/lwnetrouter.service \
     xdg/Makefile \
-    lwnetrouter.service \
     lwnetrouter.spec \
     Makefile ])
 AC_OUTPUT()

@@ -1,10 +1,10 @@
-## automake.am
+## Makefile.am
 ##
-## Top level automake.am
+## Top level Makefile.am
 ##
 ## Use automake to process this into a Makefile.in
 ##
-##   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
+##   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 ##
 ##   This program is free software; you can redistribute it and/or modify
 ##   it under the terms of the GNU General Public License version 2 as
@@ -48,7 +48,6 @@ EXTRA_DIST = autogen.sh\
              get_distro.sh\
              get_target.sh\
              link_common.sh\
-             lwnetrouter.service.in\
              lwnetrouter.spec.in\
              PACKAGE_VERSION
 
