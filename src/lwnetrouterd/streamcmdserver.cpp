@@ -120,14 +120,14 @@ StreamCmdServer::StreamCmdServer(const std::map<int,QString> &cmd_table,
   // Mappers
   //
   cmd_read_mapper=new QSignalMapper(this);
-  connect(cmd_read_mapper,SIGNAL(mapped(int)),this,SLOT(readyReadData(int)));
+  connect(cmd_read_mapper,SIGNAL(mappedInt(int)),this,SLOT(readyReadData(int)));
 
   cmd_closed_mapper=new QSignalMapper(this);
-  connect(cmd_closed_mapper,SIGNAL(mapped(int)),
+  connect(cmd_closed_mapper,SIGNAL(mappedInt(int)),
 	  this,SLOT(connectionClosedData(int)));
 
   cmd_pending_connected_mapper=new QSignalMapper(this);
-  connect(cmd_pending_connected_mapper,SIGNAL(mapped(int)),
+  connect(cmd_pending_connected_mapper,SIGNAL(mappedInt(int)),
 	  this,SLOT(pendingConnectedData(int)));
 
   //
@@ -238,7 +238,7 @@ void StreamCmdServer::connectToHost(const QString &hostname,uint16_t port)
   connect(cmd_pending_sockets[new_id],SIGNAL(connected()),
 	  cmd_pending_connected_mapper,SLOT(map()));
   connect(cmd_pending_sockets[new_id],
-	  SIGNAL(error(QAbstractSocket::SocketError)),
+	  SIGNAL(errorOccurred(QAbstractSocket::SocketError)),
 	  this,SLOT(pendingErrorData(QAbstractSocket::SocketError)));
   cmd_pending_connected_mapper->setMapping(cmd_pending_sockets[new_id],new_id);
   cmd_pending_sockets[new_id]->connectToHost(hostname,port);
@@ -308,7 +308,7 @@ void StreamCmdServer::collectGarbageData()
 	  connect(cmd_pending_sockets[pending_id],SIGNAL(connected()),
 		  cmd_pending_connected_mapper,SLOT(map()));
 	  connect(cmd_pending_sockets[pending_id],
-		  SIGNAL(error(QAbstractSocket::SocketError)),
+		  SIGNAL(errorOccurred(QAbstractSocket::SocketError)),
 		  this,SLOT(pendingErrorData(QAbstractSocket::SocketError)));
 	  cmd_pending_connected_mapper->
 	    setMapping(cmd_pending_sockets[pending_id],pending_id);
@@ -363,7 +363,7 @@ void StreamCmdServer::reconnectData()
       connect(cmd_pending_sockets[i],SIGNAL(connected()),
 	      cmd_pending_connected_mapper,SLOT(map()));
       connect(cmd_pending_sockets[i],
-	      SIGNAL(error(QAbstractSocket::SocketError)),
+	      SIGNAL(errorOccurred(QAbstractSocket::SocketError)),
 	      this,SLOT(pendingErrorData(QAbstractSocket::SocketError)));
       cmd_pending_connected_mapper->
 	setMapping(cmd_pending_sockets[i],i);

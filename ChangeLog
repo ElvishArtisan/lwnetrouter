@@ -228,3 +228,5 @@
 2025-06-12 Fred Gleason <fredg@paravelsystems.com>
 	* Added a 'LwrpPassword=' directive to the '[Global]' section of
 	lwnetrouter.conf(5).
+2025-06-12 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed 'no such signal' errors in lwnetrouterd(8) and lwnetdelay(1).

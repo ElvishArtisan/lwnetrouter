@@ -140,7 +140,7 @@ QString hostname="localhost";
   connect(cunc_socket,SIGNAL(disconnected()),
 	  this,SLOT(socketDisconnectedData()));
   connect(cunc_socket,SIGNAL(readyRead()),this,SLOT(readyReadData()));
-  connect(cunc_socket,SIGNAL(error(QAbstractSocket::SocketError)),
+  connect(cunc_socket,SIGNAL(errorOccurred(QAbstractSocket::SocketError)),
 	  this,SLOT(errorData(QAbstractSocket::SocketError)));
   cunc_socket->connectToHost(hostname,port);
 }

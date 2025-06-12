@@ -29,7 +29,7 @@ ProtocolGpio::ProtocolGpio(SyGpioServer *gpioserv,Config *c,QObject *parent)
 	  this,SLOT(gpioReceivedData(SyGpioEvent *)));
 
   gpio_dump_reset_mapper=new QSignalMapper(this);
-  connect(gpio_dump_reset_mapper,SIGNAL(mapped(int)),
+  connect(gpio_dump_reset_mapper,SIGNAL(mappedInt(int)),
 	  this,SLOT(dumpResetData(int)));
   for(int i=0;i<config()->inputQuantity();i++) {
     gpio_controls[i]=
