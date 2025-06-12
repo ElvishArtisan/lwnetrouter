@@ -64,6 +64,7 @@ Config::Config()
   conf_relay_debounce_interval=
     p->intValue("Global","RelayDebounceInterval",
 		CONFIG_DEFAULT_RELAY_DEBOUNCE_INTERVAL);
+  conf_lwrp_password=p->stringValue("Global","LwrpPassword","");
   conf_input_bus_xfers=p->
     boolValue("Global","InputBusXfers",CONFIG_DEFAULT_INPUT_BUS_XFERS);
   conf_output_bus_xfers=p->
@@ -185,6 +186,12 @@ QHostAddress Config::adapterIpAddress() const
 int Config::relayDebounceInterval() const
 {
   return conf_relay_debounce_interval;
+}
+
+
+QString Config::lwrpPassword() const
+{
+  return conf_lwrp_password;
 }
 
 

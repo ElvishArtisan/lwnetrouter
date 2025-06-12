@@ -75,6 +75,7 @@ class Config
   QHostAddress livewireIpAddress() const;
   QHostAddress adapterIpAddress() const;
   int relayDebounceInterval() const;
+  QString lwrpPassword() const;
   bool inputBusXfers() const;
   bool outputBusXfers() const;
   int inputFullDelay(int input) const;
@@ -100,6 +101,7 @@ class Config
   QHostAddress conf_livewire_ip_address;
   QHostAddress conf_adapter_ip_address;
   int conf_relay_debounce_interval;
+  QString conf_lwrp_password;
   bool conf_input_bus_xfers;
   bool conf_output_bus_xfers;
   int conf_input_full_delays[MAX_INPUTS];

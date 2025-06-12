@@ -77,8 +77,9 @@ MainObject::MainObject(QObject *parent)
   // Adapter Control
   //
   main_lwrp=new SyLwrpClient(0,this);
-  main_lwrp->
-    connectToHost(main_config->adapterIpAddress(),SWITCHYARD_LWRP_PORT,"",true);
+  main_lwrp->connectToHost(main_config->adapterIpAddress(),
+			   SWITCHYARD_LWRP_PORT,
+			   main_config->lwrpPassword(),true);
 
   //
   // Routers

@@ -225,3 +225,6 @@
 	'src/lwnetrouterd/protocol_cunc.cpp'.
 2025-06-11 Fred Gleason <fredg@paravelsystems.com>
 	* Completed rough port to Qt6.
+2025-06-12 Fred Gleason <fredg@paravelsystems.com>
+	* Added a 'LwrpPassword=' directive to the '[Global]' section of
+	lwnetrouter.conf(5).
