@@ -237,3 +237,6 @@
 	protocol message.
 2025-06-24 Fred Gleason <fredg@paravelsystems.com>
 	* Added code to log LWRP connections and errors to syslog.
+2025-06-24 Fred Gleason <fredg@paravelsystems.com>
+	* Eliminated '(const char *)' casts in
+	'src/lwnetrouterd/router_gpio.cpp'.

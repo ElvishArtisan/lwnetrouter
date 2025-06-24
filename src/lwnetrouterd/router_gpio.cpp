@@ -77,7 +77,7 @@ RouterGpio::RouterGpio(SyGpioServer *gpioserv,SyLwrpClient *lwrp,Config *c,
     gpio_netcue_device->setFlowControl(NETCUE_TTY_FLOW_CONTROL);
     if(!gpio_netcue_device->open(QIODevice::WriteOnly)) {
       syslog(LOG_WARNING,"unable to open netcue serial device \"%s\"",
-	     (const char *)config()->netcuePort().toUtf8());
+	     config()->netcuePort().toUtf8().constData());
     }
   }
 
@@ -168,8 +168,8 @@ void RouterGpio::SendGpo(int input,int line)
 	QString netcue=config()->outputNetcue(i,line)+"\n";
 	gpio_netcue_device->write(netcue.toUtf8(),netcue.toUtf8().length());
 	syslog(LOG_DEBUG,"sent NetCue \"%s\" from input %d to %s",
-	       (const char *)config()->outputNetcue(i,line).toUtf8(),input+1,
-	       (const char *)config()->netcuePort().toUtf8());
+	       config()->outputNetcue(i,line).toUtf8().constData(),input+1,
+	       config()->netcuePort().toUtf8().constData());
       }
     }
   }
