@@ -47,6 +47,8 @@ class MainObject : public QObject
   MainObject(QObject *parent=0);
 
  private slots:
+  void lwrpConnectedData(unsigned id,bool state);
+  void lwrpConnectionErrorData(unsigned id,QAbstractSocket::SocketError err);
   void cuncDelayStateRequestedData(int id,int input);
   void cuncInputNameRequestedData(int id,int input);
   void sapCrosspointRequestedData(int id,int output);

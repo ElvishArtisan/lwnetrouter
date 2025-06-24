@@ -77,6 +77,12 @@ MainObject::MainObject(QObject *parent)
   // Adapter Control
   //
   main_lwrp=new SyLwrpClient(0,this);
+  connect(main_lwrp,SIGNAL(connected(unsigned,bool)),
+	  this,SLOT(lwrpConnectedData(unsigned,bool)));
+  connect(main_lwrp,SIGNAL(connectionError(unsigned,
+					   QAbstractSocket::SocketError)),
+	  this,SLOT(lwrpConnectionErrorData(unsigned,
+					    QAbstractSocket::SocketError)));
   main_lwrp->connectToHost(main_config->adapterIpAddress(),
 			   SWITCHYARD_LWRP_PORT,
 			   main_config->lwrpPassword(),true);
@@ -185,6 +191,25 @@ MainObject::MainObject(QObject *parent)
     main_gpio_router->setCrossPoint(i,main_state->crossPoint(i));
     main_breakaway_router->setCrossPoint(i,main_state->crossPoint(i));
   }
+}
+
+
+void MainObject::lwrpConnectedData(unsigned id,bool state)
+{
+  if(state) {
+    syslog(LOG_INFO,"LWRP connection established");
+  }
+  else {
+    syslog(LOG_WARNING,"LWRP connection failed");
+  }
+}
+
+
+void MainObject::lwrpConnectionErrorData(unsigned id,
+					 QAbstractSocket::SocketError err)
+{
+  syslog(LOG_WARNING,"LWRP connection error: %s",
+	 SyMcastSocket::socketErrorText(err).toUtf8().constData());
 }
 
 

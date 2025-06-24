@@ -235,3 +235,5 @@
 2025-06-24 Fred Gleason <fredg@paravelsystems.com>
 	* Modified the Cunctator parser to require '!' at the end of each
 	protocol message.
+2025-06-24 Fred Gleason <fredg@paravelsystems.com>
+	* Added code to log LWRP connections and errors to syslog.
