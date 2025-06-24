@@ -61,6 +61,7 @@ ProtocolCunc::ProtocolCunc(Config *c,QObject *parent)
 
   cunc_server=
     new StreamCmdServer(cmds,upper_limits,lower_limits,server,this);
+  cunc_server->setDelimiter('!');
   connect(cunc_server,SIGNAL(commandReceived(int,int,const QStringList &)),
 	  this,SLOT(commandReceivedData(int,int,const QStringList &)));
 }
@@ -70,7 +71,7 @@ void ProtocolCunc::sendDelayState(int input,Config::DelayState state,int msec)
 {
   QStringList args;
 
-  args.push_back(QString::asprintf("%d",input+1));
+  args.push_back(QString::asprintf("%d",input));
   args.push_back(QString::asprintf("%d",state));
   args.push_back(QString::asprintf("%d",msec));
   cunc_server->sendCommand(ProtocolCunc::DS,args);
@@ -82,7 +83,7 @@ void ProtocolCunc::sendDelayState(int id,int input,Config::DelayState state,
 {
   QStringList args;
 
-  args.push_back(QString::asprintf("%d",input+1));
+  args.push_back(QString::asprintf("%d",input));
   args.push_back(QString::asprintf("%d",state));
   args.push_back(QString::asprintf("%d",msec));
   cunc_server->sendCommand(id,ProtocolCunc::DS,args);
@@ -92,8 +93,7 @@ void ProtocolCunc::sendDelayState(int id,int input,Config::DelayState state,
 void ProtocolCunc::sendInputName(int id,int input,const QString &str)
 {
   QStringList args;
-
-  args.push_back(QString::asprintf("%d",input+1));
+  args.push_back(QString::asprintf("%d",input));
   args.push_back(QString::asprintf("%d",config()->inputDumpDelay(input)));
   args.push_back(str);
   cunc_server->sendCommand(id,(int)ProtocolCunc::DM,args);
@@ -104,7 +104,7 @@ void ProtocolCunc::sendDelayDumped(int input)
 {
   QStringList args;
 
-  args.push_back(QString::asprintf("%d",input+1));
+  args.push_back(QString::asprintf("%d",input));
   cunc_server->sendCommand((int)ProtocolCunc::DP,args);
 }
 
@@ -132,21 +132,22 @@ void ProtocolCunc::commandReceivedData(int id,int cmd,const QStringList &args)
     break;
 
   case ProtocolCunc::DM:  // Get Delay Model
-    input=args.at(0).toUInt(&ok)-1;
+    input=args.at(0).toUInt(&ok);
     if(ok&&(input<(unsigned)config()->inputQuantity())) {
+      printf("emitting inputNameRequested(%d,%d)\n",id,input);
       emit inputNameRequested(id,input);
     }
     break;
 
   case ProtocolCunc::DS:  // Get Delay State
-    input=args.at(0).toUInt(&ok)-1;
+    input=args.at(0).toUInt(&ok);
     if(ok&&(input<(unsigned)config()->inputQuantity())) {
       emit delayStateRequested(id,input);
     }
     break;
 
   case ProtocolCunc::SS:  // Set Delay State
-    input=args.at(0).toUInt(&ok)-1;
+    input=args.at(0).toUInt(&ok);
     if(ok&&(input<(unsigned)config()->inputQuantity())) {
       state=(Config::DelayState)args.at(1).toUInt(&ok);
       if(ok) {
@@ -156,7 +157,7 @@ void ProtocolCunc::commandReceivedData(int id,int cmd,const QStringList &args)
     break;
 
   case ProtocolCunc::DP:  // Dump Delay
-    input=args.at(0).toUInt(&ok)-1;
+    input=args.at(0).toUInt(&ok);
     if(ok&&(input<(unsigned)config()->inputQuantity())) {
       emit delayDumpReceived(input);
     }

@@ -18,8 +18,6 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
-#include <vector>
-
 #include "streamcmdserver.h"
 
 StreamCmdConnection::StreamCmdConnection(QTcpSocket *sock)
@@ -103,6 +101,8 @@ StreamCmdServer::StreamCmdServer(const std::map<int,QString> &cmd_table,
 				 QTcpServer *server,QObject *parent)
   : QObject(parent)
 {
+  cmd_delimiter=13;
+
   //
   // Tables
   //
@@ -152,6 +152,18 @@ StreamCmdServer::~StreamCmdServer()
 }
 
 
+char StreamCmdServer::delimiter() const
+{
+  return cmd_delimiter;
+}
+
+
+void StreamCmdServer::setDelimiter(char c)
+{
+  cmd_delimiter=c;
+}
+
+
 QHostAddress StreamCmdServer::localAddress(int id) const
 {
   return cmd_connections.at(id)->socket()->localAddress();
@@ -182,7 +194,7 @@ void StreamCmdServer::sendCommand(int id,int cmd,const QStringList &args)
   for(int i=0;i<args.size();i++) {
     str+=QString(" ")+args[i];
   }
-  str+="\r\n";
+  str+=cmd_delimiter;
   cmd_connections.at(id)->socket()->write(str.toUtf8(),str.length());
 }
 
@@ -276,12 +288,12 @@ void StreamCmdServer::readyReadData(int id)
 
   n=cmd_connections.at(id)->socket()->read(data,1500);
   for(int i=0;i<n;i++) {
-    if(data[i]==13) {
+    if(data[i]==cmd_delimiter) {
       ProcessCommand(id);
       cmd_connections.at(id)->buffer="";
     }
     else {
-      if(data[i]!=10) {
+      if((data[i]!=10)&&(data[i]!=13)) {
 	cmd_connections.at(id)->buffer+=data[i];
       }
     }
@@ -330,7 +342,6 @@ void StreamCmdServer::pendingConnectedData(int pending_id)
 {
   int conn_id=cmd_pending_connection_ids[pending_id];
   QTcpSocket *sock=cmd_pending_sockets[pending_id];
-
   
   cmd_pending_connected_mapper->removeMappings(sock);
   sock->disconnect();
@@ -415,7 +426,7 @@ int StreamCmdServer::GetFreePendingSlot()
 
 void StreamCmdServer::ProcessCommand(int id)
 {
-  QStringList cmds=cmd_connections.at(id)->buffer.split(" ");
+  QStringList cmds=QString::fromUtf8(cmd_connections.at(id)->buffer).split(" ");
   for(unsigned i=0;i<cmd_cmd_table.size();i++) {
     if(cmd_cmd_table[i]==cmds[0]) {
       if(((cmd_upper_table[i]<0)||((cmds.size()-1)<=cmd_upper_table[i]))&&

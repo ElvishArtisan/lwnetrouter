@@ -232,3 +232,6 @@
 	* Fixed 'no such signal' errors in lwnetrouterd(8) and lwnetdelay(1).
 2025-06-12 Fred Gleason <fredg@paravelsystems.com>
 	* Moved systemd control components to 'systemd/'.
+2025-06-24 Fred Gleason <fredg@paravelsystems.com>
+	* Modified the Cunctator parser to require '!' at the end of each
+	protocol message.

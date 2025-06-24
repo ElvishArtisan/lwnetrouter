@@ -26,12 +26,12 @@
 #include <map>
 #include <vector>
 
-#include <QtCore/QObject>
-#include <QtCore/QSignalMapper>
-#include <QtCore/QStringList>
-#include <QtCore/QTimer>
-#include <QtNetwork/QTcpServer>
-#include <QtNetwork/QTcpSocket>
+#include <QObject>
+#include <QSignalMapper>
+#include <QStringList>
+#include <QTimer>
+#include <QTcpSocket>
+#include <QTcpServer>
 
 class StreamCmdConnection
 {
@@ -40,7 +40,7 @@ class StreamCmdConnection
   StreamCmdConnection(const QString &hostname,uint16_t port);
   ~StreamCmdConnection();
   QTcpSocket *socket();
-  QString buffer;
+  QByteArray buffer;
   bool isConnected() const;
   bool isPersistent() const;
   QString hostname() const;
@@ -66,6 +66,8 @@ class StreamCmdServer : public QObject
 		  const std::map<int,int> &lower_table,
 		  QTcpServer *server,QObject *parent);
   ~StreamCmdServer();
+  char delimiter() const;
+  void setDelimiter(char c);
   QHostAddress localAddress(int id) const;
   uint16_t localPort(int id) const;
   QHostAddress peerAddress(int id) const;
@@ -109,6 +111,7 @@ class StreamCmdServer : public QObject
   std::map<int,QString> cmd_cmd_table;
   std::map<int,int> cmd_upper_table;
   std::map<int,int> cmd_lower_table;
+  char cmd_delimiter;
 };
 
 

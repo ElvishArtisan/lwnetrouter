@@ -39,10 +39,6 @@ AC_ARG_ENABLE(docbook,[  --disable-docbook       disable building of documentati
 #
 # Check for Qt6 (Mandatory)
 #
-#PKG_CHECK_MODULES(QT4CLI,QtCore QtNetwork,[],[AC_MSG_ERROR([*** Qt4 not found ***])])
-#PKG_CHECK_MODULES(QT4GUI,QtCore QtGui QtNetwork,[],[AC_MSG_ERROR([*** Qt4 not found ***])])
-#AC_CHECK_PROG(MOC_NAME,moc-qt4,[moc-qt4],[moc])
-#AC_SUBST(QT4_MOC,$MOC_NAME)
 AQ_FIND_QT6(QT6,Core Gui Widgets Network,[],[AC_MSG_ERROR([*** Qt6 not found ***])])
 
 #
@@ -108,6 +104,7 @@ AC_CONFIG_FILES([ \
     src/lwnetrouterd/Makefile \
     src/tests/Makefile \
     systemd/lwnetrouter.service \
+    systemd/Makefile \
     xdg/Makefile \
     lwnetrouter.spec \
     Makefile ])
