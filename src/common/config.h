@@ -44,6 +44,7 @@
 #define CONFIG_DEFAULT_SOFTWARE_AUTHORITY_PORT 9500
 #define CONFIG_DEFAULT_CIC_PORT 5001
 #define CONFIG_DEFAULT_NETCUE_PORT QString("/dev/ttyS0")
+#define CONFIG_DEFAULT_FORWARD_NETCUES_VIA_LIVEWIRE true
 #define CONFIG_DEFAULT_RELAY_DEBOUNCE_INTERVAL 500
 #define CONFIG_DEFAULT_INPUT_BUS_XFERS false
 #define CONFIG_DEFAULT_OUTPUT_BUS_XFERS true
@@ -72,6 +73,7 @@ class Config
   uint16_t cicPort() const;
   QList<QHostAddress> cicIpAddresses();
   QString netcuePort() const;
+  bool forwardNetcuesViaLivewire() const;
   QHostAddress livewireIpAddress() const;
   QHostAddress adapterIpAddress() const;
   int relayDebounceInterval() const;
@@ -98,6 +100,7 @@ class Config
   uint16_t conf_cic_port;
   QList<QHostAddress> conf_cic_addresses;
   QString conf_netcue_port;
+  bool conf_forward_netcues_via_livewire;
   QHostAddress conf_livewire_ip_address;
   QHostAddress conf_adapter_ip_address;
   int conf_relay_debounce_interval;

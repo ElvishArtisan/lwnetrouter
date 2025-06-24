@@ -242,3 +242,6 @@
 	'src/lwnetrouterd/router_gpio.cpp'.
 2025-06-24 Fred Gleason <fredg@paravelsystems.com>
 	* Annotated the directives in 'conf/lwnetrouter-sample.conf'.
+2025-06-24 Fred Gleason <fredg@paravelsystems.com>
+	* Added a 'ForwardNetcueViaLivewire=' directive to the '[Global]'
+	section of lwnetrouter.conf(5).
