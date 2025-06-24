@@ -240,3 +240,5 @@
 2025-06-24 Fred Gleason <fredg@paravelsystems.com>
 	* Eliminated '(const char *)' casts in
 	'src/lwnetrouterd/router_gpio.cpp'.
+2025-06-24 Fred Gleason <fredg@paravelsystems.com>
+	* Annotated the directives in 'conf/lwnetrouter-sample.conf'.
