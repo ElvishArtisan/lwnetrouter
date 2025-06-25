@@ -43,6 +43,8 @@
 #define CONFIG_DEFAULT_CUNCTATOR_PORT 3749
 #define CONFIG_DEFAULT_SOFTWARE_AUTHORITY_PORT 9500
 #define CONFIG_DEFAULT_CIC_PORT 5001
+#define CONFIG_DEFAULT_NETCUE_UDP_PORT 7001
+#define CONFIG_DEFAULT_NETCUE_UDP_REPEAT 1
 #define CONFIG_DEFAULT_NETCUE_PORT QString("/dev/ttyS0")
 #define CONFIG_DEFAULT_FORWARD_NETCUES_VIA_LIVEWIRE true
 #define CONFIG_DEFAULT_RELAY_DEBOUNCE_INTERVAL 500
@@ -72,6 +74,9 @@ class Config
   uint16_t softwareAuthorityPort() const;
   uint16_t cicPort() const;
   QList<QHostAddress> cicIpAddresses();
+  QList<QHostAddress> netcueUdpAddresses() const;
+  uint16_t netcueUdpPort() const;
+  int netcueUdpRepeat() const;
   QString netcuePort() const;
   bool forwardNetcuesViaLivewire() const;
   QHostAddress livewireIpAddress() const;
@@ -100,6 +105,9 @@ class Config
   uint16_t conf_cic_port;
   QList<QHostAddress> conf_cic_addresses;
   QString conf_netcue_port;
+  QList<QHostAddress> conf_netcue_udp_addresses;
+  uint16_t conf_netcue_udp_port;
+  int conf_netcue_udp_repeat;
   bool conf_forward_netcues_via_livewire;
   QHostAddress conf_livewire_ip_address;
   QHostAddress conf_adapter_ip_address;

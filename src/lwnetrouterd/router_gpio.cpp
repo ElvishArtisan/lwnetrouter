@@ -66,6 +66,11 @@ RouterGpio::RouterGpio(SyGpioServer *gpioserv,SyLwrpClient *lwrp,Config *c,
   gpio_lwrp=lwrp;
 
   //
+  // Netcue Socket
+  //
+  gpio_netcue_socket=new QUdpSocket(this);
+
+  //
   // Netcue Port
   //
   gpio_netcue_device=new TTYDevice(this);
@@ -157,9 +162,16 @@ void RouterGpio::scanTimerData()
 
 void RouterGpio::SendGpo(int input,int line)
 {
-  //  printf("SendGpo(%d,%d)\n",input,line);
   for(int i=0;i<config()->outputQuantity();i++) {
+    QByteArray netcue=(config()->outputNetcue(i,line)+"\n").toUtf8();
     if(crossPoint(i)==input) {
+      QList<QHostAddress> udp_addrs=config()->netcueUdpAddresses();
+      for(int j=0;j<udp_addrs.size();j++) {
+	for(int k=0;k<config()->netcueUdpRepeat();k++) {
+	  gpio_netcue_socket->writeDatagram(netcue,udp_addrs.at(j),
+					    config()->netcueUdpPort());
+	}
+      }
       if(config()->forwardNetcuesViaLivewire()) {
 	gpio_server->sendGpo(SyRouting::livewireNumber(gpio_lwrp->srcAddress(i)),
 			     line,true,true);
@@ -167,8 +179,7 @@ void RouterGpio::SendGpo(int input,int line)
 	       SyRouting::livewireNumber(gpio_lwrp->srcAddress(i)),line+1);
       }
       if(gpio_netcue_device->isOpen()) {
-	QString netcue=config()->outputNetcue(i,line)+"\n";
-	gpio_netcue_device->write(netcue.toUtf8(),netcue.toUtf8().length());
+	gpio_netcue_device->write(netcue,netcue.length());
 	syslog(LOG_DEBUG,"sent NetCue \"%s\" from input %d to %s",
 	       config()->outputNetcue(i,line).toUtf8().constData(),input+1,
 	       config()->netcuePort().toUtf8().constData());

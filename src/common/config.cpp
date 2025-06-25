@@ -49,6 +49,8 @@ Config::Config()
 		CONFIG_DEFAULT_SOFTWARE_AUTHORITY_PORT);
   conf_cic_port=
     p->intValue("Global","CicPort",CONFIG_DEFAULT_CIC_PORT);
+  ok=true;
+  count=0;
   while(ok) {
     addr=p->addressValue("Global",QString::asprintf("CicIpAddress%d",
 						   count+1),"",&ok);
@@ -57,6 +59,24 @@ Config::Config()
     }
     count++;
   }
+
+  ok=true;
+  count=0;
+  while(ok) {
+    addr=p->addressValue("Global",QString::asprintf("NetcueUdpAddress%d",
+						   count+1),"",&ok);
+    if(ok) {
+      conf_netcue_udp_addresses.push_back(addr);
+    }
+    count++;
+  }
+  conf_netcue_udp_port=
+    p->intValue("Global","NetcueUdpPort",CONFIG_DEFAULT_NETCUE_UDP_PORT);
+  conf_netcue_udp_repeat=
+    p->intValue("Global","NetcueUdpRepeat",CONFIG_DEFAULT_NETCUE_UDP_REPEAT);
+
+
+
   conf_netcue_port=
     p->stringValue("Global","NetcuePort",CONFIG_DEFAULT_NETCUE_PORT);
   conf_forward_netcues_via_livewire=
@@ -165,6 +185,24 @@ uint16_t Config::cicPort() const
 QList<QHostAddress> Config::cicIpAddresses()
 {
   return conf_cic_addresses;
+}
+
+
+QList<QHostAddress> Config::netcueUdpAddresses() const
+{
+  return conf_netcue_udp_addresses;
+}
+
+
+uint16_t Config::netcueUdpPort() const
+{
+  return conf_netcue_udp_port;
+}
+
+
+int Config::netcueUdpRepeat() const
+{
+  return conf_netcue_udp_repeat;
 }
 
 

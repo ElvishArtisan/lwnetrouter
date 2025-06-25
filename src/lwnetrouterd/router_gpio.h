@@ -26,6 +26,7 @@
 
 #include <QDateTime>
 #include <QTimer>
+#include <QUdpSocket>
 
 #include <sy6/sygpio_server.h>
 #include <sy6/sylwrp_client.h>
@@ -74,6 +75,7 @@ class RouterGpio : public Router
   int gpio_delay_intervals[MAX_INPUTS];
   std::queue<RouterGpioEvent *> gpio_events[MAX_INPUTS];
   QTimer *gpio_debounce_timers[MAX_INPUTS][SWITCHYARD_GPIO_BUNDLE_SIZE];
+  QUdpSocket *gpio_netcue_socket;
 };
 
 
