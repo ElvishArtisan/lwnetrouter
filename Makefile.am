@@ -25,8 +25,12 @@ if DOCBOOK_AM
 endif
 
 SUBDIRS = $(DOCBOOK_AM_OPT) conf\
+          debian\
           src\
           systemd
+
+deb:	dist
+	./build_debs.sh
 
 rpm:	dist
 	cp lwnetrouter-$(VERSION).tar.gz $(HOME)/rpmbuild/SOURCES/
@@ -37,25 +41,31 @@ rpm:	dist
 	rm -rf $(HOME)/rpmbuild/BUILD/lwnetrouter-$(VERSION)
 
 EXTRA_DIST = autogen.sh\
-             get_distro.sh\
+             get_distro.pl\
              get_target.sh\
              link_common.sh\
              lwnetrouter.spec.in\
              PACKAGE_VERSION
 
 CLEANFILES = *~\
+             *.buildinfo\
+             *.changes\
+             *.ddeb\
              *.deb\
+             *.dsc\
              *.mo\
              *.rpm\
              *.tar.gz\
+             *.tar.xz\
              *.tgz\
              *.zip
 
-DISTCLEANFILES = lwnetrouter.service\
-                 lwnetrouter.spec\
+DISTCLEANFILES = build_debs.sh\
                  config.guess\
                  config.sub\
-                 ltmain.sh
+                 ltmain.sh\
+                 lwnetrouter.service\
+                 lwnetrouter.spec
 
 MAINTAINERCLEANFILES = *~\
                        *.tar.gz\

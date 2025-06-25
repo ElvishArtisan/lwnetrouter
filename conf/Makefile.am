@@ -20,6 +20,13 @@
 ##
 ## Use automake to process this into a Makefile.in
 
+install-exec-am:
+	mkdir -p $(DESTDIR)$(prefix)/share/lwnetrouter
+	cp lwnetrouter-sample.conf $(DESTDIR)$(prefix)/share/lwnetrouter/
+
+uninstall:
+	rm $(DESTDIR)$(prefix)/share/lwnetrouter/lwnetrouter-sample.conf
+
 EXTRA_DIST = lwnetrouter-sample.conf
 
 CLEANFILES = *~

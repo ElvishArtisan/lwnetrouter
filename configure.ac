@@ -96,6 +96,8 @@ fi
 
 AC_CONFIG_FILES([ \
     conf/Makefile \
+    debian/source/Makefile \
+    debian/Makefile \
     docs/Makefile \
     src/Makefile \
     src/common/Makefile \
@@ -103,9 +105,11 @@ AC_CONFIG_FILES([ \
     src/tests/Makefile \
     systemd/lwnetrouter.service \
     systemd/Makefile \
+    build_debs.sh \
     lwnetrouter.spec \
     Makefile ])
 AC_OUTPUT()
+chmod 755 build_debs.sh
 
 #
 # Link Common Elements

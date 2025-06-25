@@ -1,6 +1,6 @@
 #!/bin/sh
 ##
-##    (C) Copyright 2012 Fred Gleason <fredg@paravelsystems.com>
+##    (C) Copyright 2012-2025 Fred Gleason <fredg@paravelsystems.com>
 ##
 ##    Adapted from './autogen.sh' in the Jack Audio Connection Kit.
 ##    Copyright (C) 2001-2003 Paul Davis, et al.
@@ -19,6 +19,12 @@
 ##    Foundation, Inc., 59 Temple Place, Suite 330, 
 ##    Boston, MA  02111-1307  USA
 ##
+
+#
+# Generate Debian packaging metadata
+#
+DATESTAMP=`date +%a,\ %d\ %b\ %Y\ %T\ %z`
+sed s/@VERSION@/`cat PACKAGE_VERSION`/ < debian/changelog.src | sed "s/@DATESTAMP@/$DATESTAMP/" > debian/changelog
 
 aclocal $ACLOCAL_FLAGS || {
     echo "aclocal \$ACLOCAL_FLAGS where \$ACLOCAL_FLAGS= failed, exiting..."
