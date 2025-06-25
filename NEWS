@@ -1,12 +1,24 @@
 The NEWS file for the lwnetrouter package.
 
 -------------------------------------------------------------------------------
-v1.0.1 - 02/27/2018
+v2.0.0rc0 - 25 June 2025
+
+The first v2.x release candidate.
+
+Changes:
+  Qt Toolkit. Upgraded the required Qt dependency to Qt6.
+
+  Delay Control. Modified the 'lwnetrouter' service to use the standard
+  'cunctator' control protocol, allowing the cunc(1) GUI applet to be used
+  for delay control. Removed the lwnetdelay(1) GUI applet.
+
+-------------------------------------------------------------------------------
+v1.0.1 - 27 February 2018
 
 Bugfixes. See the ChangeLog for details.
 
 -------------------------------------------------------------------------------
-v1.0.0 - 02/21/2018
+v1.0.0 - 21 February 2018
 
 The first production release.
 

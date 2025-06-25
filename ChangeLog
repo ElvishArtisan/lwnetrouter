@@ -254,3 +254,5 @@
 	* Removed the 'Qt6Gui' and 'Qt6Widgets' build dependencies.
 2025-06-25 Fred Gleason <fredg@paravelsystems.com>
 	* Added a 'make deb' target.
+2025-06-25 Fred Gleason <fredg@paravelsystems.com>
+	* Incremented the package version to 2.0.0rc0.
