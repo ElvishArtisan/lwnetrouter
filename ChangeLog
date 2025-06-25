@@ -250,3 +250,5 @@
 	'NetcueUdpRepeat=' directives to lwnetrouter.conf(5).
 2025-06-25 Fred Gleason <fredg@paravelsystems.com>
 	* Removed lwnetdelay(1).
+2025-06-25 Fred Gleason <fredg@paravelsystems.com>
+	* Removed the 'Qt6Gui' and 'Qt6Widgets' build dependencies.

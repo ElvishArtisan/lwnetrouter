@@ -39,7 +39,7 @@ AC_ARG_ENABLE(docbook,[  --disable-docbook       disable building of documentati
 #
 # Check for Qt6 (Mandatory)
 #
-AQ_FIND_QT6(QT6,Core Gui Widgets Network,[],[AC_MSG_ERROR([*** Qt6 not found ***])])
+AQ_FIND_QT6(QT6,Core Network,[],[AC_MSG_ERROR([*** Qt6 not found ***])])
 
 #
 # Check for Switchyard6
