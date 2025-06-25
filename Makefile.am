@@ -25,10 +25,8 @@ if DOCBOOK_AM
 endif
 
 SUBDIRS = $(DOCBOOK_AM_OPT) conf\
-          icons\
           src\
-          systemd\
-          xdg
+          systemd
 
 rpm:	dist
 	cp lwnetrouter-$(VERSION).tar.gz $(HOME)/rpmbuild/SOURCES/

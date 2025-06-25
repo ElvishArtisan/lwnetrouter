@@ -97,15 +97,12 @@ fi
 AC_CONFIG_FILES([ \
     conf/Makefile \
     docs/Makefile \
-    icons/Makefile \
     src/Makefile \
     src/common/Makefile \
-    src/lwnetdelay/Makefile \
     src/lwnetrouterd/Makefile \
     src/tests/Makefile \
     systemd/lwnetrouter.service \
     systemd/Makefile \
-    xdg/Makefile \
     lwnetrouter.spec \
     Makefile ])
 AC_OUTPUT()
@@ -113,7 +110,6 @@ AC_OUTPUT()
 #
 # Link Common Elements
 #
-./link_common.sh lwnetdelay
 ./link_common.sh lwnetrouterd
 ./link_common.sh tests
 

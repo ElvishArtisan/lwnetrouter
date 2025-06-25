@@ -2,7 +2,7 @@
 ##
 ##    Radio network facility router system
 ##
-##    Copyright (C) 2016  Fred Gleason <fredg@paravelsystems.com>
+##    Copyright (C) 2016-2025  Fred Gleason <fredg@paravelsystems.com>
 ##
 ##    This program is free software; you can redistribute it and/or modify
 ##    it under the terms of version 2 of the GNU General Public License as
@@ -31,17 +31,8 @@ BuildRequires: qt-devel
 BuildRoot: /var/tmp/%{name}-@VERSION@
 
 
-%package gui
-Summary: GUI control panels for LWNetRouter
-Group: Productivity/Multimedia/Other
-
-
 %description
 LWNetRouter is a centralized audio routing system for radio head-end network.
-
-
-%description gui
-GUI control panels for use the LWNetRouter.
 
 
 %prep
@@ -119,13 +110,8 @@ rm -rf $RPM_BUILD_ROOT
 %doc conf/lwnetrouter-sample.conf
 
 
-%files gui
-%{_bindir}/lwnetdelay
-%{_datadir}/icons/hicolor/48x48/apps/lwnetdelay.png
-%{_datadir}/applications/lwnetdelay.desktop
-%doc conf/lwnetrouter-sample.conf
-
-
 %changelog
+* Wed Jun 25 2025 Fred Gleason <fredg@paravelsystems.com>
+-- Removed the 'lwnetrouter-gui' subpackage.
 * Sat Nov 26 2016 Fred Gleason <fredg@paravelsystems.com>
 -- Initial RPM creation.

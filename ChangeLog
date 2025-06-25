@@ -248,3 +248,5 @@
 2025-06-25 Fred Gleason <fredg@paravelsystems.com>
 	* Added 'NetcueUdpAddress<n>=', 'NetcueUdpPort=' and
 	'NetcueUdpRepeat=' directives to lwnetrouter.conf(5).
+2025-06-25 Fred Gleason <fredg@paravelsystems.com>
+	* Removed lwnetdelay(1).

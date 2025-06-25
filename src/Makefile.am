@@ -1,8 +1,8 @@
-## automake.am
+## Makefile.am
 ##
-## Automake.am for lwpath src/
+## Makefile.am for lwpath src/
 ##
-##   (C) Copyright 2015-2016 Fred Gleason <fredg@paravelsystems.com>
+##   (C) Copyright 2015-2025 Fred Gleason <fredg@paravelsystems.com>
 ##
 ##   This program is free software; you can redistribute it and/or modify
 ##   it under the terms of the GNU General Public License as
@@ -21,7 +21,6 @@
 ## Use automake to process this into a Makefile.in
 
 SUBDIRS = common\
-          lwnetdelay\
           lwnetrouterd\
           tests
 
