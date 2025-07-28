@@ -30,3 +30,5 @@ EXTRA_DIST = changelog\
              postrm\
              prerm\
              rules
+
+MAINTAINERCLEANFILES = changelog

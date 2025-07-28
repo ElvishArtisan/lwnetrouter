@@ -256,3 +256,6 @@
 	* Added a 'make deb' target.
 2025-06-25 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the package version to 2.0.0rc0.
+2025-07-28 Fred Gleason <fredg@paravelsystems.com>
+	* Restored lwnetdelay(1).
+	* Added a 'lwnetrouter-panels' DEB package.

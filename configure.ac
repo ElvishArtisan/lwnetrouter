@@ -39,7 +39,7 @@ AC_ARG_ENABLE(docbook,[  --disable-docbook       disable building of documentati
 #
 # Check for Qt6 (Mandatory)
 #
-AQ_FIND_QT6(QT6,Core Network,[],[AC_MSG_ERROR([*** Qt6 not found ***])])
+AQ_FIND_QT6(QT6,Core Gui Widgets Network,[],[AC_MSG_ERROR([*** Qt6 not found ***])])
 
 #
 # Check for Switchyard6
@@ -99,8 +99,10 @@ AC_CONFIG_FILES([ \
     debian/source/Makefile \
     debian/Makefile \
     docs/Makefile \
+    icons/Makefile \
     src/Makefile \
     src/common/Makefile \
+    src/lwnetdelay/Makefile \
     src/lwnetrouterd/Makefile \
     src/tests/Makefile \
     systemd/lwnetrouter.service \
@@ -114,6 +116,7 @@ chmod 755 build_debs.sh
 #
 # Link Common Elements
 #
+./link_common.sh lwnetdelay
 ./link_common.sh lwnetrouterd
 ./link_common.sh tests
 

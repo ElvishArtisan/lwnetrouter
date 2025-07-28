@@ -11,6 +11,19 @@ binary:
 	dh_prep
 	dh_auto_install
 	dh_installchangelogs ChangeLog
+
+	mkdir -p debian/lwnetrouter/lib/systemd/system
+	cp debian/tmp/lib/systemd/system/lwnetrouter.service debian/lwnetrouter/lib/systemd/system/
+	mkdir -p debian/lwnetrouter/usr/sbin
+	cp debian/tmp/usr/sbin/lwnetrouterd debian/lwnetrouter/usr/sbin/
+	mkdir -p debian/lwnetrouter/usr/share/lwnetrouter
+	cp debian/tmp/usr/share/lwnetrouter/lwnetrouter-sample.conf debian/lwnetrouter/usr/share/lwnetrouter/
+
+	mkdir -p debian/lwnetrouter-panels/bin
+	cp debian/tmp/usr/bin/lwnetdelay debian/lwnetrouter-panels/bin/
+	mkdir -p debian/lwnetrouter-panels/usr/share/icons/hicolor/48x48/apps
+	cp debian/tmp/usr/share/icons/hicolor/48x48/apps/lwnetdelay.png debian/lwnetrouter-panels/usr/share/icons/hicolor/48x48/apps/
+
 	dh_strip_nondeterminism
 	dh_compress
 	dh_fixperms

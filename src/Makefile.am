@@ -21,6 +21,7 @@
 ## Use automake to process this into a Makefile.in
 
 SUBDIRS = common\
+          lwnetdelay\
           lwnetrouterd\
           tests
 

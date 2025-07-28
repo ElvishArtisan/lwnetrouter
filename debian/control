@@ -11,4 +11,10 @@ Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Radio network facility router system
  LWNetRouter is a centralized audio routing system for radio head-end network.
 
+Package: lwnetrouter-panels
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: GUI control clients for use with lwnetrouter
+ This contains the lwnetdelay(1) GUI control client for use with lwnetrouter.
+
 

@@ -26,6 +26,7 @@ endif
 
 SUBDIRS = $(DOCBOOK_AM_OPT) conf\
           debian\
+          icons\
           src\
           systemd
 
