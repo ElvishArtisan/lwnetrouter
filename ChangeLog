@@ -259,3 +259,6 @@
 2025-07-28 Fred Gleason <fredg@paravelsystems.com>
 	* Restored lwnetdelay(1).
 	* Added a 'lwnetrouter-panels' DEB package.
+2025-08-05 Fred Gleason <fredg@paravelsystems.com>
+	* Added a 'qt6-qpa-plugins' dependency to the 'lwnetrouter-panels'
+	DEB package.

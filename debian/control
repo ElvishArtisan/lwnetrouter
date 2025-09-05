@@ -13,7 +13,7 @@ Description: Radio network facility router system
 
 Package: lwnetrouter-panels
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, qt6-qpa-plugins
 Description: GUI control clients for use with lwnetrouter
  This contains the lwnetdelay(1) GUI control client for use with lwnetrouter.
 
