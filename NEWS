@@ -1,6 +1,15 @@
 The NEWS file for the lwnetrouter package.
 
 -------------------------------------------------------------------------------
+v2.0.0rc1 - 5 September 2025
+
+The second v2.x release candidate.
+
+Changes:
+  Bugfix. Added a required dependency to the 'lwnetrouter-panels' DEB
+  package.
+
+-------------------------------------------------------------------------------
 v2.0.0rc0 - 25 June 2025
 
 The first v2.x release candidate.
