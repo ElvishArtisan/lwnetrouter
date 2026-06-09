@@ -224,3 +224,7 @@
 2026-06-09 Fred Gleason <fredg@paravelsystems.com>
 	* Added 'NetcueUdpAddress<n>=', 'NetcueUdpPort=' and
 	'NetcueUdpRepeat=' directives to lwnetrouter.conf(5).
+2026-06-09 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a regression in 'src/common/config.cpp' that broke the
+	build on RHEL7.
+

@@ -63,7 +63,7 @@ Config::Config()
   ok=true;
   count=0;
   while(ok) {
-    addr=p->addressValue("Global",QString::asprintf("NetcueUdpAddress%d",
+    addr=p->addressValue("Global",QString().sprintf("NetcueUdpAddress%d",
                                                   count+1),"",&ok);
     if(ok) {
       conf_netcue_udp_addresses.push_back(addr);
