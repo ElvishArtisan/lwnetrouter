@@ -218,3 +218,6 @@
 2018-02-27 Fred Gleason <fredg@paravelsystems.com>
 	* Updated 'NEWS'.
 	* Incremented the package version to 1.0.1.
+2026-06-09 Fred Gleason <fredg@paravelsystems.com>
+	* Added a 'ForwardNetcueViaLivewire=' directive to the '[Global]'
+	section of lwnetrouter.conf(5).

@@ -59,7 +59,10 @@ Config::Config()
   }
   conf_netcue_port=
     p->stringValue("Global","NetcuePort",CONFIG_DEFAULT_NETCUE_PORT);
-  conf_livewire_ip_address=p->addressValue("Global","LivewireIpAddress","");
+  conf_forward_netcues_via_livewire=
+    p->boolValue("Global","ForwardNetcuesViaLivewire",
+		 CONFIG_DEFAULT_FORWARD_NETCUES_VIA_LIVEWIRE);
+ conf_livewire_ip_address=p->addressValue("Global","LivewireIpAddress","");
   conf_adapter_ip_address=p->addressValue("Global","AdapterIpAddress","");
   conf_relay_debounce_interval=
     p->intValue("Global","RelayDebounceInterval",
@@ -167,6 +170,12 @@ QList<QHostAddress> Config::cicIpAddresses()
 QString Config::netcuePort() const
 {
   return conf_netcue_port;
+}
+
+
+bool Config::forwardNetcuesViaLivewire() const
+{
+  return conf_forward_netcues_via_livewire;
 }
 
 
