@@ -229,3 +229,5 @@
 	build on RHEL7.
 2026-06-09 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the package version to 1.0.2.
+2026-09-30 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a typo in 'conf/lwnetrouter-sample.conf'.
