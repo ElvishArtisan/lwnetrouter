@@ -1,6 +1,12 @@
 The NEWS file for the lwnetrouter package.
 
 -------------------------------------------------------------------------------
+v1.0.3 - 09/30/2026
+
+Fixed a typo in the sample lwnetrouterconf(5) file that had ' NetcueIpAddress'
+instead of 'NetcueUdpAddress'.
+
+-------------------------------------------------------------------------------
 v1.0.2 - 06/09/2026
 
 Added 'NetcueUdpAddress<n>=', 'NetcueUdpPort=' and 'NetcueUdpRepeat='
