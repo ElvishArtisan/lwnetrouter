@@ -242,3 +242,5 @@
 	* Moved the placement of the 'CicProgramCode=' directives from
 	the '[Input<n>]' to the '[Output<n>]' sections in the sample
 	lwnetrouter.conf(5) file.
+2026-10-08 Fred Gleason <fredg@paravelsystems.com>
+	* Incremented the package version to 1.0.4.

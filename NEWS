@@ -1,6 +1,16 @@
 The NEWS file for the lwnetrouter package.
 
 -------------------------------------------------------------------------------
+v1.0.4 - 10/8/2026
+
+Configuration File Format. Altered the format of the 'NetcueUdpPort='
+directive to	'NetcueUdpPort<n>=' in the '[Global]' section of
+lwnetrouter.conf(5). Altered the format of the 'NetcueUdpRepeat=' directive
+to 'NetcueUdpRepeat<n>=' in the '[Global]' section of lwnetrouter.conf(5).
+
+Startup Switches. Added a '--dump-config' switch to lwnetrouterd(8).
+
+-------------------------------------------------------------------------------
 v1.0.3 - 09/30/2026
 
 Fixed a typo in the sample lwnetrouterconf(5) file that had ' NetcueIpAddress'
