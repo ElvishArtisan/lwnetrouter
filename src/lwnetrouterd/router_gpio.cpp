@@ -166,10 +166,12 @@ void RouterGpio::SendGpo(int input,int line)
     QByteArray netcue=(config()->outputNetcue(i,line)+"\n").toUtf8();
     if(crossPoint(i)==input) {
       QList<QHostAddress> udp_addrs=config()->netcueUdpAddresses();
+      QList<uint16_t> udp_ports=config()->netcueUdpPorts();
+      QList<int> udp_repeats=config()->netcueUdpRepeats();
       for(int j=0;j<udp_addrs.size();j++) {
-       for(int k=0;k<config()->netcueUdpRepeat();k++) {
+	for(int k=0;k<udp_repeats.at(j);k++) {
          gpio_netcue_socket->writeDatagram(netcue,udp_addrs.at(j),
-                                           config()->netcueUdpPort());
+                                           udp_ports.at(j));
        }
       }
       if(config()->forwardNetcuesViaLivewire()) {

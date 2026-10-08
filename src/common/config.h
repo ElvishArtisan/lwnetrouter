@@ -73,10 +73,10 @@ class Config
   uint16_t cunctatorPort() const;
   uint16_t softwareAuthorityPort() const;
   uint16_t cicPort() const;
-  QList<QHostAddress> cicIpAddresses();
+  QList<QHostAddress> cicIpAddresses() const;
   QList<QHostAddress> netcueUdpAddresses() const;
-  uint16_t netcueUdpPort() const;
-  int netcueUdpRepeat() const;
+  QList<uint16_t> netcueUdpPorts() const;
+  QList<int> netcueUdpRepeats() const;
   QString netcuePort() const;
   bool forwardNetcuesViaLivewire() const;
   QHostAddress livewireIpAddress() const;
@@ -93,6 +93,7 @@ class Config
   QHostAddress outputBreakawayIpAddress(int output) const;
   int outputBreakawaySlotNumber(int output) const;
   QString outputNetcue(int output,int line) const;
+  QString dump() const;
   static QString delayStateText(DelayState state);
 
  private:
@@ -105,8 +106,8 @@ class Config
   QList<QHostAddress> conf_cic_addresses;
   QString conf_netcue_port;
   QList<QHostAddress> conf_netcue_udp_addresses;
-  uint16_t conf_netcue_udp_port;
-  int conf_netcue_udp_repeat;
+  QList<uint16_t> conf_netcue_udp_ports;
+  QList<int> conf_netcue_udp_repeats;
   bool conf_forward_netcues_via_livewire;
   QHostAddress conf_livewire_ip_address;
   QHostAddress conf_adapter_ip_address;

@@ -46,9 +46,15 @@ void SignalHandler(int signo)
 MainObject::MainObject(QObject *parent)
   : QObject(parent)
 {
+  bool dump_config=false;
+
   SyCmdSwitch *cmd=
     new SyCmdSwitch(qApp->argc(),qApp->argv(),"lwnetrouterd",VERSION,LWNETROUTERD_USAGE);
   for(unsigned i=0;i<cmd->keys();i++) {
+    if(cmd->key(i)=="--dump-config") {
+      dump_config=true;
+      cmd->setProcessed(i,true);
+    }
     if(!cmd->processed(i)) {
       fprintf(stderr,"lwnetrouterd: unknown option\n");
       exit(256);
@@ -56,6 +62,10 @@ MainObject::MainObject(QObject *parent)
   }
 
   main_config=new Config();
+  if(dump_config) {
+    printf("%s\n",main_config->dump().toUtf8().constData());
+    exit(0);
+  }
 
   main_state=new State();
   main_state->load();

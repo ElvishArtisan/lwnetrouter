@@ -233,3 +233,12 @@
 	* Fixed a typo in 'conf/lwnetrouter-sample.conf'.
 2026-09-30 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the package version to 1.0.3.
+2026-10-08 Fred Gleason <fredg@paravelsystems.com>
+	* Altered the format of the 'NetcueUdpPort=' directive to
+	'NetcueUdpPort<n>=' in the '[Global]' section of lwnetrouter.conf(5).
+	* Altered the format of the 'NetcueUdpRepeat=' directive to
+	'NetcueUdpRepeat<n>=' in the '[Global]' section of
+	lwnetrouter.conf(5).
+	* Moved the placement of the 'CicProgramCode=' directives from
+	the '[Input<n>]' to the '[Output<n>]' sections in the sample
+	lwnetrouter.conf(5) file.

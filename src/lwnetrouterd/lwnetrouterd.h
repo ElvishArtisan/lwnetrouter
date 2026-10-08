@@ -38,7 +38,7 @@
 #include "router_hpiaudio.h"
 #include "state.h"
 
-#define LWNETROUTERD_USAGE "[options]\n"
+#define LWNETROUTERD_USAGE "[--dump-config]\n"
 
 class MainObject : public QObject
 {

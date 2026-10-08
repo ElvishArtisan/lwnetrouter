@@ -62,18 +62,23 @@ Config::Config()
 
   ok=true;
   count=0;
+  addr=p->addressValue("Global",QString().sprintf("NetcueUdpAddress%d",
+						  count+1),"",&ok);
   while(ok) {
-    addr=p->addressValue("Global",QString().sprintf("NetcueUdpAddress%d",
-                                                  count+1),"",&ok);
-    if(ok) {
-      conf_netcue_udp_addresses.push_back(addr);
-    }
+    conf_netcue_udp_ports.
+      push_back(p->intValue("Global",
+			    QString().sprintf("NetcueUdpPort%d",count+1),
+			    CONFIG_DEFAULT_NETCUE_UDP_PORT));
+    conf_netcue_udp_repeats.
+      push_back(p->intValue("Global",
+			    QString().sprintf("NetcueUdpRepeat%d",count+1),
+			    CONFIG_DEFAULT_NETCUE_UDP_REPEAT));
+    conf_netcue_udp_addresses.push_back(addr);
+
     count++;
+    addr=p->addressValue("Global",QString().sprintf("NetcueUdpAddress%d",
+						    count+1),"",&ok);
   }
-  conf_netcue_udp_port=
-    p->intValue("Global","NetcueUdpPort",CONFIG_DEFAULT_NETCUE_UDP_PORT);
-  conf_netcue_udp_repeat=
-    p->intValue("Global","NetcueUdpRepeat",CONFIG_DEFAULT_NETCUE_UDP_REPEAT);
 
 
 
@@ -181,7 +186,7 @@ uint16_t Config::cicPort() const
 }
 
 
-QList<QHostAddress> Config::cicIpAddresses()
+QList<QHostAddress> Config::cicIpAddresses() const
 {
   return conf_cic_addresses;
 }
@@ -193,15 +198,15 @@ QList<QHostAddress> Config::netcueUdpAddresses() const
 }
 
 
-uint16_t Config::netcueUdpPort() const
+QList<uint16_t> Config::netcueUdpPorts() const
 {
-  return conf_netcue_udp_port;
+  return conf_netcue_udp_ports;
 }
 
 
-int Config::netcueUdpRepeat() const
+QList<int> Config::netcueUdpRepeats() const
 {
-  return conf_netcue_udp_repeat;
+  return conf_netcue_udp_repeats;
 }
 
 
@@ -303,6 +308,91 @@ int Config::outputBreakawaySlotNumber(int output) const
 QString Config::outputNetcue(int output,int line) const
 {
   return conf_output_netcues[output][line];
+}
+
+
+QString Config::dump() const
+{
+  QString ret;
+
+  ret+="[Global]\n";
+  ret+=QString().sprintf("InputQuantity=%d\n",inputQuantity());
+  ret+=QString().sprintf("OutputQuantity=%d\n",outputQuantity());
+  ret+=QString().sprintf("RmlPort=%d\n",rmlPort());
+  ret+=QString().sprintf("CunctatorPort=%d\n",cunctatorPort());
+  ret+=QString().sprintf("SoftwareAuthorityPort=%d\n",softwareAuthorityPort());
+  QList<QHostAddress> addrs=cicIpAddresses();
+  for(int i=0;i<addrs.size();i++) {
+    ret+=QString().sprintf("CicIpAddress%d=%s\n",1+i,
+			   addrs.at(i).toString().toUtf8().constData());
+  }
+  ret+=QString().sprintf("CicPort=%d\n",cicPort());
+  addrs=netcueUdpAddresses();
+  QList<uint16_t> ports=netcueUdpPorts();
+  QList<int> repeats=netcueUdpRepeats();
+  if(addrs.size()!=ports.size()) {
+    fprintf(stderr,
+	    "NetcueUdpAddresses (%d) and NetcueUdpPorts (%d) have different quantities\n",
+	    addrs.size(),ports.size());
+    exit(1);
+  }
+  if(addrs.size()!=repeats.size()) {
+    fprintf(stderr,
+	    "NetcueUdpAddresses (%d) and NetcueUdpRepeats (%d) have different quantities\n",
+	    addrs.size(),repeats.size());
+    exit(1);
+  }
+  for(int i=0;i<addrs.size();i++) {
+    ret+=QString().sprintf("NetcueUdpAddress%d=%s\n",1+i,
+			   addrs.at(i).toString().toUtf8().constData());
+    ret+=QString().sprintf("NetcueUdpPort%d=%u\n",1+i,0xffff&ports.at(i));
+    ret+=QString().sprintf("NetcueUdpRepeat%d=%d\n",1+i,repeats.at(i));
+  }
+  ret+="NetcuePort="+netcuePort()+"\n";
+  ret+="LivewireIpAddress="+livewireIpAddress().toString()+"\n";
+  ret+="AdapterIpAddress="+adapterIpAddress().toString()+"\n";
+  ret+=QString().sprintf("RelayDebounceInterval=%d\n",relayDebounceInterval());
+  if(inputBusXfers()) {
+    ret+="InputBusXfers=Yes\n";
+  }
+  else {
+    ret+="InputBusXfers=No\n";
+  }
+  if(outputBusXfers()) {
+    ret+="OutputBusXfers=Yes\n";
+  }
+  else {
+    ret+="OutputBusXfers=No\n";
+  }
+  ret+="\n";
+
+  for(int i=0;i<inputQuantity();i++) {
+    ret+=QString().sprintf("[Input%d]\n",1+i);
+    ret+=QString().sprintf("FullDelay=%d\n",inputFullDelay(i));
+    ret+=QString().sprintf("DumpDelay=%d\n",inputDumpDelay(i));
+    ret+=
+      QString().sprintf("DelayChangedPercent=%d\n",inputDelayChangePercent(i));
+    ret+=
+      QString().sprintf("DelayControlSource=%d\n",inputDelayControlSource(i));
+    for(int j=0;j<conf_input_addresses[i].size();j++) {
+      ret+=QString().sprintf("SourceIpAddress%d=%s\n",1+j,
+		 conf_input_addresses[i].at(j).toString().toUtf8().constData());
+    }
+  }
+  for(int i=0;i<outputQuantity();i++) {
+    ret+=QString().sprintf("[Output%d]\n",1+i);
+    ret+="CicProgramCode="+outputCicProgramCode(i)+"\n";
+    ret+="BreakawayIpAddress="+outputBreakawayIpAddress(i).toString()+"\n";
+    ret+=QString().sprintf("BreakawaySlotNumber=%d\n",
+			   outputBreakawaySlotNumber(i));
+    for(int j=0;j<SWITCHYARD_GPIO_BUNDLE_SIZE;j++) {
+      ret+=QString().sprintf("Netcue%d=%s\n",1+j,
+			     outputNetcue(i,j).toUtf8().constData());
+    }
+  }
+
+
+  return ret;
 }
 
 
